@@ -3,6 +3,7 @@ name: 매일 추적
 on:
   schedule:
     - cron: "0 0 * * *"      # 09:00 KST (UTC 00:00)
+                              # 캘린더는 calendar.yml이 5분마다 따로 돈다
   workflow_dispatch:          # 수동 실행 버튼
 
 permissions:
@@ -39,16 +40,20 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python track.py
 
-      - name: 캘린더(.ics) 생성
-        env:
-          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
-        run: python make_ics.py
-        continue-on-error: true
-
       - name: 스냅샷 커밋
         run: |
           git config user.name "release-tracker"
           git config user.email "noreply@github.com"
-          git add snapshots/ docs/
-          git diff --staged --quiet || git commit -m "스냅샷 $(date +%Y-%m-%d)"
-          git push
+          git add snapshots/
+          if git diff --staged --quiet; then
+            echo "스냅샷 변경 없음"
+            exit 0
+          fi
+          git commit -m "스냅샷 $(date +%Y-%m-%d)"
+          # calendar.yml과 동시에 돌면 push가 밀릴 수 있어 재시도한다
+          for i in 1 2 3; do
+            git pull --rebase --autostash && git push && exit 0
+            echo "push 재시도 $i"
+            sleep 5
+          done
+          exit 1

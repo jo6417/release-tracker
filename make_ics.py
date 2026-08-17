@@ -91,6 +91,19 @@ def day_after(d):
     return time.strftime("%Y%m%d", time.localtime(time.mktime(t) + 86400))
 
 
+def stamp_of(page, fallback):
+    """DTSTAMP는 노션의 마지막 수정 시각을 쓴다.
+
+    생성 시각을 쓰면 데이터가 그대로여도 파일이 매번 바뀐다.
+    짧은 주기로 돌릴 때 의미 없는 커밋이 하루 수백 개씩 쌓이므로,
+    내용이 같으면 파일도 바이트 단위로 같아야 한다.
+    """
+    t = page.get("last_edited_time") or ""
+    if not t:
+        return fallback
+    return t.replace("-", "").replace(":", "")[:15] + "Z"
+
+
 def event(uid, start, end, summary, desc, url, stamp):
     lines = ["BEGIN:VEVENT",
              f"UID:{uid}@release-tracker",
@@ -119,6 +132,7 @@ def main():
 
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
+    # 노션에 수정시각이 없는 경우에만 쓰는 예비값 (stamp_of 참고)
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
     cutoff = time.strftime("%Y-%m-%d",
                            time.localtime(time.time() - PAST_MONTHS * 30 * 86400))
@@ -149,7 +163,7 @@ def main():
             bits.append("보유: " + "/".join(multi(pr["소유처"])))
         body += event(p["id"].replace("-", ""), d["start"], d.get("end"),
                       f"{ICON.get(kind, '')} {title}".strip(),
-                      " · ".join(bits), p.get("url"), stamp)
+                      " · ".join(bits), p.get("url"), stamp_of(p, stamp))
         n_work += 1
         if a.limit and n_work >= a.limit:
             break
@@ -164,7 +178,7 @@ def main():
             continue
         body += event(p["id"].replace("-", ""), d["start"], d.get("end"),
                       f"📌 {txt(pr['이름'])}", sel(pr["종류"]) or "",
-                      p.get("url"), stamp)
+                      p.get("url"), stamp_of(p, stamp))
         n_sched += 1
 
     body.append("END:VCALENDAR")

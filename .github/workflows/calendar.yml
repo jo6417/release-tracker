@@ -1,0 +1,53 @@
+# 캘린더만 자주 갱신하는 가벼운 워크플로.
+#
+# 무거운 것(스팀·가격·알림)은 daily.yml에 그대로 두고, 여기서는
+# 노션을 읽어 .ics를 만드는 일만 한다. 그래서 5분마다 돌려도 부담이 없다.
+#
+# make_ics.py의 DTSTAMP가 노션 수정시각을 쓰므로, 데이터가 그대로면
+# 파일도 바이트 단위로 같다 → 커밋이 생기지 않고 Pages 재배포도 없다.
+name: 캘린더 갱신
+
+on:
+  schedule:
+    - cron: "*/5 * * * *"     # 5분마다 (GitHub 예약은 부하에 따라 밀린다)
+  workflow_dispatch:          # 즉시 반영이 필요할 때 수동 실행
+
+permissions:
+  contents: write
+
+concurrency:
+  group: calendar
+  cancel-in-progress: true    # 밀려서 겹치면 최신 것만 남긴다
+
+jobs:
+  calendar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 캘린더(.ics) 생성
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python make_ics.py
+
+      - name: 변경분만 커밋
+        run: |
+          git config user.name "release-tracker"
+          git config user.email "noreply@github.com"
+          git add docs/
+          if git diff --staged --quiet; then
+            echo "캘린더 변경 없음 — 커밋하지 않습니다"
+            exit 0
+          fi
+          git commit -m "캘린더 갱신 $(date -u +%Y-%m-%dT%H:%MZ)"
+          # daily.yml과 동시에 돌면 push가 밀릴 수 있어 재시도한다
+          for i in 1 2 3; do
+            git pull --rebase --autostash && git push && exit 0
+            echo "push 재시도 $i"
+            sleep 5
+          done
+          exit 1
