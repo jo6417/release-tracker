@@ -97,8 +97,7 @@ def event(uid, start, end, summary, desc, url, stamp):
              f"DTSTART;VALUE=DATE:{start.replace('-', '')}",
              # 종료일은 하루 뒤 (iCalendar 종일 일정은 끝을 배타적으로 본다)
              f"DTEND;VALUE=DATE:{day_after(end or start)}",
-             f"SUMMARY:{esc(summary)}",
-             "TRANSP:TRANSPARENT"]
+             f"SUMMARY:{esc(summary)}"]
     if desc:
         lines.append(f"DESCRIPTION:{esc(desc)}")
     if url:
@@ -107,7 +106,7 @@ def event(uid, start, end, summary, desc, url, stamp):
     return lines
 
 
-ICON = {"게임": "🎮", "영화": "🎬", "시리즈": "📺", "만화": "📖"}
+ICON = {"게임": "[게임]", "영화": "[영화]", "시리즈": "[시리즈]", "만화": "[만화]"}
 
 
 def main():
@@ -119,8 +118,9 @@ def main():
     print(f"기준일: {cutoff} 이후만 내보냄")
 
     body = ["BEGIN:VCALENDAR", "VERSION:2.0", f"PRODID:{PRODID}",
-            "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
-            "X-WR-CALNAME:출시 트래커", "X-WR-TIMEZONE:Asia/Seoul"]
+            "CALSCALE:GREGORIAN",
+            "X-WR-CALNAME:출시 트래커", "X-WR-TIMEZONE:Asia/Seoul",
+            "REFRESH-INTERVAL;VALUE=DURATION:PT6H", "X-PUBLISHED-TTL:PT6H"]
     n_work = n_sched = 0
 
     # 작품 — 정밀도 '확정'인 것만
