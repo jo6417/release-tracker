@@ -40,6 +40,13 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python track.py
 
+      # 매월 1일에만 실제로 보낸다 (heartbeat.py가 날짜를 스스로 판단)
+      - name: 월 1회 생존 신호
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python heartbeat.py
+        continue-on-error: true
+
       - name: 스냅샷 커밋
         run: |
           git config user.name "release-tracker"
