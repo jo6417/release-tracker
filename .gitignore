@@ -1,5 +1,6 @@
 .env
-db_ids.json
+# db_ids.json / notify_ids.json은 비밀이 아니라 식별자라 커밋한다
+# (Actions가 읽어야 함. 접근에는 NOTION_TOKEN이 별도로 필요)
 migrate_state.json
 migrate_preview.json
 snapshots/*.tmp

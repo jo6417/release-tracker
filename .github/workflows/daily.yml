@@ -1,0 +1,39 @@
+name: 매일 추적
+
+on:
+  schedule:
+    - cron: "0 0 * * *"      # 09:00 KST (UTC 00:00)
+  workflow_dispatch:          # 수동 실행 버튼
+
+permissions:
+  contents: write             # 스냅샷 커밋용
+
+jobs:
+  track:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 스팀 라이브러리 동기화
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+        run: python sync_steam.py
+        continue-on-error: true      # 한 소스가 죽어도 추적은 계속
+
+      - name: 변화 감지 및 알림
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python track.py
+
+      - name: 스냅샷 커밋
+        run: |
+          git config user.name "release-tracker"
+          git config user.email "noreply@github.com"
+          git add snapshots/
+          git diff --staged --quiet || git commit -m "스냅샷 $(date +%Y-%m-%d)"
+          git push
