@@ -223,6 +223,7 @@ migrate_preview.json
 snapshots/*.tmp
 *.pyc
 *.ics
+!docs/releases.ics   # 배포용 캘린더는 커밋한다
 이관검토.md
 
 # 실행 중 생기는 것들
