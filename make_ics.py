@@ -10,6 +10,7 @@ GitHub Pages로 올리면 구글·네이버·폰 기본 캘린더에서 구독�
 사용법:
     python make_ics.py
 """
+import argparse
 import io
 import json
 import time
@@ -110,6 +111,12 @@ ICON = {"게임": "[게임]", "영화": "[영화]", "시리즈": "[시리즈]", 
 
 
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--out", default=OUT, help="출력 파일")
+    ap.add_argument("--limit", type=int, default=0, help="이벤트 N개만 (테스트용)")
+    a = ap.parse_args()
+    out_path = a.out
+
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
@@ -144,6 +151,8 @@ def main():
                       f"{ICON.get(kind, '')} {title}".strip(),
                       " · ".join(bits), p.get("url"), stamp)
         n_work += 1
+        if a.limit and n_work >= a.limit:
+            break
 
     # 일정 — 캘린더노출된 부속 사건
     for p in query_all(ids["schedule_db"], {
@@ -163,9 +172,10 @@ def main():
     folded = []
     for line in body:
         folded += fold(line)
-    with io.open(OUT, "w", encoding="utf-8", newline="\r\n") as f:
+    # newline=""로 열어야 우리가 넣은 CRLF가 CR CR LF로 이중 변환되지 않는다
+    with io.open(out_path, "w", encoding="utf-8", newline="") as f:
         f.write("\r\n".join(folded) + "\r\n")
-    print(f"{OUT} — 작품 {n_work}건 + 일정 {n_sched}건 = {n_work + n_sched}개 이벤트")
+    print(f"{out_path} — 작품 {n_work}건 + 일정 {n_sched}건 = {n_work + n_sched}개 이벤트")
 
 
 if __name__ == "__main__":
