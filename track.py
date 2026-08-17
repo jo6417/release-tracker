@@ -24,7 +24,8 @@ from config import API, headers
 IDS_FILE = "db_ids.json"
 SNAP_DIR = "snapshots"
 
-WATCH = ["출시·개봉일", "날짜정밀도", "단계", "게임패스", "현재최저가", "국내 출시·개봉일"]
+WATCH = ["출시·개봉일", "날짜정밀도", "단계", "게임패스", "국내 출시·개봉일"]
+IDLE_DAYS = 60      # 플레이중인데 이 기간 넘게 안 켠 게임은 방치로 본다
 
 
 def query_all(dbid):
@@ -64,6 +65,27 @@ def value(prop):
     return None
 
 
+def idle_check(cur):
+    """플레이중인데 오래 손 안 댄 게임 — 백로그가 조용히 쌓이는 걸 막는다."""
+    import datetime
+    today = datetime.date.today()
+    out = []
+    for row in cur.values():
+        if row.get("단계") != "플레이중":
+            continue
+        last = row.get("마지막플레이일")
+        if not last:
+            continue
+        try:
+            d = datetime.date.fromisoformat(last[:10])
+        except ValueError:
+            continue
+        gap = (today - d).days
+        if gap >= IDLE_DAYS:
+            out.append(f"[방치] {row['제목']} — {gap}일째 안 켬 (마지막 {last[:10]})")
+    return out
+
+
 def snapshot():
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
@@ -72,6 +94,9 @@ def snapshot():
         props = p["properties"]
         row = {"제목": value(props["제목"]), "종류": value(props["종류"])}
         for k in WATCH:
+            if k in props:
+                row[k] = value(props[k])
+        for k in ("마지막플레이일", "플레이시간"):
             if k in props:
                 row[k] = value(props[k])
         out[p["id"]] = row
@@ -132,9 +157,17 @@ def main():
         urgent, daily = diff(prev_data, cur)
         print(f"{prev_name}과 대조 — 즉시 {len(urgent)}건 / 요약 {len(daily)}건")
 
-    os.makedirs(SNAP_DIR, exist_ok=True)
-    with io.open(os.path.join(SNAP_DIR, f"{today}.json"), "w", encoding="utf-8") as f:
-        json.dump(cur, f, ensure_ascii=False, indent=1)
+    # --dry는 아무것도 바꾸지 않는다 (스냅샷을 덮어쓰면 기준값이 사라진다)
+    if not a.dry:
+        os.makedirs(SNAP_DIR, exist_ok=True)
+        with io.open(os.path.join(SNAP_DIR, f"{today}.json"), "w",
+                     encoding="utf-8") as f:
+            json.dump(cur, f, ensure_ascii=False, indent=1)
+
+    idle = idle_check(cur)
+    if idle:
+        print(f"방치 {len(idle)}건")
+        daily += idle
 
     for line in urgent + daily:
         print("  ", line)

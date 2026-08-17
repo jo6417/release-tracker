@@ -115,3 +115,19 @@ def search(name, limit=5):
             "url": g.get("url"),
         })
     return out
+
+
+def steam_appids(igdb_ids):
+    """IGDB 게임 id → 스팀 appid. 미보유 게임의 가격을 조회하기 위한 것."""
+    out = {}
+    ids = list(igdb_ids)
+    for i in range(0, len(ids), 100):
+        chunk = ids[i:i + 100]
+        rows = query("external_games",
+                     "fields game,uid; "
+                     f"where external_game_source = {STEAM_SOURCE} "
+                     f"& game = ({','.join(map(str, chunk))}); limit 500;")
+        for r in rows:
+            if r.get("game") and r.get("uid", "").isdigit():
+                out[r["game"]] = r["uid"]
+    return out

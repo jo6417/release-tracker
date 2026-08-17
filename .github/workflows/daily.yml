@@ -25,15 +25,30 @@ jobs:
         run: python sync_steam.py
         continue-on-error: true      # 한 소스가 죽어도 추적은 계속
 
+      - name: 가격 추적 (ITAD)
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          ITAD_API_KEY: ${{ secrets.ITAD_API_KEY }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python sync_prices.py
+        continue-on-error: true
+
       - name: 변화 감지 및 알림
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python track.py
 
+      - name: 캘린더(.ics) 생성
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python make_ics.py
+        continue-on-error: true
+
       - name: 스냅샷 커밋
         run: |
           git config user.name "release-tracker"
           git config user.email "noreply@github.com"
-          git add snapshots/
+          git add snapshots/ docs/
           git diff --staged --quiet || git commit -m "스냅샷 $(date +%Y-%m-%d)"
           git push
