@@ -1,0 +1,54 @@
+# 출시 트래커
+
+게임·영화·시리즈의 출시일을 자동 추적해 Notion에 기록하는 개인용 시스템.
+서버 없음, 프론트엔드 없음. GitHub Actions가 매일 API를 조회하고 Notion이 UI를 담당한다.
+
+문서: [PROJECT.md](PROJECT.md) 목적·범위 · [SCHEMA.md](SCHEMA.md) DB 정의 · [HANDOFF.md](HANDOFF.md) 현재 상태
+
+## 구성
+
+| 파일 | 하는 일 |
+|---|---|
+| `config.py` | 공통 설정, DB 스키마 정의, `.env` 로드 |
+| `create_db.py` | Notion에 작품/일정 DB 생성 (최초 1회) |
+| `sync_schema.py` | `config.py`의 스키마를 기존 DB에 반영 |
+| `migrate.py` | 네이버 캘린더 .ics → Notion 이관 |
+| `review_list.py` | 이관 대상 검토 목록(`이관검토.md`) 생성 |
+| `apply_review.py` | 검토에서 `x` 표시한 항목을 제외 목록으로 |
+| `match_tmdb.py` | 영화·시리즈를 TMDB와 대조 |
+| `apply_tmdb.py` | 매칭 결과를 이관 데이터에 반영 |
+| `adapters/tmdb.py` | TMDB 조회 (소스별 격리) |
+
+## 사용
+
+```bash
+python migrate.py --dry              # 미리보기 (Notion 미변경)
+python review_list.py                # 검토 목록 생성
+python apply_review.py               # 검토 결과 반영
+python match_tmdb.py                 # TMDB 매칭
+python apply_tmdb.py                 # 매칭 결과 반영
+python migrate.py                    # 실제 이관
+python migrate.py --limit 5          # 소량 테스트
+python migrate.py --only 타이탄폴,씨프  # 특정 작품만
+```
+
+이관은 `migrate_state.json`에 진행 상태를 남긴다. 중단되어도 다시 실행하면
+이어서 진행하며 중복을 만들지 않는다.
+
+## 설계 원칙
+
+- 의존성 최소화 — Python 표준 라이브러리만 사용
+- 소스 격리 — 데이터 소스마다 어댑터 1개. 하나가 깨져도 나머지는 동작
+- 한글 우선 — Notion 속성명·알림 문구·작품명은 한글
+
+## 키
+
+`.env`에 넣는다 (gitignore됨). GitHub Actions는 리포 시크릿을 쓴다.
+
+```
+NOTION_TOKEN=
+TMDB_API_KEY=
+TWITCH_CLIENT_ID=
+TWITCH_CLIENT_SECRET=
+STEAM_API_KEY=
+```

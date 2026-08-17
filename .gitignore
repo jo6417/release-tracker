@@ -1,0 +1,14 @@
+.env
+db_ids.json
+migrate_state.json
+migrate_preview.json
+snapshots/*.tmp
+__pycache__/
+*.pyc
+*.ics
+이관검토.md
+
+# 실행 중 생기는 것들
+*.log
+migrate_enriched.json
+tmdb_확인필요.md
