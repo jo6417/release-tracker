@@ -17,7 +17,25 @@
 | `apply_review.py` | 검토에서 `x` 표시한 항목을 제외 목록으로 |
 | `match_tmdb.py` | 영화·시리즈를 TMDB와 대조 |
 | `apply_tmdb.py` | 매칭 결과를 이관 데이터에 반영 |
+| `match_igdb.py` | 게임을 IGDB와 대조 (스팀 appid 역조회 + 제목 검색) |
+| `apply_igdb.py` | 매칭 결과를 노션에 반영 |
+| `sync_steam.py` | 스팀 보유·플레이시간을 노션에 반영 |
+| `add_steam_games.py` | 스팀에만 있는 게임을 작품으로 추가 |
+| `track.py` | 스냅샷 대조로 변화 감지 → 알림 |
+| `notify.py` | 노션 멘션 알림 |
 | `adapters/tmdb.py` | TMDB 조회 (소스별 격리) |
+| `adapters/igdb.py` | IGDB 조회 |
+| `adapters/steam.py` | 스팀 라이브러리 조회 |
+
+## 대조표
+
+API로 자동 매칭이 안 되는 부분은 표로 고정해 둔다. 한 번 만들면 계속 재사용된다.
+
+| 파일 | 내용 |
+|---|---|
+| `steam_map.json` | 스팀 appid ↔ 작품 제목 (스팀은 영문, 노션은 한글) |
+| `game_title_en.json` | 한글 게임 제목 → 영문 (IGDB 한글 검색 히트율 10%) |
+| `tmdb_match.json` / `igdb_match.json` | 매칭 결과 캐시 |
 
 ## 사용
 
