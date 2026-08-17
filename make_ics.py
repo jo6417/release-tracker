@@ -21,6 +21,9 @@ from config import API, headers
 
 IDS_FILE = "db_ids.json"
 OUT = "docs/releases.ics"
+# 과거를 다 실으면 이벤트가 677개가 되어 캘린더 앱이 버거워하고
+# 기존 일정과 뒤엉킨다. 최근 것과 미래만 내보낸다.
+PAST_MONTHS = 6
 PRODID = "-//release-tracker//jo6417//KO"
 
 
@@ -111,6 +114,9 @@ def main():
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
     stamp = time.strftime("%Y%m%dT%H%M%SZ", time.gmtime())
+    cutoff = time.strftime("%Y-%m-%d",
+                           time.localtime(time.time() - PAST_MONTHS * 30 * 86400))
+    print(f"기준일: {cutoff} 이후만 내보냄")
 
     body = ["BEGIN:VCALENDAR", "VERSION:2.0", f"PRODID:{PRODID}",
             "CALSCALE:GREGORIAN", "METHOD:PUBLISH",
@@ -123,6 +129,8 @@ def main():
                     {"property": "출시·개봉일", "date": {"is_not_empty": True}}]}):
         pr = p["properties"]
         d = pr["출시·개봉일"]["date"]
+        if (d.get("end") or d["start"]) < cutoff:
+            continue
         kind = sel(pr["종류"]) or ""
         title = txt(pr["제목"])
         bits = []
@@ -143,6 +151,8 @@ def main():
                     {"property": "날짜", "date": {"is_not_empty": True}}]}):
         pr = p["properties"]
         d = pr["날짜"]["date"]
+        if (d.get("end") or d["start"]) < cutoff:
+            continue
         body += event(p["id"].replace("-", ""), d["start"], d.get("end"),
                       f"📌 {txt(pr['이름'])}", sel(pr["종류"]) or "",
                       p.get("url"), stamp)
