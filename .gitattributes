@@ -1,0 +1,2 @@
+# .ics는 iCalendar 표준상 CRLF여야 한다. git이 줄바꿈을 바꾸지 못하게 막는다.
+*.ics -text
