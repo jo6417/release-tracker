@@ -85,7 +85,7 @@ def main():
         props = {
             "제목": {"title": [{"type": "text", "text": {"content": g["이름"][:1900]}}]},
             "종류": {"select": {"name": "게임"}},
-            "단계": {"select": {"name": "플레이중" if recent else "미확인"}},
+            "진행도(게임)": {"select": {"name": "진행 중" if recent else "미확인"}},
             "플랫폼": {"multi_select": [{"name": "PC"}]},
             "소유처": {"multi_select": [{"name": "스팀"}]},
             "획득경로": {"multi_select": [{"name": "구매"}]},
@@ -103,7 +103,7 @@ def main():
 
         if a.dry:
             print(f"  + {g['이름'][:44]:44} {g['플레이분']//60:>4}h "
-                  f"{'플레이중' if recent else '미확인'}")
+                  f"{'진행 중' if recent else '미확인'}")
         else:
             post("/pages", {"parent": {"database_id": ids["work_db"]},
                             "properties": props})

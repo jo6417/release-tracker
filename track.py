@@ -24,8 +24,17 @@ from config import API, headers
 IDS_FILE = "db_ids.json"
 SNAP_DIR = "snapshots"
 
-WATCH = ["출시·개봉일", "날짜정밀도", "단계", "게임패스", "국내 출시·개봉일"]
-IDLE_DAYS = 60      # 플레이중인데 이 기간 넘게 안 켠 게임은 방치로 본다
+WATCH = ["출시·개봉일", "날짜정밀도", "진행도(게임)", "진행도(영상)",
+         "게임패스", "방영상태"]
+# 진행도는 매체별로 속성이 갈려 있다. 한 행은 둘 중 하나만 쓴다.
+STAGE = ("진행도(게임)", "진행도(영상)")
+# 아직 보거나 하지 않은 단계. 이용 가능일이 지나면 백로그로 넘어가는 것들이다.
+# 아직 안 했고 앞으로 할 것. `구매 보류`(안 사기로)와 `시청 보류`는 제외 쪽이라 뺀다.
+UNSEEN = ("출시 대기", "구매 대기", "보유함", "공개 대기", "시청 안함")
+PLAYING = ("진행 중", "시청 중")
+# 스냅샷에는 담되 그 자체로는 알림을 만들지 않는 것 (문구를 만들 때 쓴다)
+EXTRA = ["마지막플레이일", "플레이시간", "방영진행", "이용 가능일"]
+IDLE_DAYS = 60      # 진행 중인데 이 기간 넘게 안 켠 게임은 방치로 본다
 
 
 def query_all(dbid):
@@ -62,16 +71,21 @@ def value(prop):
         if not d:
             return None
         return d["start"] + (f"~{d['end']}" if d.get("end") else "")
+    if t == "formula":
+        f = prop["formula"]
+        if f["type"] == "date":
+            return f["date"]["start"] if f["date"] else None
+        return f.get(f["type"])
     return None
 
 
 def idle_check(cur):
-    """플레이중인데 오래 손 안 댄 게임 — 백로그가 조용히 쌓이는 걸 막는다."""
+    """진행 중인데 오래 손 안 댄 게임 — 백로그가 조용히 쌓이는 걸 막는다."""
     import datetime
     today = datetime.date.today()
     out = []
     for row in cur.values():
-        if row.get("단계") != "플레이중":
+        if stage_of(row) not in PLAYING:
             continue
         last = row.get("마지막플레이일")
         if not last:
@@ -86,6 +100,33 @@ def idle_check(cur):
     return out
 
 
+def stage_of(row):
+    """이 행이 실제로 쓰는 진행도 값. 게임이든 영상이든 하나만 차 있다."""
+    for k in STAGE:
+        if row.get(k):
+            return row[k]
+    return None
+
+
+def available_check(cur):
+    """오늘부터 볼 수 있게 된 것 — '아 맞다 이거' 하라고 그날 한 번 알린다.
+
+    이용 가능일이 지나면 출시 대기 작품은 조용히 과거로 밀려서 뷰에서 흐려진다.
+    그날 알림 한 번이 그걸 백로그로 넘겨준다.
+    """
+    import datetime
+    today = datetime.date.today().isoformat()
+    out = []
+    for row in cur.values():
+        if stage_of(row) not in UNSEEN:
+            continue
+        d = row.get("이용 가능일")
+        if d and d[:10] == today:
+            what = "완결" if row.get("방영상태") in ("완결", "시즌완결") else "공개"
+            out.append(f"[볼차례] {row['제목']} — 오늘 {what}. 이제 볼 수 있다")
+    return out
+
+
 def snapshot():
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
@@ -96,7 +137,7 @@ def snapshot():
         for k in WATCH:
             if k in props:
                 row[k] = value(props[k])
-        for k in ("마지막플레이일", "플레이시간"):
+        for k in EXTRA:
             if k in props:
                 row[k] = value(props[k])
         out[p["id"]] = row
@@ -122,18 +163,38 @@ def diff(prev, cur):
             daily.append(f"[신규] {now['제목']}")
             continue
         for k in WATCH:
+            if k not in old:
+                continue      # 속성 이름이 바뀐 첫날. 전 행이 알림으로 터지는 걸 막는다
             a, b = old.get(k), now.get(k)
             if a == b:
                 continue
             title = now["제목"]
-            if k == "날짜정밀도" and b == "확정":
+            if k == "방영상태":
+                # 완결을 기다리던 작품이 끝나는 순간이 이 프로젝트에서 제일 중요한 알림.
+                # 나무위키 방영표를 매주 열어보던 걸 대신한다.
+                #
+                # 단, 값이 없다가 처음 채워진 건 알림 대상이 아니다.
+                # 속성을 새로 만든 날 과거 완결작 30건이 한꺼번에 터진다.
+                if a is None:
+                    continue
+                if b in ("완결", "시즌완결"):
+                    line = f"[완결] {title} — {now.get('방영진행') or ''}".strip()
+                    if now.get("날짜정밀도") == "완결대기":
+                        urgent.append(line + " · 이제 정주행 가능")
+                    else:
+                        daily.append(line)
+                elif b == "취소":
+                    daily.append(f"[취소] {title} — 시리즈 중단")
+                elif a is not None:
+                    daily.append(f"[방영] {title}: {a} → {b}")
+            elif k == "날짜정밀도" and b == "확정":
                 urgent.append(f"[날짜확정] {title} — {now.get('출시·개봉일')}")
             elif k == "게임패스" and b:
                 urgent.append(f"[게임패스] {title} 입점")
             elif k == "출시·개봉일":
                 daily.append(f"[날짜변경] {title}: {a} → {b}")
-            elif k == "단계":
-                daily.append(f"[단계] {title}: {a} → {b}")
+            elif k in STAGE:
+                daily.append(f"[진행도] {title}: {a} → {b}")
             else:
                 daily.append(f"[{k}] {title}: {a} → {b}")
     return urgent, daily
@@ -163,6 +224,11 @@ def main():
         with io.open(os.path.join(SNAP_DIR, f"{today}.json"), "w",
                      encoding="utf-8") as f:
             json.dump(cur, f, ensure_ascii=False, indent=1)
+
+    ready = available_check(cur)
+    if ready:
+        print(f"볼차례 {len(ready)}건")
+        urgent += ready
 
     idle = idle_check(cur)
     if idle:

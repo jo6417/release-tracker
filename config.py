@@ -52,16 +52,33 @@ WORK_SCHEMA = {
     "애니메이션": {"checkbox": {}},
     "외부ID": {"rich_text": {}},
 
-    "단계": {"select": {"options": [
-        {"name": "추천됨", "color": "gray"},
-        {"name": "기대작", "color": "yellow"},
-        {"name": "구매판단", "color": "orange"},
-        {"name": "보유", "color": "blue"},
-        {"name": "플레이중", "color": "green"},
-        {"name": "완료", "color": "purple"},
+    # 작품이 아니라 **나**의 진행 상태. 작품 쪽 상태(나왔나·완결됐나)는
+    # 이용 가능일·날짜정밀도·방영상태가 따로 갖고 있다.
+    #
+    # 게임과 영상으로 속성을 나눴다. 같은 뼈대에 어휘만 다른 값을 한 속성에
+    # 넣으니 영상 쪽이 계속 어색했고, 괄호 병기는 지저분했다. 뷰가 매체별로
+    # 갈려 있어 한 화면에 둘이 같이 보이지 않는다.
+    # 중립인 셋(미확인·일시 중단·폐기됨)만 양쪽 같은 이름을 쓴다.
+    "진행도(게임)": {"select": {"options": [
         {"name": "미확인", "color": "brown"},
-        {"name": "접음", "color": "red"},
-        {"name": "거절", "color": "default"},
+        {"name": "출시 대기", "color": "yellow"},
+        {"name": "구매 대기", "color": "orange"},      # 살 예정
+        {"name": "보유함", "color": "blue"},
+        {"name": "진행 중", "color": "green"},
+        {"name": "일시 중단", "color": "red"},
+        {"name": "구매 보류", "color": "default"},     # 안 사기로 한 것
+        {"name": "폐기됨(노잼)", "color": "gray"},
+        {"name": "클리어", "color": "purple"},
+    ]}},
+    "진행도(영상)": {"select": {"options": [
+        {"name": "미확인", "color": "brown"},
+        {"name": "공개 대기", "color": "yellow"},
+        {"name": "시청 안함", "color": "blue"},        # 아직 안 본 것 (= 볼 대상)
+        {"name": "시청 중", "color": "green"},
+        {"name": "시청 일시 중단", "color": "red"},
+        {"name": "시청 보류", "color": "gray"},
+        {"name": "폐기됨(노잼)", "color": "default"},
+        {"name": "시청 완료", "color": "purple"},
     ]}},
 
     "날짜정밀도": {"select": {"options": [
@@ -70,10 +87,38 @@ WORK_SCHEMA = {
         {"name": "분기", "color": "yellow"},
         {"name": "월", "color": "blue"},
         {"name": "확정", "color": "green"},
+        # 방영은 시작했지만 완결되면 몰아보려고 기다리는 중.
+        # 진행도는 출시 대기(공개 대기) 그대로 두고 여기에만 표시한다.
+        # 확정이 아니므로 작품 자체는 캘린더에 안 뜨고, 완결일만 최종화 일정으로 뜬다.
+        {"name": "완결대기", "color": "pink"},
     ]}},
+    # 국내/해외를 나누지 않는다. 아는 날짜를 넣어두고 국내 날짜가 나오면 덮어쓴다.
+    # (덮어쓰면 변경이력에 남고 track.py가 [날짜변경]으로 알려준다)
     "출시·개봉일": {"date": {}},
-    "추정시기": {"rich_text": {}},
-    "국내 출시·개봉일": {"date": {}},
+
+    # 정렬용 단일 기준. "내가 이걸 볼/할 수 있게 되는 날"이다.
+    # 출시일과 완결일이 갈려 있으면 뷰를 어느 쪽으로 정렬해도 한쪽이 어긋나서,
+    # 원본 두 날짜는 그대로 두고 표시용 날짜만 하나 뽑는다.
+    "이용 가능일": {"formula": {"expression":
+        'if(prop("날짜정밀도") == "완결대기" and not empty(prop("완결일")), '
+        'prop("완결일"), prop("출시·개봉일"))'}},
+
+    # ── 시리즈 완결 추적 ──
+    # "완결되면 몰아보려고 대기 중"인 작품을 매번 손으로 확인하지 않기 위한 것.
+    # 대기 표시는 날짜정밀도 = 완결대기로 한다 (별도 속성을 두지 않는다).
+    # 아래 셋은 sync_series.py가 TMDB로 채운다.
+    "방영상태": {"select": {"options": [
+        {"name": "방영예정", "color": "gray"},
+        {"name": "방영중", "color": "green"},
+        {"name": "시즌완결", "color": "blue"},     # 이번 시즌 끝, 다음 시즌 있음
+        {"name": "완결", "color": "purple"},       # 시리즈 자체가 종영
+        {"name": "취소", "color": "red"},
+        {"name": "휴방", "color": "orange"},       # 다음 화 미정인 채로 멈춤
+    ]}},
+    "방영진행": {"rich_text": {}},                 # "7/12화 · 다음 2026-08-22"
+    # 방영이 끝났으면 실제 마지막 화 날짜, 방영 중이면 추정치.
+    # 어느 쪽인지는 방영상태·방영진행이 말해준다.
+    "완결일": {"date": {}},
 
     "플랫폼": {"multi_select": {"options": [
         {"name": "PC", "color": "gray"},
@@ -95,12 +140,6 @@ WORK_SCHEMA = {
         {"name": "애플TV+", "color": "gray"},
         {"name": "프라임비디오", "color": "blue"},
     ]}},
-    "한국어지원": {"select": {"options": [
-        {"name": "자막", "color": "green"},
-        {"name": "더빙", "color": "blue"},
-        {"name": "미지원", "color": "red"},
-        {"name": "미정", "color": "gray"},
-    ]}},
 
     "소유처": {"multi_select": {"options": [
         {"name": "스팀", "color": "blue"},
@@ -118,14 +157,11 @@ WORK_SCHEMA = {
         {"name": "구독포함", "color": "yellow"},
         {"name": "번들", "color": "orange"},
     ]}},
-    "소유상세": {"rich_text": {}},
-    "중복소유": {"checkbox": {}},
     "게임패스": {"checkbox": {}},
 
     "정가": {"number": {"format": "won"}},
     "현재최저가": {"number": {"format": "won"}},
     "역대최저가": {"number": {"format": "won"}},
-    "목표할인율": {"number": {"format": "percent"}},
     "평점": {"number": {"format": "number"}},
 
     "클리어일": {"date": {}},
@@ -139,7 +175,6 @@ WORK_SCHEMA = {
         {"name": "★1", "color": "red"},
     ]}},
     "한줄평": {"rich_text": {}},
-    "후속작대기": {"checkbox": {}},
 
     "마지막확인": {"date": {}},
     "변경이력": {"rich_text": {}},

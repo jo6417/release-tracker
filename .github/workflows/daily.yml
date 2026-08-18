@@ -35,6 +35,13 @@ jobs:
         run: python sync_prices.py
         continue-on-error: true
 
+      - name: 시리즈 완결 추적 (TMDB)
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+        run: python sync_series.py
+        continue-on-error: true
+
       - name: 변화 감지 및 알림
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}

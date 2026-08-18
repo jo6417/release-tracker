@@ -21,9 +21,11 @@
 | `apply_igdb.py` | 매칭 결과를 노션에 반영 |
 | `sync_steam.py` | 스팀 보유·플레이시간을 노션에 반영 |
 | `add_steam_games.py` | 스팀에만 있는 게임을 작품으로 추가 |
+| `sync_series.py` | 시리즈 방영·완결 상태를 TMDB로 갱신 (완결대기 알림·캘린더) |
 | `track.py` | 스냅샷 대조로 변화 감지 → 알림 |
 | `notify.py` | 노션 멘션 알림 |
 | `adapters/tmdb.py` | TMDB 조회 (소스별 격리) |
+| `adapters/anilist.py` | AniList 조회 — 애니 회차별 방영일 (키 불필요) |
 | `adapters/igdb.py` | IGDB 조회 |
 | `adapters/steam.py` | 스팀 라이브러리 조회 |
 

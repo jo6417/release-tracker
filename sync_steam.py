@@ -5,9 +5,9 @@ steam_map.json(appid → 작품 제목)을 기준으로 매칭한다.
 스팀은 영문, 노션은 한글이라 자동 매칭이 안 되므로 이 표가 정본이다.
 
 단계 판정:
-    플레이 0시간            → 보유 (샀지만 아직 안 함)
-    플레이 있고 90일 이내    → 플레이중
-    플레이 있고 그보다 오래됨 → 단계는 그대로 두고 기록만 (완료인지 접었는지는 사람이 판단)
+    플레이 0시간            → 보유함 (샀지만 아직 안 함)
+    플레이 있고 90일 이내    → 진행 중
+    플레이 있고 그보다 오래됨 → 진행도는 그대로 두고 기록만 (클리어인지 폐기됨(노잼)인지는 사람이 판단)
 
 사용법:
     python sync_steam.py --dry    # 미리보기
@@ -88,7 +88,7 @@ def main():
             pages[text_of(p["properties"]["제목"])] = p
 
     now = time.time()
-    done = {"갱신": 0, "보유": 0, "플레이중": 0, "누락": []}
+    done = {"갱신": 0, "보유함": 0, "진행 중": 0, "누락": []}
     for appid, title in mapping.items():
         page = pages.get(title)
         g = lib.get(appid)
@@ -106,7 +106,6 @@ def main():
         props = {
             "소유처": {"multi_select": [{"name": v} for v in owners]},
             "획득경로": {"multi_select": [{"name": v} for v in routes]},
-            "중복소유": {"checkbox": len(owners) > 1},
             "플레이시간": {"number": round(g["플레이분"] / 60, 1)},
             "외부ID": {"rich_text": [{"type": "text",
                                     "text": {"content": f"steam:{appid}"}}]},
@@ -115,15 +114,15 @@ def main():
             last = time.strftime("%Y-%m-%d", time.localtime(g["최근플레이"]))
             props["마지막플레이일"] = {"date": {"start": last}}
 
-        stage = page["properties"]["단계"]["select"]
+        stage = page["properties"]["진행도(게임)"]["select"]
         stage = stage["name"] if stage else None
         if g["플레이분"] == 0:
             if stage == "미확인":
-                props["단계"] = {"select": {"name": "보유"}}
-                done["보유"] += 1
+                props["진행도(게임)"] = {"select": {"name": "보유함"}}
+                done["보유함"] += 1
         elif g["최근플레이"] and (now - g["최근플레이"]) < RECENT_DAYS * 86400:
-            props["단계"] = {"select": {"name": "플레이중"}}
-            done["플레이중"] += 1
+            props["진행도(게임)"] = {"select": {"name": "진행 중"}}
+            done["진행 중"] += 1
 
         if a.dry:
             h = g["플레이분"] // 60
@@ -133,7 +132,7 @@ def main():
             time.sleep(0.34)
         done["갱신"] += 1
 
-    print(f"\n갱신 {done['갱신']}건 (보유로 전환 {done['보유']}, 플레이중 {done['플레이중']})")
+    print(f"\n갱신 {done['갱신']}건 (보유함 {done['보유함']}, 진행 중 {done['진행 중']})")
     if done["누락"]:
         print("매칭 실패:", done["누락"])
     if a.dry:

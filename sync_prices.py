@@ -24,7 +24,7 @@ from adapters import igdb, itad
 from config import API, headers
 
 IDS_FILE = "db_ids.json"
-DEFAULT_TARGET = 0.30      # 목표할인율이 비어 있을 때
+DEFAULT_TARGET = 0.30      # 할인 알림 기준. 작품별 조정은 두지 않는다
 
 
 def query_all(dbid):
@@ -111,11 +111,7 @@ def main():
         pr = page["properties"]
         title = txt(pr["제목"])
         owners = [o["name"] for o in pr["소유처"]["multi_select"]]
-        target_rate = pr["목표할인율"]["number"]
-        if target_rate is None:
-            target_rate = DEFAULT_TARGET
-        elif target_rate > 1:          # 30 처럼 넣었을 때
-            target_rate = target_rate / 100
+        target_rate = DEFAULT_TARGET
 
         props = {
             "정가": {"number": round(d["정가"])},
