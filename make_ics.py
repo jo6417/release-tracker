@@ -124,7 +124,43 @@ def event(uid, start, end, summary, desc, url, stamp):
     return lines
 
 
-ICON = {"게임": "[게임]", "영화": "[영화]", "시리즈": "[시리즈]", "만화": "[만화]"}
+# 캘린더에서는 한 줄에 여러 일정이 겹쳐 보이므로 앞 글자만으로 뭔지 알아야 한다.
+# `[게임]` 같은 말머리는 자리를 많이 먹어 제목이 잘렸다. 아이콘 한 글자로 바꾼다.
+#
+# **아이콘은 5개까지만 늘린다.** 종류마다 다른 그림을 주면 20개가 되고, 그러면
+# 아무도 외우지 못해서 아이콘이 그냥 앞에 붙은 장식이 된다. 매체 넷 + 완결 하나면
+# 격자에서 구별하기에 충분하다. 나머지 정보(예약구매인지 DLC인지)는 일정 이름과
+# DESCRIPTION에 이미 글자로 들어 있다.
+#
+# 고를 때 **주 색깔이 서로 겹치지 않는지**를 본다. 격자에서 14px로 줄면 그림이
+# 아니라 색덩어리로 읽히기 때문이다. 🎬·📺·🎮는 셋 다 어두운 회색이라 구별이
+# 안 됐고, 그래서 영화를 🍿(빨강), 만화를 📗(초록)로 바꿨다.
+#   🎮 회색 · 🍿 빨강 · 📺 갈색 · 📗 초록 · 🏁 흑백
+WORK_ICON = {
+    "게임": "🎮",
+    "영화": "🍿",
+    "시리즈": "📺",
+    "만화": "📗",
+    "도서": "📗",      # `종류`에 아직 없다. 나중에 추가되면 그대로 붙는다
+}
+# 애니메이션 체크는 아이콘으로 나누지 않는다. 서양 애니·애니 극장판까지 묶는
+# 축이라 흔히 쓰는 🍥가 절반은 틀린 그림이 된다.
+
+# 일정도 같은 다섯 글자로 떨어뜨린다. 일정 종류는 곧 매체를 말해준다.
+FINALE = "🏁"        # 최종화 — "이제 정주행 가능"이라 유일하게 따로 뺄 값어치가 있다
+SCHED_ICON = {
+    "발표": "🎮", "예약구매": "🎮", "알파테스트": "🎮", "베타테스트": "🎮",
+    "데모": "🎮", "얼리액세스": "🎮", "정식출시": "🎮", "DLC": "🎮",
+    "무료배포": "🎮",
+    "극장개봉": "🍿", "국내개봉": "🍿",
+    "OTT공개": "📺", "시즌시작": "📺", "파트공개": "📺",
+    "최종화": FINALE,
+    "회차": "📗",
+}
+
+
+def work_icon(kind):
+    return WORK_ICON.get(kind, "📌")
 
 
 def main():
@@ -168,7 +204,7 @@ def main():
         if multi(pr["소유처"]):
             bits.append("보유: " + "/".join(multi(pr["소유처"])))
         body += event(p["id"].replace("-", ""), d["start"], d.get("end"),
-                      f"{ICON.get(kind, '')} {title}".strip(),
+                      f"{work_icon(kind)} {title}".strip(),
                       " · ".join(bits), p.get("url"), stamp_of(p, stamp))
         n_work += 1
         if a.limit and n_work >= a.limit:
@@ -184,8 +220,9 @@ def main():
             continue
         if (sel(pr["종류"]) or "") in SKIP_SCHED_KINDS:
             continue
+        skind = sel(pr["종류"]) or ""
         body += event(p["id"].replace("-", ""), d["start"], d.get("end"),
-                      f"📌 {txt(pr['이름'])}", sel(pr["종류"]) or "",
+                      f"{SCHED_ICON.get(skind, '📌')} {txt(pr['이름'])}", skind,
                       p.get("url"), stamp_of(p, stamp))
         n_sched += 1
 
