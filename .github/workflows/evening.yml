@@ -1,0 +1,24 @@
+name: 저녁 브리핑
+
+on:
+  schedule:
+    - cron: "0 10 * * *"      # 19:00 KST (UTC 10:00)
+                              # 아침 09:00 daily.yml은 '달라진 것'을,
+                              # 이쪽은 '지금 상태'를 보낸다
+  workflow_dispatch:          # 수동 실행 버튼
+
+jobs:
+  brief:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      # 노션을 읽기만 한다. 스냅샷도 상태 파일도 건드리지 않으므로 커밋이 없다.
+      - name: 저녁 브리핑
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python briefing.py
