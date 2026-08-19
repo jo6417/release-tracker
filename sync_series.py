@@ -42,6 +42,8 @@ from config import API, headers
 
 IDS_FILE = "db_ids.json"
 WEEK = 7
+# 이보다 오래된 완결일은 캘린더에 올리지 않는다 (make_ics.py의 6개월과 맞춘 값)
+RECENT = (datetime.date.today() - datetime.timedelta(days=180)).isoformat()
 
 
 def query_all(dbid, flt=None):
@@ -305,7 +307,11 @@ def main():
         cur_end = (pr.get("완결일") or {}).get("date")
         cur_end = cur_end["start"][:10] if cur_end else None
 
-        wait = sel(pr.get("날짜정밀도")) == "완결대기"
+        # 캘린더에 올릴 대상. 완결대기로 찍어둔 것 + 완결일이 아직 지나지 않았거나
+        # 얼마 안 지난 것. 시리즈는 시작일이 캘린더에서 빠지므로(make_ics.py)
+        # 최종화 일정이 그 작품의 유일한 캘린더 항목이 된다.
+        wait = (sel(pr.get("날짜정밀도")) == "완결대기"
+                or (finale is not None and finale >= RECENT))
 
         # 대기 중인 작품은 완결(예정)일을 캘린더에도 올린다
         msg = None

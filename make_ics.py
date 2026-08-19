@@ -25,6 +25,10 @@ OUT = "docs/releases.ics"
 # 과거를 다 실으면 이벤트가 677개가 되어 캘린더 앱이 버거워하고
 # 기존 일정과 뒤엉킨다. 최근 것과 미래만 내보낸다.
 PAST_MONTHS = 6
+# 시리즈는 시작일을 캘린더에 넣지 않는다. 몰아보는 사람에게 의미 있는 날짜는
+# "언제 다 나오나"뿐이라, 완결일만 일정 DB의 `최종화` 행으로 나간다.
+SKIP_WORK_KINDS = {"시리즈"}
+SKIP_SCHED_KINDS = {"시즌시작"}
 PRODID = "-//release-tracker//jo6417//KO"
 
 
@@ -153,6 +157,8 @@ def main():
         if (d.get("end") or d["start"]) < cutoff:
             continue
         kind = sel(pr["종류"]) or ""
+        if kind in SKIP_WORK_KINDS:
+            continue
         title = txt(pr["제목"])
         bits = []
         if multi(pr["플랫폼"]):
@@ -175,6 +181,8 @@ def main():
         pr = p["properties"]
         d = pr["날짜"]["date"]
         if (d.get("end") or d["start"]) < cutoff:
+            continue
+        if (sel(pr["종류"]) or "") in SKIP_SCHED_KINDS:
             continue
         body += event(p["id"].replace("-", ""), d["start"], d.get("end"),
                       f"📌 {txt(pr['이름'])}", sel(pr["종류"]) or "",
