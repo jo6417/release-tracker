@@ -131,72 +131,57 @@ def watch_line(row, today=None, has_date_line=False):
 # ─────────────────────────────────────────────
 # 종류별 상세
 # ─────────────────────────────────────────────
+# 상세는 세 줄로 고정한다.
+#
+#   1. 신원   이게 뭐였는지    "시리즈 · 넷플릭스 · 완결"
+#   2. 사실   무슨 일이 있었나 "24/24화 · 종영 2026-08-18"
+#   3. 이유   왜 알리는가      "완결되면 몰아보려고 표시해두셔서 알려드립니다"
+#
+# 3번이 제일 중요하다. 알림을 받고 "이게 왜 떴지"를 되묻게 만들면 그 알림은
+# 실패다. 처음에는 여기에 "'일시 중단'으로 옮기면 이 알림이 멈춘다" 같은
+# 끄는 법을 적었는데, 그건 이유가 아니라 잔소리라 쓸모가 없었다.
+
+
+# 이 진행도들은 "이미 손에 있다"는 뜻이다. 게임패스 입점 알림에서 중복 구매를
+# 경고할지 판단할 때 쓴다.
+HAVE = ("보유함", "진행 중", "일시 중단", "졸업", "엔딩 없음", "폐기됨(노잼)")
+
+IDLE_TEXT = 60      # track.IDLE_DAYS와 같은 값. 문구에만 쓴다
+                    # (track이 describe를 import하므로 반대로는 못 가져온다)
+
+
+def _why(kind, row, today=None):
+    """왜 이 알림이 떴는지 한 문장. 알림마다 반드시 하나씩 붙는다."""
+    waiting = row.get("날짜정밀도") == "완결대기"
+    stage = stage_of(row) or "미확인"
+    return {
+        "완결": ("완결되면 몰아보려고 날짜정밀도를 '완결대기'로 표시해두신 작품이라 알려드립니다"
+                 if waiting else
+                 "아직 안 보신 시리즈가 종영해서 알려드립니다"),
+        "오늘 공개": "오늘부터 볼 수 있게 돼서 알려드립니다",
+        "날짜확정": "날짜가 미정이었는데 확정돼서 알려드립니다",
+        "게임패스": "게임패스에 들어와서 알려드립니다. 구독 중이면 추가 비용 없이 됩니다",
+        "날짜변경": "출시·개봉일이 바뀌어서 알려드립니다",
+        "신규": "작품 DB에 새로 추가돼서 한 번만 알려드립니다",
+        "상태변경": "진행도가 바뀌어서 알려드립니다 (스팀 플레이 기록이 잡히면 자동으로도 바뀝니다)",
+        "방치": f"진행도를 '{stage}'으로 두신 채 {IDLE_TEXT}일 넘게 플레이 기록이 없어서 알려드립니다",
+        "할인": "목표가(정가의 70% 이하)에 들어와서 알려드립니다",
+        "취소": "시리즈가 중단돼서 알려드립니다",
+        "방영": "방영 상태가 바뀌어서 알려드립니다",
+        "백로그": "나온 지 한참 됐는데 아직 손을 안 대셔서 오늘 골라 올렸습니다",
+        # 브리핑의 나머지 칸은 섹션 제목이 곧 이유다. 항목마다 같은 문장을
+        # 열 번 반복하면 그게 소음이라 붙이지 않는다.
+    }.get(kind)
+
+
 def detail(kind, row, note=None, today=None):
-    """알림 한 건의 상세 줄들. 첫 줄은 신원, 가운데는 날짜, 끝은 할 일."""
-    if kind == "방치":
-        lines = [head_line(row)]
-        if note:
-            lines.append(note)
-        hrs = row.get("플레이시간")
-        if hrs:
-            lines.append(f"누적 {hrs}시간")
-        lines.append("→ 이어서 하거나, 진행도를 '일시 중단'으로 옮기면 이 알림이 멈춘다")
-        return lines
+    """알림 한 건의 상세. (신원 / 사실 / 왜 알리는지) 세 줄이 기본이다."""
+    lines = [head_line(row)]
 
-    if kind == "할인":
-        return [head_line(row)] + ([note] if note else [])
-
-    if kind == "백로그":
-        # 이미 나왔는데 손 안 댄 것. 같은 숫자를 세 번 반복하지 않는다.
-        lines = [head_line(row)]
-        av = row.get("이용 가능일")
-        d = _date(av)
-        if d:
-            days = ((today or datetime.date.today()) - d).days
-            verb = {"게임": "출시", "영화": "개봉"}.get(kind_of(row), "공개")
-            lines.append(f"{av[:10]} {verb} — 나온 지 {days}일째 그대로")
-        undone = "안 함" if kind_of(row) == "게임" else "안 봄"
-        lines.append(f"→ 아직 {undone}. 할 거면 지금, 아니면 진행도를 "
-                     "'보류'나 '폐기됨'으로")
-        return lines
-
-    if kind == "진행도":
-        # 진행도가 바뀐 날 출시일이나 "이미 할 수 있음"은 아무 쓸모가 없다.
-        lines = [head_line(row)]
-        if note:
-            lines.append(note)
-        last = row.get("마지막플레이일")
-        if last:
-            lines.append(f"마지막 {last[:10]} ({dday(last, today)})"
-                         + (f" · 누적 {row['플레이시간']}시간" if row.get("플레이시간") else ""))
-        return lines
-
-    if kind == "게임패스":
-        # 이 알림의 핵심은 "구독으로 지금 공짜로 할 수 있다"는 것 하나다.
-        # 게임패스 자체는 소유처에서 빼고 본다 — 입점 알림에 "이미 게임패스로
-        # 갖고 있음"이라고 답하면 아무 말도 안 한 것이 된다.
-        lines = [head_line(row)]
-        owned = [o for o in (row.get("소유처") or []) if o != "게임패스"]
-        if owned:
-            j = _join(owned)
-            lines.append(f"→ 이미 {j}{euro(j)} 갖고 있음. 중복 구매 주의")
-        else:
-            lines.append("→ 게임패스에 들어옴. 구독 중이면 지금 바로 할 수 있다")
-        return lines
-
-    if kind == "볼차례":
-        # note가 "오늘 공개. 이제 볼 수 있다"라 볼 시점 줄을 또 붙이면 겹친다.
-        lines = [head_line(row)]
-        if note:
-            lines.append(note)
-        if row.get("방영진행"):
-            lines.append(row["방영진행"])
-        return lines
-
-    if kind == "진행중":
-        lines = [head_line(row)]
-        last = row.get("마지막플레이일")
+    # ── 2번 줄: 무슨 일이 있었나
+    if kind in ("방치", "진행중"):
         bits = []
+        last = row.get("마지막플레이일")
         if last:
             bits.append(f"마지막 {last[:10]} ({dday(last, today)})")
         if row.get("플레이시간"):
@@ -205,17 +190,59 @@ def detail(kind, row, note=None, today=None):
             bits.append(row["방영진행"])
         if bits:
             lines.append(" · ".join(bits))
+    elif kind == "상태변경":
         if note:
             lines.append(note)
-        return lines
+            note = None
+        last = row.get("마지막플레이일")
+        if last:
+            lines.append(f"마지막 {last[:10]} ({dday(last, today)})"
+                         + (f" · 누적 {row['플레이시간']}시간"
+                            if row.get("플레이시간") else ""))
+    elif kind == "할인":
+        if note:
+            lines.append(note)
+            note = None
+    elif kind == "게임패스":
+        # 이 알림에 출시일과 "이미 할 수 있음"은 아무 값어치가 없다.
+        # 알고 싶은 건 딱 하나 — 돈 또 쓰는 건가 아닌가.
+        # 소유처의 게임패스는 빼고 본다. 입점 알림에 "이미 게임패스로 갖고 있음"은
+        # 아무 말도 안 한 것이 된다.
+        owned = [o for o in (row.get("소유처") or []) if o != "게임패스"]
+        if owned:
+            j = _join(owned)
+            lines.append(f"이미 {j}{euro(j)} 갖고 있음 — 중복 구매 주의")
+        elif stage_of(row) in HAVE:
+            # 소유처가 비어 있어도 진행도가 이미 손에 있다고 말하는 경우가 있다
+            lines.append(f"진행도가 '{stage_of(row)}' — 이미 갖고 있음 (소유처 미기록)")
+        else:
+            lines.append("아직 미보유")
 
-    lines = [head_line(row)]
-    dl = date_line(row, today)
-    if dl:
-        lines.append(dl)
+    elif kind == "오늘 공개":
+        # 날짜 줄도 볼 시점 줄도 이유 줄도 전부 "오늘"이라 한 줄이면 족하다.
+        if row.get("방영진행"):
+            lines.append(row["방영진행"])
+
+    elif kind == "백로그":
+        av = row.get("이용 가능일")
+        d = _date(av)
+        if d:
+            days = ((today or datetime.date.today()) - d).days
+            verb = {"게임": "출시", "영화": "개봉"}.get(kind_of(row), "공개")
+            lines.append(f"{av[:10]} {verb} — 나온 지 {days}일째 그대로")
+    else:
+        dl = date_line(row, today)
+        if dl:
+            lines.append(dl)
+        wl = watch_line(row, today, has_date_line=bool(dl))
+        if wl:
+            lines.append(wl)
+
     if note:
         lines.append(note)
-    wl = watch_line(row, today, has_date_line=bool(dl))
-    if wl:
-        lines.append(wl)
+
+    # ── 3번 줄: 왜 알리는가
+    why = _why(kind, row, today)
+    if why:
+        lines.append(why)
     return lines

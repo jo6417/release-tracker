@@ -43,10 +43,15 @@ EXTRA = ["마지막플레이일", "플레이시간", "방영진행", "이용 가
          "공개처", "플랫폼", "소유처"]
 IDLE_DAYS = 60          # 진행 중인데 이 기간 넘게 안 켠 게임은 방치로 본다
 IDLE_REMIND = 30        # 같은 방치를 다시 알리기까지의 간격
+# `신규`는 스냅샷에 없는 행을 말한다. 그런데 스냅샷이 낡으면(로컬에서 돌렸거나
+# 워크플로가 하루 걸렀거나) 며칠 전에 넣은 작품이 다시 신규로 뜬다. 실제로
+# 같은 시리즈 3건이 이틀 연속 신규로 울렸다. 노션의 생성 시각을 같이 보고,
+# 이 기간이 지난 행은 스냅샷에 없어도 신규로 치지 않는다.
+NEW_DAYS = 2
 
 # 카드 요약에서 이 순서로 묶는다. 앞쪽이 더 중요한 것.
-KIND_ORDER = ["완결", "볼차례", "날짜확정", "게임패스", "방영", "취소",
-              "날짜변경", "신규", "진행도", "방치"]
+KIND_ORDER = ["완결", "오늘 공개", "날짜확정", "게임패스", "방영", "취소",
+              "날짜변경", "신규", "상태변경", "방치"]
 
 
 def query_all(dbid):
@@ -146,8 +151,7 @@ def idle_check(cur, state, today=None):
             except ValueError:
                 pass
         seen[pid] = today.isoformat()
-        out.append(event("방치", row,
-                         note=f"진행 중인데 {gap}일째 안 켬 (마지막 {last[:10]})"))
+        out.append(event("방치", row))
     return out
 
 
@@ -164,9 +168,7 @@ def available_check(cur, today=None):
             continue
         d = row.get("이용 가능일")
         if d and d[:10] == stamp:
-            what = "완결" if row.get("방영상태") in ("완결", "시즌완결") else "공개"
-            out.append(event("볼차례", row, note=f"오늘 {what}. 이제 볼 수 있다",
-                             urgent=True))
+            out.append(event("오늘 공개", row, urgent=True))
     return out
 
 
@@ -176,7 +178,8 @@ def snapshot():
     out = {}
     for p in query_all(ids["work_db"]):
         props = p["properties"]
-        row = {"제목": value(props["제목"]), "종류": value(props["종류"])}
+        row = {"제목": value(props["제목"]), "종류": value(props["종류"]),
+               "생성일": p["created_time"][:10]}
         for k in WATCH + EXTRA:
             if k in props:
                 row[k] = value(props[k])
@@ -194,12 +197,20 @@ def load_prev():
         return json.load(f), files[-1]
 
 
-def diff(prev, cur):
+def diff(prev, cur, today=None):
     """어제와 오늘의 차이를 알림 이벤트 목록으로."""
+    today = today or datetime.date.today()
     events = []
     for pid, now in cur.items():
         old = prev.get(pid)
         if old is None:
+            born = now.get("생성일")
+            if born:
+                try:
+                    if (today - datetime.date.fromisoformat(born)).days > NEW_DAYS:
+                        continue      # 스냅샷이 낡은 것뿐이다. 이미 알렸다
+                except ValueError:
+                    pass
             events.append(event("신규", now))
             continue
         for k in WATCH:
@@ -220,10 +231,8 @@ def diff(prev, cur):
                     waiting = now.get("날짜정밀도") == "완결대기"
                     events.append(event(
                         "완결", now,
-                        # 문구를 여기서 다 쓰지 않는다. describe가 붙이는
-                        # "→ 완결. 이제 몰아볼 수 있음"과 같은 말을 두 번 하게 된다.
-                        note="완결 기다리던 작품이다" if waiting
-                             else f"방영상태 {a} → {b}",
+                        # 문구는 describe가 만든다. 여기서는 사실만 넘긴다.
+                        note=None if waiting else f"방영상태 {a} → {b}",
                         urgent=waiting))
                 elif b == "취소":
                     events.append(event("취소", now, note="시리즈 중단"))
@@ -231,14 +240,13 @@ def diff(prev, cur):
                     events.append(event("방영", now, note=f"방영상태 {a} → {b}"))
             elif k == "날짜정밀도" and b == "확정":
                 events.append(event("날짜확정", now,
-                                    note=f"날짜 확정 ({a} → 확정)", urgent=True))
+                                    note=f"날짜정밀도 {a} → 확정", urgent=True))
             elif k == "게임패스" and b:
-                events.append(event("게임패스", now, note="게임패스 입점",
-                                    urgent=True))
+                events.append(event("게임패스", now, urgent=True))
             elif k == "출시·개봉일":
                 events.append(event("날짜변경", now, note=f"날짜 {a} → {b}"))
             elif k in STAGE:
-                events.append(event("진행도", now, note=f"진행도 {a} → {b}"))
+                events.append(event("상태변경", now, note=f"진행도 {a} → {b}"))
             else:
                 events.append(event(k, now, note=f"{k} {a} → {b}"))
     return events
@@ -296,7 +304,7 @@ def main():
         events = []
     else:
         prev_data, prev_name = prev
-        events = diff(prev_data, cur)
+        events = diff(prev_data, cur, datetime.date.today())
         print(f"{prev_name}과 대조 — 변경 {len(events)}건")
 
     # --dry는 아무것도 바꾸지 않는다 (스냅샷을 덮어쓰면 기준값이 사라진다)
