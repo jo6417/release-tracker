@@ -23,7 +23,11 @@
 | `add_steam_games.py` | 스팀에만 있는 게임을 작품으로 추가 |
 | `sync_series.py` | 시리즈 방영·완결 상태를 TMDB로 갱신 (완결대기 알림·캘린더) |
 | `track.py` | 스냅샷 대조로 변화 감지 → 알림 |
-| `notify.py` | 노션 멘션 알림 |
+| `notify.py` | 노션 알림 DB에 카드 한 장 (@멘션 → 폰 푸시) |
+| `describe.py` | 알림 문구 — 요약 한 줄과 "언제부터 보면 되나" 상세 |
+| `briefing.py` | 저녁 19시 브리핑 — 지금 상태 한 장 (오늘·7일내·진행중·백로그) |
+| `create_notify_db.py` | 알림 DB 생성 (최초 1회) |
+| `rename_option.py` | select 옵션 이름 바꾸기 (노션 UI가 더 빠르다 — HANDOFF 참고) |
 | `adapters/tmdb.py` | TMDB 조회 (소스별 격리) |
 | `adapters/anilist.py` | AniList 조회 — 애니 회차별 방영일 (키 불필요) |
 | `adapters/igdb.py` | IGDB 조회 |

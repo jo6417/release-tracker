@@ -64,11 +64,18 @@ WORK_SCHEMA = {
         {"name": "출시 대기", "color": "yellow"},
         {"name": "구매 대기", "color": "orange"},      # 살 예정
         {"name": "보유함", "color": "blue"},
+        # 끝이 없는 게임 — 온라인·캐주얼·샌드박스처럼 엔딩으로 갈 일이 없는 것.
+        # `보유함`에 섞어두면 "아직 안 한 것"으로 잡혀 백로그 알림에 영원히 뜬다.
+        # 안 한 게 아니라 끝이 없는 것이라, 알림 대상에서 통째로 뺀다.
+        # (Backloggery의 `Endless`, Backloggd의 `Retired`와 같은 자리다)
+        {"name": "엔딩 없음", "color": "blue"},
         {"name": "진행 중", "color": "green"},
         {"name": "일시 중단", "color": "red"},
         {"name": "구매 보류", "color": "default"},     # 안 사기로 한 것
         {"name": "폐기됨(노잼)", "color": "gray"},
-        {"name": "클리어", "color": "purple"},
+        # 엔딩을 본 것과 "더 파먹을 게 없어 그만둔 것"을 한 값으로 묶는다.
+        # 엔딩 없는 게임에는 클리어가 없지만 졸업은 있다.
+        {"name": "졸업", "color": "purple"},
     ]}},
     "진행도(영상)": {"select": {"options": [
         {"name": "미확인", "color": "brown"},
@@ -164,7 +171,7 @@ WORK_SCHEMA = {
     "역대최저가": {"number": {"format": "won"}},
     "평점": {"number": {"format": "number"}},
 
-    "클리어일": {"date": {}},
+    "졸업일": {"date": {}},
     "마지막플레이일": {"date": {}},
     "플레이시간": {"number": {"format": "number"}},
     "개인평점": {"select": {"options": [
