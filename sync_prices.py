@@ -130,12 +130,20 @@ def main():
         was_hit = prev is not None and prev <= limit
         hit = now_hit and not was_hit and not owners and prev is not None
         if hit:
-            line = (f"[할인] {title} {d['할인율']}% "
-                    f"({d['현재최저가']:,.0f}원 / 정가 {d['정가']:,.0f}원) @ {d['상점']}")
+            plats = ([o["name"] for o in pr["플랫폼"]["multi_select"]]
+                     if "플랫폼" in pr else [])
+            lines = [f"{d['할인율']}% 할인 — {d['현재최저가']:,.0f}원 "
+                     f"(정가 {d['정가']:,.0f}원) @ {d['상점']}"]
             low = lows.get(gid)
             if low:
-                line += f" / 역대최저 {low:,.0f}원"
-            alerts.append(line)
+                gap = d["현재최저가"] - low
+                lines.append(f"역대최저 {low:,.0f}원"
+                             + (" — 지금이 역대최저" if gap <= 0
+                                else f" (지금은 {gap:,.0f}원 비쌈)"))
+            lines.append("→ 미보유" + (f" · {'/'.join(plats)}" if plats else ""))
+            alerts.append((title,
+                           f"{title} {d['할인율']}% {d['현재최저가']:,.0f}원",
+                           lines))
 
         n += 1
         if a.dry:
@@ -149,12 +157,16 @@ def main():
             time.sleep(0.34)
 
     print(f"\n{'갱신 예정' if a.dry else '갱신'} {n}건 / 목표가 도달 {len(alerts)}건")
-    for line in alerts[:15]:
-        print("   " + line.replace("\n", " "))
+    for _, short, _ in alerts[:15]:
+        print("   " + short)
     if alerts and not a.dry:
-        for line in alerts:
-            notify.send(line)
-        print("알림 발송 완료")
+        # 할인도 카드 한 장으로 묶는다. 낱개로 보내면 세일 기간에 알림이 쏟아진다.
+        notify.send_card(
+            f"목표가 도달 {len(alerts)}건",
+            summary=["[할인] " + ", ".join(t for t, _, _ in alerts)],
+            details=[(f"[할인] {t}", lines) for t, _, lines in alerts],
+            kinds=["할인"], count=len(alerts))
+        print("알림 카드 1장 발송 완료")
 
 
 if __name__ == "__main__":

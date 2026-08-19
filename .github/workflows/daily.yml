@@ -58,7 +58,9 @@ jobs:
         run: |
           git config user.name "release-tracker"
           git config user.email "noreply@github.com"
-          git add snapshots/
+          # notify_state.json은 방치 알림을 언제 보냈는지 기억한다.
+          # 커밋하지 않으면 러너가 매번 새로 시작해 같은 알림이 매일 다시 울린다.
+          git add snapshots/ notify_state.json
           if git diff --staged --quiet; then
             echo "스냅샷 변경 없음"
             exit 0
