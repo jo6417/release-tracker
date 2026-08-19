@@ -46,6 +46,15 @@ def _join(v):
     return "/".join(v) if isinstance(v, list) else v
 
 
+def euro(word):
+    """받침에 맞는 '으로/로'. '게임패스으로' 같은 게 알림에 그대로 나갔었다."""
+    ch = word[-1] if word else ""
+    if not ("가" <= ch <= "힣"):
+        return "로"
+    jong = (ord(ch) - 0xAC00) % 28
+    return "로" if jong in (0, 8) else "으로"      # 받침 없음 또는 ㄹ
+
+
 def kind_of(row):
     """작품의 매체(게임·영화·시리즈·만화). 알림 종류와 헷갈리지 않게 따로 둔다."""
     return row.get("종류")
@@ -85,13 +94,20 @@ def date_line(row, today=None):
     return " · ".join(parts)
 
 
-def watch_line(row, today=None):
-    """언제부터 보면 되는지. 알림을 행동으로 바꾸는 줄이라 항상 넣는다."""
-    today = today or datetime.date.today()
-    kind = row.get("종류")
-    verb = "할 수 있음" if kind == "게임" else "볼 수 있음"
+def watch_line(row, today=None, has_date_line=False):
+    """언제부터 보면 되는지. 알림을 행동으로 바꾸는 줄이라 웬만하면 넣는다.
 
-    if row.get("날짜정밀도") == "완결대기":
+    `has_date_line`이 True면 바로 윗줄이 이미 날짜와 D-day를 말한 상태다.
+    그때 "그 날짜부터 볼 수 있음"을 또 적으면 같은 숫자가 두 번 나온다.
+    덧붙일 게 없으면 None을 돌려 줄을 통째로 뺀다.
+    """
+    today = today or datetime.date.today()
+    verb = "할 수 있음" if kind_of(row) == "게임" else "볼 수 있음"
+    # 완결/시즌완결이면 기다림은 끝난 것이다. 이걸 안 보고 날짜정밀도만 보면
+    # 완결 알림에 "완결 기다리는 중"이 붙는다.
+    done = row.get("방영상태") in ("완결", "시즌완결")
+
+    if row.get("날짜정밀도") == "완결대기" and not done:
         fin = row.get("완결일")
         if fin:
             return f"→ 완결 기다리는 중. {fin[:10]}({dday(fin, today)})부터 정주행"
@@ -102,7 +118,11 @@ def watch_line(row, today=None):
     if not d:
         return "→ 날짜 미정. 확정되면 다시 알림"
     if d > today:
+        if has_date_line and av == row.get("출시·개봉일"):
+            return None          # 윗줄이 이미 같은 날짜와 D-day를 말했다
         return f"→ {av[:10]}부터 {verb} ({dday(av, today)})"
+    if done:
+        return "→ 완결. 이제 몰아볼 수 있음"      # 화수·종영일은 윗줄이 이미 말했다
     if row.get("방영상태") == "방영중":
         return "→ 지금 주간 방영 중. 몰아볼 거면 완결까지 대기"
     return f"→ 이미 {verb} (공개 {dday(av, today)})"
@@ -140,6 +160,39 @@ def detail(kind, row, note=None, today=None):
                      "'보류'나 '폐기됨'으로")
         return lines
 
+    if kind == "진행도":
+        # 진행도가 바뀐 날 출시일이나 "이미 할 수 있음"은 아무 쓸모가 없다.
+        lines = [head_line(row)]
+        if note:
+            lines.append(note)
+        last = row.get("마지막플레이일")
+        if last:
+            lines.append(f"마지막 {last[:10]} ({dday(last, today)})"
+                         + (f" · 누적 {row['플레이시간']}시간" if row.get("플레이시간") else ""))
+        return lines
+
+    if kind == "게임패스":
+        # 이 알림의 핵심은 "구독으로 지금 공짜로 할 수 있다"는 것 하나다.
+        # 게임패스 자체는 소유처에서 빼고 본다 — 입점 알림에 "이미 게임패스로
+        # 갖고 있음"이라고 답하면 아무 말도 안 한 것이 된다.
+        lines = [head_line(row)]
+        owned = [o for o in (row.get("소유처") or []) if o != "게임패스"]
+        if owned:
+            j = _join(owned)
+            lines.append(f"→ 이미 {j}{euro(j)} 갖고 있음. 중복 구매 주의")
+        else:
+            lines.append("→ 게임패스에 들어옴. 구독 중이면 지금 바로 할 수 있다")
+        return lines
+
+    if kind == "볼차례":
+        # note가 "오늘 공개. 이제 볼 수 있다"라 볼 시점 줄을 또 붙이면 겹친다.
+        lines = [head_line(row)]
+        if note:
+            lines.append(note)
+        if row.get("방영진행"):
+            lines.append(row["방영진행"])
+        return lines
+
     if kind == "진행중":
         lines = [head_line(row)]
         last = row.get("마지막플레이일")
@@ -162,5 +215,7 @@ def detail(kind, row, note=None, today=None):
         lines.append(dl)
     if note:
         lines.append(note)
-    lines.append(watch_line(row, today))
+    wl = watch_line(row, today, has_date_line=bool(dl))
+    if wl:
+        lines.append(wl)
     return lines

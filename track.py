@@ -220,7 +220,9 @@ def diff(prev, cur):
                     waiting = now.get("날짜정밀도") == "완결대기"
                     events.append(event(
                         "완결", now,
-                        note="기다리던 완결 — 이제 정주행 가능" if waiting
+                        # 문구를 여기서 다 쓰지 않는다. describe가 붙이는
+                        # "→ 완결. 이제 몰아볼 수 있음"과 같은 말을 두 번 하게 된다.
+                        note="완결 기다리던 작품이다" if waiting
                              else f"방영상태 {a} → {b}",
                         urgent=waiting))
                 elif b == "취소":

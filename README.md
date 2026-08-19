@@ -26,6 +26,7 @@
 | `notify.py` | 노션 알림 DB에 카드 한 장 (@멘션 → 폰 푸시) |
 | `describe.py` | 알림 문구 — 요약 한 줄과 "언제부터 보면 되나" 상세 |
 | `briefing.py` | 저녁 19시 브리핑 — 지금 상태 한 장 (오늘·7일내·진행중·백로그) |
+| `preview_card.py` | 알림 카드 견본 출력 (노션 미발송). 문구 고칠 때 먼저 돌린다 |
 | `create_notify_db.py` | 알림 DB 생성 (최초 1회) |
 | `rename_option.py` | select 옵션 이름 바꾸기 (노션 UI가 더 빠르다 — HANDOFF 참고) |
 | `adapters/tmdb.py` | TMDB 조회 (소스별 격리) |
