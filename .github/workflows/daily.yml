@@ -42,6 +42,25 @@ jobs:
         run: python sync_series.py
         continue-on-error: true
 
+      # 빈 것부터 조금씩 채운다. 매일 밀면 새로 들어온 작품이 알아서 붙는다
+      - name: 작품 소개 채우기
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python sync_intro.py --limit 120
+        continue-on-error: true
+
+      - name: 새 트레일러 감지
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python sync_media.py
+        continue-on-error: true
+
       - name: 변화 감지 및 알림
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -60,7 +79,10 @@ jobs:
           git config user.email "noreply@github.com"
           # notify_state.json은 방치 알림을 언제 보냈는지 기억한다.
           # 커밋하지 않으면 러너가 매번 새로 시작해 같은 알림이 매일 다시 울린다.
-          git add snapshots/ notify_state.json
+          # media_state.json은 어떤 트레일러를 이미 알렸는지 기억한다.
+          # 커밋하지 않으면 러너가 매번 빈 상태로 시작해 첫 실행 취급이 되고,
+          # 그러면 새 영상을 영원히 못 잡는다 (기준값만 다시 잡는다).
+          git add snapshots/ notify_state.json media_state.json youtube_watch.json
           if git diff --staged --quiet; then
             echo "스냅샷 변경 없음"
             exit 0

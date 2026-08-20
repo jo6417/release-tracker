@@ -20,6 +20,7 @@ import io
 import json
 import os
 import time
+import urllib.error
 import urllib.request
 
 import describe
@@ -38,9 +39,17 @@ STAGE = describe.STAGE
 # 아직 안 했고 앞으로 할 것. `구매 보류`(안 사기로)와 `시청 보류`는 제외 쪽이라 뺀다.
 UNSEEN = ("출시 대기", "구매 대기", "보유함", "공개 대기", "시청 안함")
 PLAYING = ("진행 중", "시청 중")
+# 출시일이 지났는데도 대기 상태로 남아 있는 행을 다음 단계로 민다.
+# `출시 대기`는 "아직 안 나왔다"는 뜻인데, 나온 뒤에도 그대로면 기대작 뷰에
+# 계속 눌러앉고 백로그로는 넘어가지 않는다. 날짜가 이미 말해주는 걸 사람이
+# 손으로 옮기고 있었다.
+PROMOTE = {
+    "진행도(게임)": ("출시 대기", "구매 대기"),
+    "진행도(영상)": ("공개 대기", "시청 안함"),
+}
 # 스냅샷에는 담되 그 자체로는 알림을 만들지 않는 것 (문구를 만들 때 쓴다)
 EXTRA = ["마지막플레이일", "플레이시간", "방영진행", "이용 가능일", "완결일",
-         "공개처", "플랫폼", "소유처"]
+         "공개처", "플랫폼", "소유처", "소개"]
 IDLE_DAYS = 60          # 진행 중인데 이 기간 넘게 안 켠 게임은 방치로 본다
 IDLE_REMIND = 30        # 같은 방치를 다시 알리기까지의 간격
 # `신규`는 스냅샷에 없는 행을 말한다. 그런데 스냅샷이 낡으면(로컬에서 돌렸거나
@@ -51,7 +60,7 @@ NEW_DAYS = 2
 
 # 카드 요약에서 이 순서로 묶는다. 앞쪽이 더 중요한 것.
 KIND_ORDER = ["완결", "오늘 공개", "날짜확정", "게임패스", "방영", "취소",
-              "날짜변경", "신규", "상태변경", "방치"]
+              "날짜변경", "신규", "전환", "상태변경", "방치"]
 
 
 def query_all(dbid):
@@ -69,6 +78,22 @@ def query_all(dbid):
         if not d.get("has_more"):
             return out
         cursor = d["next_cursor"]
+
+
+def patch_page(pid, props):
+    req = urllib.request.Request(f"{API}/pages/{pid}",
+                                 data=json.dumps({"properties": props}).encode(),
+                                 headers=headers(), method="PATCH")
+    for attempt in range(4):
+        try:
+            with urllib.request.urlopen(req) as r:
+                return json.loads(r.read())
+        except urllib.error.HTTPError as e:
+            if e.code == 429:
+                time.sleep(2 ** attempt)
+                continue
+            raise
+    raise RuntimeError("재시도 초과")
 
 
 def value(prop):
@@ -169,6 +194,48 @@ def available_check(cur, today=None):
         d = row.get("이용 가능일")
         if d and d[:10] == stamp:
             out.append(event("오늘 공개", row, urgent=True))
+    return out
+
+
+def released(row, today):
+    """이 행이 정말 나왔는가. 추정 날짜로는 옮기지 않는다.
+
+    날짜정밀도가 `월`이나 `분기`면 출시·개봉일은 그 구간의 첫날이 들어 있는
+    자리표시자다. 그걸 지났다고 대기를 풀면 아직 안 나온 게임이 구매 대기로
+    올라간다. 확정된 날짜만 근거로 쓴다.
+    """
+    av = row.get("이용 가능일")
+    if not av or av[:10] > today.isoformat():
+        return False
+    if row.get("날짜정밀도") == "완결대기":
+        # 완결일은 남은 화수 × 7일 추정일 수 있다. 실제로 끝났는지는 방영상태가 말한다
+        return row.get("방영상태") in ("완결", "시즌완결")
+    return row.get("날짜정밀도") == "확정"
+
+
+def promote_stage(cur, today=None, dry=False):
+    """출시일이 지난 대기 행을 다음 단계로 옮긴다 (노션에 직접 쓴다).
+
+    `cur`도 같이 고쳐야 한다. 스냅샷에 옛 값이 남으면 내일 대조에서 우리가 쓴
+    값이 `[상태변경]`으로 되돌아온다 — 자기가 한 일을 자기가 알리는 꼴이다.
+    """
+    today = today or datetime.date.today()
+    out = []
+    for pid, row in cur.items():
+        for prop, (before, after) in PROMOTE.items():
+            if row.get(prop) != before:
+                continue
+            if not released(row, today):
+                break
+            if not dry:
+                patch_page(pid, {prop: {"select": {"name": after}}})
+                time.sleep(0.34)
+            row[prop] = after
+            # 오늘 나온 건 available_check가 [오늘 공개]로 이미 알린다.
+            # 여기서 또 세면 같은 작품이 카드에 두 줄로 뜬다
+            if (row.get("이용 가능일") or "")[:10] != today.isoformat():
+                out.append(event("전환", row, note=f"진행도 {before} → {after}"))
+            break
     return out
 
 
@@ -306,6 +373,10 @@ def main():
         prev_data, prev_name = prev
         events = diff(prev_data, cur, datetime.date.today())
         print(f"{prev_name}과 대조 — 변경 {len(events)}건")
+
+    # 전환은 대조가 끝난 뒤에 한다. 먼저 하면 우리가 쓴 값이 그대로
+    # [상태변경] 알림이 되고, 스냅샷에는 전환 후 값이 담겨야 내일 조용하다.
+    events += promote_stage(cur, datetime.date.today(), a.dry)
 
     # --dry는 아무것도 바꾸지 않는다 (스냅샷을 덮어쓰면 기준값이 사라진다)
     if not a.dry:

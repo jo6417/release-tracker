@@ -22,10 +22,12 @@
 | `sync_steam.py` | 스팀 보유·플레이시간을 노션에 반영 |
 | `add_steam_games.py` | 스팀에만 있는 게임을 작품으로 추가 |
 | `sync_series.py` | 시리즈 방영·완결 상태를 TMDB로 갱신 (완결대기 알림·캘린더) |
+| `sync_intro.py` | 작품 한 줄 소개 채우기 (스팀 한국어 → TMDB ko-KR → IGDB 영문) |
+| `sync_media.py` | 새 트레일러 감지 (유튜브 RSS · 스팀 · TMDB · IGDB) |
 | `track.py` | 스냅샷 대조로 변화 감지 → 알림 |
 | `notify.py` | 노션 알림 DB에 카드 한 장 (@멘션 → 폰 푸시) |
 | `describe.py` | 알림 문구 — 요약 한 줄과 "언제부터 보면 되나" 상세 |
-| `briefing.py` | 저녁 19시 브리핑 — 지금 상태 한 장 (오늘·7일내·진행중·백로그) |
+| `briefing.py` | 저녁 19시 브리핑 — 지금 상태 한 장 (오늘 공개·7일내·진행 중·오늘의 추천) |
 | `preview_card.py` | 알림 카드 견본 출력 (노션 미발송). 문구 고칠 때 먼저 돌린다 |
 | `create_notify_db.py` | 알림 DB 생성 (최초 1회) |
 | `rename_option.py` | select 옵션 이름 바꾸기 (노션 UI가 더 빠르다 — HANDOFF 참고) |
@@ -41,6 +43,7 @@ API로 자동 매칭이 안 되는 부분은 표로 고정해 둔다. 한 번 �
 | 파일 | 내용 |
 |---|---|
 | `steam_map.json` | 스팀 appid ↔ 작품 제목 (스팀은 영문, 노션은 한글) |
+| `youtube_watch.json` | 감시할 유튜브 채널. **작품 DB에 없는 것도 잡는 유일한 경로** |
 | `game_title_en.json` | 한글 게임 제목 → 영문 (IGDB 한글 검색 히트율 10%) |
 | `tmdb_match.json` / `igdb_match.json` | 매칭 결과 캐시 |
 

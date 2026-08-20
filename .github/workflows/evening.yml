@@ -7,6 +7,9 @@ on:
                               # 이쪽은 '지금 상태'를 보낸다
   workflow_dispatch:          # 수동 실행 버튼
 
+permissions:
+  contents: write             # media_state.json 커밋용
+
 jobs:
   brief:
     runs-on: ubuntu-latest
@@ -17,8 +20,36 @@ jobs:
         with:
           python-version: "3.12"
 
-      # 노션을 읽기만 한다. 스냅샷도 상태 파일도 건드리지 않으므로 커밋이 없다.
+      # 트레일러는 낮에 뜬다. 아침 09:00에만 보면 그날 저녁 브리핑에 한 줄도
+      # 없이 지나가고, 실제로 2026-08-20에 그렇게 놓쳤다. 저녁에 한 번 더 본다.
+      - name: 새 트레일러 감지
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python sync_media.py
+        continue-on-error: true
+
+      # 브리핑 자체는 노션을 읽기만 한다
       - name: 저녁 브리핑
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python briefing.py
+
+      - name: 영상 기록 커밋
+        run: |
+          git config user.name "release-tracker"
+          git config user.email "noreply@github.com"
+          git add media_state.json youtube_watch.json
+          if git diff --staged --quiet; then
+            echo "영상 기록 변경 없음"
+            exit 0
+          fi
+          git commit -m "영상 기록 $(date +%Y-%m-%dT%H%MZ)"
+          for i in 1 2 3; do
+            git pull --rebase --autostash && git push && exit 0
+            echo "push 재시도 $i"
+            sleep 5
+          done
+          exit 1

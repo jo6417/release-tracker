@@ -146,8 +146,34 @@ def watch_line(row, today=None, has_date_line=False):
 # 경고할지 판단할 때 쓴다.
 HAVE = ("보유함", "진행 중", "일시 중단", "졸업", "엔딩 없음", "폐기됨(노잼)")
 
+# 소개(한 줄 줄거리)를 붙이는 칸. "이게 뭐였지"가 실제로 문제가 되는 자리다.
+# 추천은 제목만 던지면 그냥 넘기게 되고, 신규·오늘 공개는 몇 달 전에 넣어둔
+# 작품이라 제목을 봐도 기억이 안 난다. 반대로 진행 중·방치는 지금 붙잡고 있는
+# 것이라 설명이 필요 없다.
+INTRO_KINDS = ("백로그", "오늘", "곧", "완결임박", "오늘 공개", "신규", "영상")
+INTRO_MAX = 150     # 카드에서 한눈에 읽히는 길이. 넘으면 문장 끝에서 자른다
+
 IDLE_TEXT = 60      # track.IDLE_DAYS와 같은 값. 문구에만 쓴다
                     # (track이 describe를 import하므로 반대로는 못 가져온다)
+
+
+def intro_line(row, limit=INTRO_MAX):
+    """작품 한 줄 소개. `소개` 속성을 sync_intro.py가 채워둔다.
+
+    문장 중간에서 끊으면 읽다 만 느낌이라, 마침표가 있으면 거기까지만 쓴다.
+    """
+    text = (row.get("소개") or "").strip().replace(chr(10), " ").replace(chr(13), " ")
+    if not text:
+        return None
+    if len(text) > limit:
+        cut = text[:limit]
+        for mark in ("。", ". ", "다. ", "! ", "? "):
+            i = cut.rfind(mark)
+            if i > limit // 2:
+                cut = cut[:i + len(mark)]
+                break
+        text = cut.rstrip() + "…"
+    return text
 
 
 def _why(kind, row, today=None):
@@ -168,7 +194,9 @@ def _why(kind, row, today=None):
         "할인": "목표가(정가의 70% 이하)에 들어와서 알려드립니다",
         "취소": "시리즈가 중단돼서 알려드립니다",
         "방영": "방영 상태가 바뀌어서 알려드립니다",
-        "백로그": "나온 지 한참 됐는데 아직 손을 안 대셔서 오늘 골라 올렸습니다",
+        "백로그": "출시 후 시간이 지났으나 아직 이용 기록이 없어 오늘의 추천으로 선정했습니다",
+        "전환": "출시·개봉일이 지나 대기 상태를 자동으로 다음 단계로 옮겼습니다",
+        "영상": "공개 대기 중인 작품의 새 영상이 올라와서 알려드립니다",
         # 브리핑의 나머지 칸은 섹션 제목이 곧 이유다. 항목마다 같은 문장을
         # 열 번 반복하면 그게 소음이라 붙이지 않는다.
     }.get(kind)
@@ -177,6 +205,12 @@ def _why(kind, row, today=None):
 def detail(kind, row, note=None, today=None):
     """알림 한 건의 상세. (신원 / 사실 / 왜 알리는지) 세 줄이 기본이다."""
     lines = [head_line(row)]
+
+    # ── 소개: 제목만으로는 이게 뭔지 안 떠오르는 칸에만
+    if kind in INTRO_KINDS:
+        intro = intro_line(row)
+        if intro:
+            lines.append(intro)
 
     # ── 2번 줄: 무슨 일이 있었나
     if kind in ("방치", "진행중"):
