@@ -387,7 +387,8 @@ def main():
         return
     notify.send_card(title, summary, details, kinds=kinds, count=len(events),
                      date=today)
-    print("\n알림 카드 1장 발송 완료")
+    if not notify.spooling():
+        print("\n알림 카드 1장 발송 완료")
 
 
 if __name__ == "__main__":

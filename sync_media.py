@@ -384,7 +384,8 @@ def main():
             f"새 영상 {len(alerts)}건",
             summary=["[영상] " + ", ".join(t for _, t, _ in alerts)],
             details=lines_by_work, kinds=["영상"], count=len(alerts))
-        print("알림 카드 1장 발송 완료")
+        if not notify.spooling():
+            print("알림 카드 1장 발송 완료")
 
 
 if __name__ == "__main__":

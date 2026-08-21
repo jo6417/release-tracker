@@ -174,7 +174,8 @@ def main():
             summary=["[할인] " + ", ".join(t for t, _, _ in alerts)],
             details=[(f"[할인] {t}", lines) for t, _, lines in alerts],
             kinds=["할인"], count=len(alerts))
-        print("알림 카드 1장 발송 완료")
+        if not notify.spooling():
+            print("알림 카드 1장 발송 완료")
 
 
 if __name__ == "__main__":

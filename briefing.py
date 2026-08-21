@@ -170,7 +170,8 @@ def main():
     notify.send_card(head, summary, details, kinds=["브리핑"],
                      count=sum(len(v) for v in sections.values()),
                      date=today.isoformat())
-    print("\n브리핑 카드 1장 발송 완료")
+    if not notify.spooling():
+        print("\n브리핑 카드 1장 발송 완료")
 
 
 if __name__ == "__main__":

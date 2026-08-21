@@ -177,6 +177,11 @@ def send_card(label, summary=(), details=(), kinds=(), count=None, date=None):
     return True
 
 
+def spooling():
+    """지금 발송이 스풀로 미뤄지는가. 호출부의 로그 문구를 가르는 데 쓴다."""
+    return bool(os.environ.get(SPOOL_ENV))
+
+
 def _read_spool(path):
     if not os.path.exists(path):
         return []
