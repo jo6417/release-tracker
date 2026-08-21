@@ -51,7 +51,6 @@ events = [
                                        "이용 가능일": "2026-08-11"}),
                 note="진행도 출시 대기 → 구매 대기"),
     track.event("상태변경", pick("Core Keeper"), note="진행도 보유함 → 진행 중"),
-    track.event("방치", pick("Baldur's Gate 3", **{"진행도(게임)": "진행 중"})),
 ]
 
 title, summary, details, kinds = track.build_card(events, TODAY)

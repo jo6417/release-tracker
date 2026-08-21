@@ -5,9 +5,11 @@ steam_map.json(appid → 작품 제목)을 기준으로 매칭한다.
 스팀은 영문, 노션은 한글이라 자동 매칭이 안 되므로 이 표가 정본이다.
 
 단계 판정:
-    플레이 0시간            → 보유함 (샀지만 아직 안 함)
-    플레이 있고 90일 이내    → 진행 중
-    플레이 있고 그보다 오래됨 → 진행도는 그대로 두고 기록만 (클리어인지 폐기됨(노잼)인지는 사람이 판단)
+    플레이 0시간이고 진행도가 `미확인` → 보유함 (샀지만 아직 안 함)
+    그 밖의 모든 경우                  → 진행도는 건드리지 않는다. 플레이 기록만 갱신한다
+
+    진행도가 지금 무엇이든 사람이 정한 값이다. 스팀이 말해줄 수 있는 건
+    "샀다"와 "몇 시간 켰다"까지고, 그게 클리어인지 접은 건지는 말해주지 않는다.
 
 사용법:
     python sync_steam.py --dry    # 미리보기
@@ -27,7 +29,6 @@ from adapters import steam
 IDS_FILE = "db_ids.json"
 MAP_FILE = "steam_map.json"
 VANITY = "jo6417"
-RECENT_DAYS = 90
 
 
 def query_all(dbid):
@@ -87,8 +88,7 @@ def main():
         if kind and kind["name"] == "게임":
             pages[text_of(p["properties"]["제목"])] = p
 
-    now = time.time()
-    done = {"갱신": 0, "보유함": 0, "진행 중": 0, "누락": []}
+    done = {"갱신": 0, "보유함": 0, "누락": []}
     for appid, title in mapping.items():
         page = pages.get(title)
         g = lib.get(appid)
@@ -116,23 +116,32 @@ def main():
 
         stage = page["properties"]["진행도(게임)"]["select"]
         stage = stage["name"] if stage else None
-        if g["플레이분"] == 0:
-            if stage == "미확인":
-                props["진행도(게임)"] = {"select": {"name": "보유함"}}
-                done["보유함"] += 1
-        elif g["최근플레이"] and (now - g["최근플레이"]) < RECENT_DAYS * 86400:
-            props["진행도(게임)"] = {"select": {"name": "진행 중"}}
-            done["진행 중"] += 1
+        # 자동으로 올리는 진행도는 이것 하나뿐이다.
+        #
+        # 예전에는 "최근 90일 안에 플레이 기록이 있으면 진행 중"도 있었다.
+        # 플레이 기록은 과거형인데 `진행 중`은 현재형이라 둘은 같은 말이 아니다.
+        # 253시간을 하고 졸업한 사람과 지금 붙잡고 있는 사람이 스팀 API에서는
+        # 구분되지 않는다. 그래서 사람이 찍어둔 졸업·일시 중단·보유함을 매일
+        # 아침 진행 중으로 되돌렸고, 변경이력만 남고 값은 사라졌다(2026-08-19,
+        # 6건). 규칙을 예외로 감싸는 대신 규칙 자체를 뺐다.
+        new_stage = None
+        if g["플레이분"] == 0 and stage == "미확인":
+            new_stage = "보유함"
+            props["진행도(게임)"] = {"select": {"name": new_stage}}
+            done["보유함"] += 1
 
         if a.dry:
+            # 진행도가 어떻게 될 예정인지 찍는다. 이게 없으면 덮어쓰기가
+            # 일어나는지를 노션을 열어보기 전에는 알 수 없다.
             h = g["플레이분"] // 60
-            print(f"  {title:26} {h:>4}시간  소유처={owners}")
+            move = f"{stage} → {new_stage}" if new_stage else f"{stage} 유지"
+            print(f"  {title:26} {h:>4}시간  진행도 {move:16} 소유처={owners}")
         else:
             patch_page(page["id"], props)
             time.sleep(0.34)
         done["갱신"] += 1
 
-    print(f"\n갱신 {done['갱신']}건 (보유함 {done['보유함']}, 진행 중 {done['진행 중']})")
+    print(f"\n갱신 {done['갱신']}건 (진행도 변경 {done['보유함']}건: 미확인 → 보유함)")
     if done["누락"]:
         print("매칭 실패:", done["누락"])
     if a.dry:

@@ -23,7 +23,6 @@ from config import API, headers
 IDS_FILE = "db_ids.json"
 MAP_FILE = "steam_map.json"
 CAND_FILE = "steam_add_candidates.json"
-RECENT_DAYS = 90
 
 
 def post(path, payload):
@@ -76,16 +75,17 @@ def main():
         exist.add("".join(x["plain_text"] for x in p["properties"]["제목"]["title"]))
 
     today = time.strftime("%Y-%m-%d")
-    now = time.time()
     added = 0
     for g in cands:
         if g["이름"] in exist:
             continue
-        recent = g["최근플레이"] and (now - g["최근플레이"]) < RECENT_DAYS * 86400
         props = {
             "제목": {"title": [{"type": "text", "text": {"content": g["이름"][:1900]}}]},
             "종류": {"select": {"name": "게임"}},
-            "진행도(게임)": {"select": {"name": "진행 중" if recent else "미확인"}},
+            # 새로 들어온 건 전부 `미확인`에서 출발한다. 최근 플레이 기록으로
+            # `진행 중`을 넣으면 사람이 분류한 적 없는 값이 생기고, 그건
+            # sync_steam이 매일 진행도를 덮어쓰던 것과 같은 잘못된 전제다.
+            "진행도(게임)": {"select": {"name": "미확인"}},
             "플랫폼": {"multi_select": [{"name": "PC"}]},
             "소유처": {"multi_select": [{"name": "스팀"}]},
             "획득경로": {"multi_select": [{"name": "구매"}]},
@@ -102,8 +102,7 @@ def main():
                 "start": time.strftime("%Y-%m-%d", time.localtime(g["최근플레이"]))}}
 
         if a.dry:
-            print(f"  + {g['이름'][:44]:44} {g['플레이분']//60:>4}h "
-                  f"{'진행 중' if recent else '미확인'}")
+            print(f"  + {g['이름'][:44]:44} {g['플레이분']//60:>4}h 미확인")
         else:
             post("/pages", {"parent": {"database_id": ids["work_db"]},
                             "properties": props})

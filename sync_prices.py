@@ -4,7 +4,7 @@
 외부ID에 steam:appid가 있는 게임이 대상이다.
 정가·현재최저가·역대최저가를 채우고, 목표가에 도달했으면 알린다.
 
-알림에는 반드시 소유 여부를 함께 싣는다. 중복 구매 방지가 목적이다.
+알림 대상은 `진행도(게임)`이 `구매 대기`나 `출시 대기`인 것뿐이다.
 
 사용법:
     python sync_prices.py --dry
@@ -25,6 +25,13 @@ from config import API, headers
 
 IDS_FILE = "db_ids.json"
 DEFAULT_TARGET = 0.30      # 할인 알림 기준. 작품별 조정은 두지 않는다
+
+# 할인을 알릴 진행도. 살 마음이 있다고 사람이 표시해둔 것만 대상이다.
+#
+# 예전에는 `소유처`가 비어 있으면 미보유로 봤는데, 소유처는 채우다 만 칸이라
+# 이미 졸업한 게임 112건이 전부 "미보유"로 통과했다(2026-08-21, 엔세스터가
+# "→ 미보유 · PS4"로 추천됨). 보유 여부는 소유처가 아니라 진행도가 안다.
+WANT = ("구매 대기", "출시 대기")
 
 
 def query_all(dbid):
@@ -110,7 +117,8 @@ def main():
             continue
         pr = page["properties"]
         title = txt(pr["제목"])
-        owners = [o["name"] for o in pr["소유처"]["multi_select"]]
+        st = pr.get("진행도(게임)", {}).get("select")
+        stage = st["name"] if st else None
         target_rate = DEFAULT_TARGET
 
         props = {
@@ -128,7 +136,7 @@ def main():
         limit = d["정가"] * (1 - target_rate) if d["정가"] else 0
         now_hit = bool(limit) and d["현재최저가"] <= limit
         was_hit = prev is not None and prev <= limit
-        hit = now_hit and not was_hit and not owners and prev is not None
+        hit = now_hit and not was_hit and stage in WANT and prev is not None
         if hit:
             plats = ([o["name"] for o in pr["플랫폼"]["multi_select"]]
                      if "플랫폼" in pr else [])
@@ -140,7 +148,7 @@ def main():
                 lines.append(f"역대최저 {low:,.0f}원"
                              + (" — 지금이 역대최저" if gap <= 0
                                 else f" (지금은 {gap:,.0f}원 비쌈)"))
-            lines.append("→ 미보유" + (f" · {'/'.join(plats)}" if plats else ""))
+            lines.append(f"→ {stage}" + (f" · {'/'.join(plats)}" if plats else ""))
             alerts.append((title,
                            f"{title} {d['할인율']}% {d['현재최저가']:,.0f}원",
                            lines))
@@ -149,9 +157,9 @@ def main():
         if a.dry:
             if n <= 10 or hit:
                 mark = " ★목표가" if hit else ""
-                own = f" [보유: {'/'.join(owners)}]" if owners else ""
                 print(f"  {title[:26]:26} {d['현재최저가']:>8,.0f}원 "
-                      f"(-{d['할인율']}%) 역대 {lows.get(gid, 0):>8,.0f}원{mark}{own}")
+                      f"(-{d['할인율']}%) 역대 {lows.get(gid, 0):>8,.0f}원"
+                      f"  [{stage}]{mark}")
         else:
             patch(page["id"], props)
             time.sleep(0.34)

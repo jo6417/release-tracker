@@ -29,7 +29,6 @@ from config import API, headers
 
 IDS_FILE = "db_ids.json"
 SNAP_DIR = "snapshots"
-STATE_FILE = "notify_state.json"
 
 WATCH = ["출시·개봉일", "날짜정밀도", "진행도(게임)", "진행도(영상)",
          "게임패스", "방영상태"]
@@ -38,7 +37,6 @@ STAGE = describe.STAGE
 # 아직 보거나 하지 않은 단계. 이용 가능일이 지나면 백로그로 넘어가는 것들이다.
 # 아직 안 했고 앞으로 할 것. `구매 보류`(안 사기로)와 `시청 보류`는 제외 쪽이라 뺀다.
 UNSEEN = ("출시 대기", "구매 대기", "보유함", "공개 대기", "시청 안함")
-PLAYING = ("진행 중", "시청 중")
 # 출시일이 지났는데도 대기 상태로 남아 있는 행을 다음 단계로 민다.
 # `출시 대기`는 "아직 안 나왔다"는 뜻인데, 나온 뒤에도 그대로면 기대작 뷰에
 # 계속 눌러앉고 백로그로는 넘어가지 않는다. 날짜가 이미 말해주는 걸 사람이
@@ -50,8 +48,6 @@ PROMOTE = {
 # 스냅샷에는 담되 그 자체로는 알림을 만들지 않는 것 (문구를 만들 때 쓴다)
 EXTRA = ["마지막플레이일", "플레이시간", "방영진행", "이용 가능일", "완결일",
          "공개처", "플랫폼", "소유처", "소개"]
-IDLE_DAYS = 60          # 진행 중인데 이 기간 넘게 안 켠 게임은 방치로 본다
-IDLE_REMIND = 30        # 같은 방치를 다시 알리기까지의 간격
 # `신규`는 스냅샷에 없는 행을 말한다. 그런데 스냅샷이 낡으면(로컬에서 돌렸거나
 # 워크플로가 하루 걸렀거나) 며칠 전에 넣은 작품이 다시 신규로 뜬다. 실제로
 # 같은 시리즈 3건이 이틀 연속 신규로 울렸다. 노션의 생성 시각을 같이 보고,
@@ -60,7 +56,7 @@ NEW_DAYS = 2
 
 # 카드 요약에서 이 순서로 묶는다. 앞쪽이 더 중요한 것.
 KIND_ORDER = ["완결", "오늘 공개", "날짜확정", "게임패스", "방영", "취소",
-              "날짜변경", "신규", "전환", "상태변경", "방치"]
+              "날짜변경", "신규", "전환", "상태변경"]
 
 
 def query_all(dbid):
@@ -132,52 +128,12 @@ def event(kind, row, note=None, urgent=False):
             "note": note, "urgent": urgent}
 
 
-def load_state():
-    if not os.path.exists(STATE_FILE):
-        return {}
-    with io.open(STATE_FILE, encoding="utf-8") as f:
-        return json.load(f)
-
-
-def save_state(state):
-    with io.open(STATE_FILE, "w", encoding="utf-8") as f:
-        json.dump(state, f, ensure_ascii=False, indent=1)
-
-
-def idle_check(cur, state, today=None):
-    """진행 중인데 오래 손 안 댄 게임 — 백로그가 조용히 쌓이는 걸 막는다.
-
-    이 검사는 이전 스냅샷을 보지 않고 현재 상태만 본다. 그대로 두면 같은 방치가
-    매일(매시 실행으로 바꾸면 하루 24번) 다시 울린다. 그래서 알린 날짜를
-    notify_state.json에 적어두고 IDLE_REMIND일이 지나기 전에는 다시 알리지 않는다.
-    """
-    today = today or datetime.date.today()
-    seen = state.setdefault("idle", {})
-    out = []
-    for pid, row in cur.items():
-        if stage_of(row) not in PLAYING:
-            continue
-        last = row.get("마지막플레이일")
-        if not last:
-            continue
-        try:
-            d = datetime.date.fromisoformat(last[:10])
-        except ValueError:
-            continue
-        gap = (today - d).days
-        if gap < IDLE_DAYS:
-            seen.pop(pid, None)      # 다시 켰으면 기록을 지운다
-            continue
-        prev = seen.get(pid)
-        if prev:
-            try:
-                if (today - datetime.date.fromisoformat(prev)).days < IDLE_REMIND:
-                    continue
-            except ValueError:
-                pass
-        seen[pid] = today.isoformat()
-        out.append(event("방치", row))
-    return out
+# `방치` 알림(진행 중인데 60일 넘게 플레이 기록 없음)은 뺐다.
+# 진행 중인 게임을 하는 도중에 다른 게임을 들이미는 알림이라, 손이 가지 않는
+# 쪽으로만 작용했다. 게다가 판정 대상인 `진행 중`의 대부분은 사람이 찍은 게
+# 아니라 sync_steam이 플레이 기록으로 자동으로 넣던 값이었다 — 그 규칙을
+# 없앤 지금은 대상 자체가 거의 남지 않는다. 안 한 게 뭔지는 작품 DB를
+# 직접 보면 되고, 백로그 추천(available_check·briefing)이 그 자리를 맡는다.
 
 
 def available_check(cur, today=None):
@@ -386,12 +342,6 @@ def main():
             json.dump(cur, f, ensure_ascii=False, indent=1)
 
     events += available_check(cur)
-
-    state = load_state()
-    idle = idle_check(cur, state)
-    events += idle
-    if idle and not a.dry:
-        save_state(state)
 
     if not events:
         print("변경 없음 — 알림 보내지 않습니다.")
