@@ -45,7 +45,9 @@ PROMOTE = {
     "진행도(게임)": ("출시 대기", "구매 대기"),
     "진행도(영상)": ("공개 대기", "시청 안함"),
 }
-# 스냅샷에는 담되 그 자체로는 알림을 만들지 않는 것 (문구를 만들 때 쓴다)
+# 스냅샷에는 담되 그 자체로는 알림을 만들지 않는 것 (문구를 만들 때 쓴다).
+# `작성자`·`수정자`·`생성일`·`수정일`은 속성이 아니라 페이지 값이라 snapshot()이
+# 직접 담는다 — 여기 적으면 안 된다
 EXTRA = ["마지막플레이일", "플레이시간", "방영진행", "이용 가능일", "완결일",
          "공개처", "플랫폼", "소유처", "소개"]
 # `신규`는 스냅샷에 없는 행을 말한다. 그런데 스냅샷이 낡으면(로컬에서 돌렸거나
@@ -195,14 +197,38 @@ def promote_stage(cur, today=None, dry=False):
     return out
 
 
+def user_names():
+    """노션 사용자 id → 이름. 워크스페이스에 사람 하나와 봇 몇이라 한 번이면 된다.
+
+    스크립트가 쓴 행은 `출시 트래커`(워크플로가 쓰는 통합 토큰)로 찍힌다.
+    """
+    try:
+        req = urllib.request.Request(f"{API}/users", headers=headers())
+        with urllib.request.urlopen(req) as r:
+            return {u["id"]: (u.get("name") or u["id"][:8])
+                    for u in json.loads(r.read())["results"]}
+    except Exception as e:
+        print(f"[경고] 사용자 목록을 못 읽었습니다 — 출처 줄은 생략합니다: {e}")
+        return {}
+
+
 def snapshot():
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
+    names = user_names()
     out = {}
     for p in query_all(ids["work_db"]):
         props = p["properties"]
         row = {"제목": value(props["제목"]), "종류": value(props["종류"]),
-               "생성일": p["created_time"][:10]}
+               "생성일": p["created_time"][:10],
+               "수정일": p["last_edited_time"][:10]}
+        # `작성자`·`수정자`는 노션 속성이 아니라 페이지 자체의 값이라 따로 담는다.
+        # 나중에 "이 행이 왜 이래?"를 되짚을 때 스크립트가 넣은 것인지 사람이
+        # 넣은 것인지가 갈림길이 된다.
+        for key, src in (("작성자", "created_by"), ("수정자", "last_edited_by")):
+            uid = (p.get(src) or {}).get("id")
+            if uid and names:
+                row[key] = names.get(uid, uid[:8])
         for k in WATCH + EXTRA:
             if k in props:
                 row[k] = value(props[k])

@@ -18,7 +18,7 @@ import urllib.request
 
 BS = chr(92)   # 백슬래시
 
-from config import API, headers
+from config import API, headers, CALENDAR_VISIBLE
 
 IDS_FILE = "db_ids.json"
 OUT = "docs/releases.ics"
@@ -29,6 +29,12 @@ PAST_MONTHS = 6
 # "언제 다 나오나"뿐이라, 완결일만 일정 DB의 `최종화` 행으로 나간다.
 SKIP_WORK_KINDS = {"시리즈"}
 SKIP_SCHED_KINDS = {"시즌시작"}
+# 대표 사건(정식출시·극장개봉·OTT공개…)은 작품 행에 흡수하는 것이 이 시스템의
+# 규칙이다 — 부속 사건(베타·데모·DLC·최종화)만 일정 행으로 남긴다. 이관할 때는
+# migrate.py가 그 규칙을 지켰지만, 그 뒤에 손으로(또는 MCP로) 작품 행과 일정
+# 행을 둘 다 만들면 아무도 막지 않아서 캘린더에 같은 날 같은 제목이 두 줄로
+# 뜬다(2026-09-04 귀무자, 2026-09-16 애니모). 여기서 한 번 더 거른다.
+DEDUP_SCHED_KINDS = CALENDAR_VISIBLE
 PRODID = "-//release-tracker//jo6417//KO"
 
 
@@ -182,7 +188,15 @@ def main():
             "CALSCALE:GREGORIAN",
             "X-WR-CALNAME:출시 트래커", "X-WR-TIMEZONE:Asia/Seoul",
             "REFRESH-INTERVAL;VALUE=DURATION:PT6H", "X-PUBLISHED-TTL:PT6H"]
-    n_work = n_sched = 0
+    n_work = n_sched = n_dup = 0
+    # 작품 루프가 실제로 내보낸 (작품 id, 시작일). 일정 루프에서 같은 것을
+    # 또 내보내지 않으려고 모은다.
+    #
+    # "작품 DB에 확정 날짜가 있으면 일정 행을 뺀다"로 하면 안 된다. 작품 루프는
+    # 확정 날짜가 있어도 이벤트를 안 내는 경우가 셋 있다 — 컷오프 이전,
+    # `종류=시리즈`, `--limit`. 그때 일정 행까지 빼면 그 날짜가 캘린더에서
+    # 통째로 사라진다. 실제로 낸 것만 기준으로 삼으면 셋 다 저절로 걸러진다.
+    emitted = set()
 
     # 작품 — 정밀도 '확정'인 것만
     for p in query_all(ids["work_db"], {
@@ -206,6 +220,7 @@ def main():
         body += event(p["id"].replace("-", ""), d["start"], d.get("end"),
                       f"{work_icon(kind)} {title}".strip(),
                       " · ".join(bits), p.get("url"), stamp_of(p, stamp))
+        emitted.add((p["id"], d["start"]))
         n_work += 1
         if a.limit and n_work >= a.limit:
             break
@@ -218,9 +233,14 @@ def main():
         d = pr["날짜"]["date"]
         if (d.get("end") or d["start"]) < cutoff:
             continue
-        if (sel(pr["종류"]) or "") in SKIP_SCHED_KINDS:
-            continue
         skind = sel(pr["종류"]) or ""
+        if skind in SKIP_SCHED_KINDS:
+            continue
+        # 작품 행이 이미 같은 날짜로 낸 대표 사건이면 그건 중복이다
+        if skind in DEDUP_SCHED_KINDS and any(
+                (r["id"], d["start"]) in emitted for r in pr["작품"]["relation"]):
+            n_dup += 1
+            continue
         body += event(p["id"].replace("-", ""), d["start"], d.get("end"),
                       f"{SCHED_ICON.get(skind, '📌')} {txt(pr['이름'])}", skind,
                       p.get("url"), stamp_of(p, stamp))
@@ -234,7 +254,8 @@ def main():
     # newline=""로 열어야 우리가 넣은 CRLF가 CR CR LF로 이중 변환되지 않는다
     with io.open(out_path, "w", encoding="utf-8", newline="") as f:
         f.write("\r\n".join(folded) + "\r\n")
-    print(f"{out_path} — 작품 {n_work}건 + 일정 {n_sched}건 = {n_work + n_sched}개 이벤트")
+    print(f"{out_path} — 작품 {n_work}건 + 일정 {n_sched}건 = {n_work + n_sched}개 이벤트"
+          + (f" (작품과 겹쳐 뺀 일정 {n_dup}건)" if n_dup else ""))
 
 
 if __name__ == "__main__":

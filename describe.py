@@ -197,6 +197,24 @@ def _why(kind, row, today=None):
     }.get(kind)
 
 
+# 출처 줄을 붙일 알림. 신규는 "누가 넣었나", 변경류는 "누가 고쳤나"가 궁금한
+# 자리다. 오늘 공개·백로그·할인처럼 날짜나 가격이 이유인 알림에는 붙이지 않는다
+# — 거기서 출처는 답이 아니라 소음이다.
+SOURCE_KINDS = {"신규": "등록", "상태변경": "수정", "날짜변경": "수정",
+                "전환": "수정", "취소": "수정"}
+
+
+def source_line(kind, row):
+    label = SOURCE_KINDS.get(kind)
+    if not label:
+        return None
+    who = row.get("작성자" if kind == "신규" else "수정자")
+    if not who:
+        return None
+    when = row.get("생성일") if kind == "신규" else row.get("수정일")
+    return f"{label}: {who}" + (f" · {when}" if when else "")
+
+
 def detail(kind, row, note=None, today=None):
     """알림 한 건의 상세. (신원 / 사실 / 왜 알리는지) 세 줄이 기본이다."""
     lines = [head_line(row)]
@@ -269,6 +287,18 @@ def detail(kind, row, note=None, today=None):
 
     if note:
         lines.append(note)
+
+    # ── 출처: 이 행을 누가 넣었나 / 누가 마지막으로 고쳤나
+    #
+    # 나중에 "이거 왜 이래?"를 되짚을 때 쓰는 줄이다. 실제로 캘린더에 같은
+    # 작품이 두 줄로 뜬 걸 추적할 때, 스크립트가 넣은 것인지 사람이 넣은
+    # 것인지가 갈림길이었다. `출시 트래커`는 워크플로의 봇이다.
+    #
+    # 한계: 노션은 MCP로 넣은 것도 사람 계정으로 찍는다. "스크립트냐 아니냐"는
+    # 갈라주지만 "손으로 넣었냐 에이전트가 넣었냐"는 못 가른다.
+    src = source_line(kind, row)
+    if src:
+        lines.append(src)
 
     # ── 3번 줄: 왜 알리는가
     why = _why(kind, row, today)
