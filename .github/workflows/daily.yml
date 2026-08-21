@@ -12,6 +12,11 @@ permissions:
 jobs:
   track:
     runs-on: ubuntu-latest
+    # 카드를 만드는 스크립트가 셋(가격·트레일러·변화)이라 예전에는 아침에만
+    # 알림이 3장 왔다. 이 변수가 있으면 각 스크립트는 보내지 않고 모아두고,
+    # 마지막 스텝이 한 장으로 합쳐 보낸다.
+    env:
+      NOTIFY_SPOOL: notify_spool.json
     steps:
       - uses: actions/checkout@v4
 
@@ -71,6 +76,14 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python heartbeat.py
+
+      # 앞 스텝들이 모아둔 것을 한 장으로 보낸다.
+      # if: always() — 앞이 하나 죽어도 나머지는 알려야 한다
+      - name: 알림 한 장으로 보내기
+        if: always()
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python notify.py --flush
         continue-on-error: true
 
       - name: 스냅샷 커밋

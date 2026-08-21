@@ -13,6 +13,9 @@ permissions:
 jobs:
   brief:
     runs-on: ubuntu-latest
+    # 브리핑과 트레일러가 각각 카드를 보내서 저녁에 2장이 왔다. 모아서 한 장.
+    env:
+      NOTIFY_SPOOL: notify_spool.json
     steps:
       - uses: actions/checkout@v4
 
@@ -36,6 +39,12 @@ jobs:
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python briefing.py
+
+      - name: 알림 한 장으로 보내기
+        if: always()
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python notify.py --flush
 
       - name: 영상 기록 커밋
         run: |
