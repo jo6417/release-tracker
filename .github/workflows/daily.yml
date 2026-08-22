@@ -40,6 +40,18 @@ jobs:
         run: python sync_prices.py
         continue-on-error: true
 
+      # sync_series는 방영 시작 이후(완결)를 본다. 이쪽은 그 앞 구간 —
+      # 아직 안 나온 것의 출시일. track.py는 노션의 변화만 보므로,
+      # 바깥 발표를 노션에 먼저 실어주는 이 단계가 track.py 앞에 있어야 한다.
+      - name: 출시일 재조회 (IGDB·TMDB)
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python refresh_dates.py
+        continue-on-error: true
+
       - name: 시리즈 완결 추적 (TMDB)
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}

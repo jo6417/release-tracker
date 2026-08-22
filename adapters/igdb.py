@@ -6,6 +6,7 @@ Twitch OAuth로 토큰을 받아 쓴다. 토큰은 약 60일 유효하지만
 """
 import json
 import os
+import re
 import time
 import urllib.error
 import urllib.parse
@@ -130,4 +131,70 @@ def steam_appids(igdb_ids):
         for r in rows:
             if r.get("game") and r.get("uid", "").isdigit():
                 out[r["game"]] = r["uid"]
+    return out
+
+
+# release_dates.category → 노션 '날짜정밀도'
+# 0=YYYY-MM-DD, 1=YYYY-MM, 2=YYYY, 3~6=분기, 7=미정
+DATE_CATEGORY = {0: "확정", 1: "월", 2: "연도",
+                 3: "분기", 4: "분기", 5: "분기", 6: "분기", 7: "미정"}
+
+_HUMAN = [
+    (re.compile(r"^[A-Za-z]{3} \d{1,2}, \d{4}$"), "확정"),
+    (re.compile(r"^[A-Za-z]{3} \d{4}$"), "월"),
+    (re.compile(r"^Q[1-4] \d{4}$", re.I), "분기"),
+    (re.compile(r"^\d{4}$"), "연도"),
+]
+
+
+def _precision(row):
+    """category를 우선 보고, 없으면 human 문자열로 판단한다.
+
+    first_release_date만 보면 '2026년 언젠가'도 2026-12-31 같은 날짜로
+    내려와서 확정과 구분이 되지 않는다. 그 구분이 알림의 핵심이라
+    두 경로를 다 둔다.
+    """
+    cat = row.get("category")
+    if cat is None:
+        cat = row.get("date_format")     # 필드명이 바뀐 API 대비
+    if isinstance(cat, int) and cat in DATE_CATEGORY:
+        return DATE_CATEGORY[cat]
+    human = (row.get("human") or "").strip()
+    for pattern, level in _HUMAN:
+        if pattern.match(human):
+            return level
+    return "미정"
+
+
+def releases(ids):
+    """IGDB 게임 id → {"날짜": "YYYY-MM-DD", "정밀도": ...}
+
+    지역·플랫폼마다 줄이 따로 있어서 가장 이른 것을 쓴다.
+    """
+    out = {}
+    ids = list(ids)
+    fields = "fields game,date,category,date_format,human;"
+    for i in range(0, len(ids), 25):
+        chunk = ids[i:i + 25]
+        q = (f"{fields} where game = ({','.join(map(str, chunk))}) "
+             f"& date != null; sort date asc; limit 500;")
+        try:
+            rows = query("release_dates", q)
+        except urllib.error.HTTPError as e:
+            if e.code != 400:
+                raise
+            # 필드 하나가 없는 API 버전 — 최소한으로 다시 묻는다
+            fields = "fields game,date,human;"
+            q = (f"{fields} where game = ({','.join(map(str, chunk))}) "
+                 f"& date != null; sort date asc; limit 500;")
+            rows = query("release_dates", q)
+        for r in rows:
+            gid = r.get("game")
+            if not gid or not r.get("date"):
+                continue
+            date = time.strftime("%Y-%m-%d", time.gmtime(r["date"]))
+            prev = out.get(gid)
+            if prev and prev["날짜"] <= date:
+                continue
+            out[gid] = {"날짜": date, "정밀도": _precision(r)}
     return out

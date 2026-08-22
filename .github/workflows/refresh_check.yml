@@ -1,0 +1,32 @@
+# 출시일 재조회를 아무것도 바꾸지 않고 돌려보는 수동 워크플로.
+#
+# refresh_dates.py를 daily.yml에 넣기 전에, 또는 규칙을 고친 뒤에
+# "무엇이 바뀔 예정인지"만 눈으로 확인하기 위한 것이다.
+# --dry라 노션도 알림도 건드리지 않는다. 예약 실행은 없다.
+name: 출시일 재조회 점검 (--dry)
+
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "영상(TMDB) 조회 상한. 0이면 전부"
+        required: false
+        default: "30"
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 재조회 결과만 출력
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python refresh_dates.py --dry --limit ${{ inputs.limit }}
