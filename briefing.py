@@ -85,6 +85,13 @@ def collect(cur, today):
         av = _date(row.get("이용 가능일"))
         if not av:
             continue
+        # 확정이 아닌 정밀도에서 날짜는 구간의 첫날을 넣어둔 자리표시다.
+        # 그것을 진짜 날짜로 읽으면 두 군데가 동시에 틀린다 — "9월 중" 작품이
+        # 9월 1일에 `오늘 공개`로 뜨고, 그 하루가 지나면 이미 나온 줄 알고
+        # `오늘의 추천`으로 올라간다. 어느 쪽이든 볼 수 없는 것을 볼 수 있다고
+        # 말하는 것이라, 날짜로 치는 것은 확정뿐이다.
+        if row.get("날짜정밀도") != "확정":
+            continue
         gap = (av - today).days
         if gap == 0:
             today_out.append(row)
@@ -93,12 +100,7 @@ def collect(cur, today):
             # 않는다. 백로그는 "이미 나왔는데 아직 안 한 것"이라, 미출시작이
             # 섞이면 오늘의 추천이 볼 수도 없는 작품을 들이민다.
             #
-            # 확정이 아닌 정밀도에서 `출시·개봉일`은 구간의 첫날을 넣어둔
-            # 자리표시다. 그걸로 D-day를 세면 "9월 어느 날"이 9월 1일 기준
-            # D-7로 둔갑한다. 확정만 센다.
-            if (gap in PULSE_DAYS
-                    and row.get("날짜정밀도") == "확정"
-                    and describe.stage_of(row) in PULSE_STAGES):
+            if gap in PULSE_DAYS and describe.stage_of(row) in PULSE_STAGES:
                 soon.append(row)
         else:
             backlog.append(row)
