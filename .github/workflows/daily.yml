@@ -102,6 +102,14 @@ jobs:
         run: python sync_media.py
         continue-on-error: true
 
+      # 게임패스 입점·이탈. 인증이 필요 없는 공개 엔드포인트라 시크릿이 없다.
+      # track.py 앞에 두어 같은 아침 카드에 실린다.
+      - name: 게임패스 입점·이탈 감지
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+        run: python sync_gamepass.py
+        continue-on-error: true
+
       - name: 변화 감지 및 알림
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -132,6 +140,7 @@ jobs:
           # 그러면 새 영상을 영원히 못 잡는다 (기준값만 다시 잡는다).
           git add snapshots/ media_state.json youtube_watch.json refresh_state.json candidates.json
           git add igdb_match.json tmdb_match.json game_title_en.json steam_map.json
+          git add gamepass_state.json gamepass_map.json
           git add ./*확인필요.md
           if git diff --staged --quiet; then
             echo "스냅샷 변경 없음"

@@ -14,6 +14,7 @@ GitHub Actions API는 public 리포에 한해 인증 없이 읽을 수 있어
     python healthcheck.py          # 이상 있으면 종료코드 1
 """
 import datetime
+import io
 import json
 import sys
 import urllib.error
@@ -25,6 +26,12 @@ REPO = "jo6417/release-tracker"
 # 기준을 2시간으로 두면 최대치와 겹쳐 멀쩡한데도 경보가 뜬다. 3시간으로 둔다.
 CHECKS = [("calendar.yml", "캘린더 갱신", 3),
           ("daily.yml", "매일 추적", 36)]
+
+# 게임패스 카탈로그는 문서화된 API가 아니라 예고 없이 바뀔 수 있다. 그때 제일
+# 나쁜 그림은 오류가 아니라 조용히 빈 목록이 오는 것이다 - 전 작품이 이탈한
+# 것처럼 보이고 소유처에서 게임패스가 통째로 지워진다.
+GAMEPASS_MIN = 200
+GAMEPASS_DROP = 0.5
 
 
 def last_run(workflow):
@@ -67,6 +74,21 @@ def main():
                 f"(기준 {limit_h}시간)")
         elif result not in ("success", "in_progress", "queued"):
             problems.append(f"{label}의 마지막 실행이 {result}로 끝났습니다")
+
+    # 게임패스 카탈로그 건수
+    try:
+        with io.open("gamepass_state.json", encoding="utf-8") as f:
+            gp = json.load(f)
+        n = len(gp.get("ids") or [])
+        prev = gp.get("직전건수")
+        print(f"  게임패스 카탈로그: {n}건" + (f" (직전 {prev}건)" if prev else ""))
+        if n < GAMEPASS_MIN:
+            problems.append(f"게임패스 카탈로그가 {n}건뿐입니다 "
+                            f"(기준 {GAMEPASS_MIN}건) - 엔드포인트가 바뀌었을 수 있습니다")
+        elif prev and n < prev * GAMEPASS_DROP:
+            problems.append(f"게임패스 카탈로그가 {prev}건에서 {n}건으로 급감했습니다")
+    except (IOError, ValueError):
+        print("  게임패스 카탈로그: 기록 없음 (아직 안 돌았을 수 있음)")
 
     if not problems:
         print("\n결과: 정상")
