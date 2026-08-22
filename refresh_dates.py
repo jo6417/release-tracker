@@ -17,7 +17,7 @@
   값을 소스가 덮는 경로는 두지 않는다. 반영은 사람이 결정한다
 - `완결대기`는 아예 보지 않는다. `sync_series.py`가 맡는 구간이다
 - 정밀도가 **올라갈 때만** 쓴다 (미정 → 연도 → 분기 → 월 → 확정)
-- `월`·`분기`·`연도`면 출시·개봉일에 **그 구간의 첫날**을 넣는다.
+- `월`·`분기`·`연도`면 출시·개봉일에 **그 구간의 마지막날**을 넣는다.
   `track.py`의 `released()`가 쓰는 규칙과 같다 — 확정이 아닌 날짜는
   자리표시자이고, 대기를 푸는 근거로 쓰이지 않는다
 - 영화는 국내 개봉일을 알게 되면 그걸로 덮어쓴다 (스키마가 국내/해외를
@@ -30,6 +30,7 @@
     python refresh_dates.py
 """
 import argparse
+import calendar
 import datetime
 import io
 import json
@@ -99,19 +100,33 @@ def txt(prop):
     return "".join(x["plain_text"] for x in prop[prop["type"]])
 
 
+def _last_day(year, month):
+    return "%s-%02d-%02d" % (year, month, calendar.monthrange(int(year), month)[1])
+
+
 def placeholder(date, precision):
-    """확정이 아닌 정밀도에서 출시·개봉일에 넣을 자리표시 날짜 (구간의 첫날)."""
+    """확정이 아닌 정밀도에서 출시·개봉일에 넣을 자리표시 날짜 (구간의 마지막날).
+
+    첫날이 아니라 마지막날인 이유는 틀리는 방향을 고르는 문제다. "8월 공개"를
+    8월 1일로 적으면 8월 2일부터 시스템은 이걸 이미 지난 날짜로 읽는다. 아직
+    안 나온 작품이 한 달 내내 "나온 것" 취급을 받는다.
+
+    마지막날로 적으면 반대로 그 달 내내 "아직"으로 남는다. 그리고 8월 공개가
+    8월 말까지 확정되지 않는 일은 거의 없다 — 회사가 공지조차 못 할 상황이
+    아닌 이상 그 안에 날짜가 나오고, 정밀도가 확정으로 올라가며 이 값은
+    사라진다. 자리표시는 채워지기 전까지만 버티면 되는 값이다.
+    """
     if not date:
         return None
     year, month = date[:4], int(date[5:7])
     if precision == "확정":
         return date
     if precision == "월":
-        return f"{year}-{month:02d}-01"
+        return _last_day(year, month)
     if precision == "분기":
-        return f"{year}-{(month - 1) // 3 * 3 + 1:02d}-01"
+        return _last_day(year, (month - 1) // 3 * 3 + 3)
     if precision == "연도":
-        return f"{year}-01-01"
+        return "%s-12-31" % year
     return None
 
 
