@@ -64,7 +64,7 @@ jobs:
           python match_igdb.py
           python apply_igdb.py
           python match_tmdb.py
-          python apply_tmdb.py
+          python apply_tmdb_ids.py
         continue-on-error: true
 
       - name: 출시일 재조회 (IGDB·TMDB)

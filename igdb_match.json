@@ -867,7 +867,7 @@
    "PC"
   ],
   "시리즈": [],
-  "평점": 81.8,
+  "평점": 81.9,
   "url": "https://www.igdb.com/games/peak--1",
   "경로": "steam",
   "확신": "확실"
@@ -1466,7 +1466,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 87.2,
+  "평점": 87.1,
   "url": "https://www.igdb.com/games/outer-wilds",
   "경로": "steam",
   "확신": "확실"
@@ -3173,7 +3173,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 75.0,
+  "평점": 74.9,
   "url": "https://www.igdb.com/games/rise-of-the-ronin",
   "경로": "검색",
   "확신": "확실"
@@ -3190,27 +3190,6 @@
   "시리즈": [],
   "평점": 84.0,
   "url": "https://www.igdb.com/games/stellar-blade",
-  "경로": "검색",
-  "확신": "확실"
- },
- "페르시아의 왕자": {
-  "id": 252476,
-  "이름": "Prince of Persia: The Lost Crown",
-  "출시일": "2024-01-18",
-  "플랫폼": [
-   "Series X|S",
-   "PS4",
-   "PC",
-   "PS5",
-   "Mac",
-   "XONE",
-   "Switch"
-  ],
-  "시리즈": [
-   "Prince of Persia"
-  ],
-  "평점": 85.5,
-  "url": "https://www.igdb.com/games/prince-of-persia-the-lost-crown",
   "경로": "검색",
   "확신": "확실"
  },
@@ -3807,7 +3786,7 @@
   "시리즈": [
    "Splatoon"
   ],
-  "평점": 89.8,
+  "평점": 86.4,
   "url": "https://www.igdb.com/games/splatoon-raiders",
   "경로": "검색",
   "확신": "확실"
@@ -3835,7 +3814,7 @@
    "XONE"
   ],
   "시리즈": [],
-  "평점": 84.8,
+  "평점": 84.5,
   "url": "https://www.igdb.com/games/replaced",
   "경로": "검색",
   "확신": "확실"
@@ -3897,7 +3876,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 77.2,
+  "평점": 86.8,
   "url": "https://www.igdb.com/games/beast-of-reincarnation",
   "경로": "검색",
   "확신": "확실"
@@ -4160,7 +4139,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 78.5,
+  "평점": 79.0,
   "url": "https://www.igdb.com/games/hell-is-us",
   "경로": "검색",
   "확신": "확실"
@@ -4170,8 +4149,7 @@
   "이름": "Donkey Kong Bananza",
   "출시일": "2025-07-17",
   "플랫폼": [
-   "Switch 2",
-   "Switch"
+   "Switch 2"
   ],
   "시리즈": [
    "Donkey Kong"
@@ -5119,7 +5097,7 @@
   "경로": "검색",
   "확신": "확실"
  },
- "어벤져스:A데이": {
+ "Marvel's Avengers": {
   "id": 138034,
   "이름": "LEGO Marvel's Avengers: Marvel's Ant-Man Pack",
   "출시일": "2016-04-05",
@@ -5293,7 +5271,7 @@
   "시리즈": [
    "Ace Combat"
   ],
-  "평점": 82.0,
+  "평점": 81.8,
   "url": "https://www.igdb.com/games/ace-combat-7-skies-unknown",
   "경로": "검색",
   "확신": "확실"
@@ -6545,25 +6523,6 @@
   "경로": "검색",
   "확신": "확실"
  },
- "고스트리콘": {
-  "id": 1294,
-  "이름": "Tom Clancy's Ghost Recon",
-  "출시일": "2001-11-13",
-  "플랫폼": [
-   "XBOX",
-   "NGC",
-   "PC",
-   "Mac",
-   "PS2"
-  ],
-  "시리즈": [
-   "Tom Clancy’s"
-  ],
-  "평점": 71.1,
-  "url": "https://www.igdb.com/games/tom-clancy-s-ghost-recon",
-  "경로": "검색",
-  "확신": "확실"
- },
  "젤다의전설:야생의숨결": {
   "id": 7346,
   "이름": "The Legend of Zelda: Breath of the Wild",
@@ -6614,25 +6573,6 @@
   ],
   "평점": 74.8,
   "url": "https://www.igdb.com/games/call-of-duty-wwii",
-  "경로": "검색",
-  "확신": "확실"
- },
- "매드맥스:분노의도로": {
-  "id": 2552,
-  "이름": "Mad Max",
-  "출시일": "2015-09-01",
-  "플랫폼": [
-   "PS4",
-   "Linux",
-   "PC",
-   "Mac",
-   "XONE"
-  ],
-  "시리즈": [
-   "Mad Max"
-  ],
-  "평점": 73.6,
-  "url": "https://www.igdb.com/games/mad-max",
   "경로": "검색",
   "확신": "확실"
  },
