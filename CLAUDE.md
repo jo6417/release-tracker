@@ -35,6 +35,23 @@ GIT_TERMINAL_PROMPT=0 gh workflow run calendar.yml --repo jo6417/release-tracker
 gh run list --workflow=calendar.yml --limit 1 --repo jo6417/release-tracker
 ```
 
+## 후보 번호로 답하면 그 자리에서 처리하라
+
+저녁 브리핑 카드에는 `등록 후보`가 최대 두 건 올라간다. 각 줄 앞에 `c17`
+같은 고정 번호가 붙어 있고, 사용자는 **채팅으로** 답한다. 이런 말이 나오면
+곧바로 처리할 것:
+
+- "c17 등록해줘" / "c17, c18 등록" -> `python apply_candidates.py 등록 c17 c18`
+- "c19 버려" / "c19 필요없어"       -> `python apply_candidates.py 버림 c19`
+- 진행도를 따로 말하면 `--진행도 "출시 대기"`를 붙인다
+- 지금 뭐가 걸려 있는지 물으면 `python apply_candidates.py --목록`
+
+노션에 행이 생기므로 **끝나고 캘린더를 밀어야 한다**(위 절 참고).
+
+무응답은 보류다. 지우거나 대신 판단하지 말 것 — 다음 저녁에 다시 올라간다.
+번호는 한 번 붙으면 바뀌지 않으니 며칠 전 카드를 보고 답해도 같은 것을
+가리킨다. 이미 처리한 번호를 다시 부르면 "큐에 없다"가 나오는데, 그게 정상이다.
+
 ## 그 밖에
 
 - `gh`는 설치·인증돼 있으나 **PATH에 없다.** 위처럼 붙여 쓴다.

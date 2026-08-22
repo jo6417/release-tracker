@@ -31,6 +31,15 @@ jobs:
         run: python sync_steam.py
         continue-on-error: true      # 한 소스가 죽어도 추적은 계속
 
+      - name: 위시리스트 후보 수집
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          STEAM_API_KEY: ${{ secrets.STEAM_API_KEY }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python sync_wishlist.py
+        continue-on-error: true
+
       - name: 가격 추적 (ITAD)
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -106,7 +115,7 @@ jobs:
           # 이미 알렸는지 기억한다.
           # 커밋하지 않으면 러너가 매번 빈 상태로 시작해 첫 실행 취급이 되고,
           # 그러면 새 영상을 영원히 못 잡는다 (기준값만 다시 잡는다).
-          git add snapshots/ media_state.json youtube_watch.json refresh_state.json
+          git add snapshots/ media_state.json youtube_watch.json refresh_state.json candidates.json
           if git diff --staged --quiet; then
             echo "스냅샷 변경 없음"
             exit 0

@@ -16,6 +16,7 @@
 import argparse
 import datetime
 
+import candidates
 import describe
 import notify
 import track
@@ -181,11 +182,23 @@ def main():
     print(f"작품 {len(cur)}행")
 
     sections = collect(cur, today)
-    if not any(sections.values()):
+    queue = candidates.load()
+    picked = candidates.pick(queue)
+    if not any(sections.values()) and not picked:
         print("브리핑할 내용이 없습니다.")
         return
 
     head, summary, details, kinds = build(sections, today)
+    if picked:
+        # 등록 후보. 작품 DB에 넣을지는 사람이 채팅으로 답한다 — 여기서는
+        # 묻기만 한다. 번호는 고정이라 며칠 뒤에 답해도 같은 것을 가리킨다.
+        kinds.append("후보")
+        summary.append("[등록 후보] " + ", ".join(
+            f"{c['번호']} {c['제목']}" for c in picked))
+        for c in picked:
+            details.append((f"[등록 후보] {c['번호']} {c['제목']}", [
+                x for x in [c.get("설명"), f"출처: {c['출처']}",
+                            f"채팅에 \"{c['번호']} 등록\" 또는 \"{c['번호']} 버림\""] if x]))
     print(f"\n{notify.card_title(head, today.isoformat())}")
     for s in summary:
         print("  " + s)
@@ -200,6 +213,11 @@ def main():
     notify.send_card(head, summary, details, kinds=["브리핑"],
                      count=sum(len(v) for v in sections.values()),
                      date=today.isoformat())
+    if picked:
+        # 보여준 뒤에 적어야 한다. 카드가 안 나갔는데 제시 횟수만 오르면
+        # 그 후보는 아무도 못 본 채로 뒤로 밀린다.
+        candidates.mark(queue, picked, today.isoformat())
+        candidates.save(queue)
     if not notify.spooling():
         print("\n브리핑 카드 1장 발송 완료")
 
