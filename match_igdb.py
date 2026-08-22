@@ -101,7 +101,9 @@ def main():
     for i, g in enumerate(rest, 1):
         query = title_en.get(g["제목"], g["제목"])
         try:
-            cands = igdb.search(query)
+            # 정확히 같은 이름이 상위 5개 밖에 있는 경우가 잦다(Stray, Control).
+            # 아래에서 이름이 같은 것을 골라내므로 후보를 넉넉히 받는다.
+            cands = igdb.search(query, limit=10)
         except Exception as e:
             print(f"    [{g['제목']}] 실패: {e}", file=sys.stderr)
             continue
