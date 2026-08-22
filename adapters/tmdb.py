@@ -163,3 +163,39 @@ def search_smart(title, year=None, max_queries=12):
             if got == want and year and r["연도"] == year:
                 return list(pool.values()), used
     return list(pool.values()), used
+
+
+# 아직 안 나온 작품은 날짜 칸이 '2026-01-01'처럼 연도만 뜻하는 자리표시로
+# 채워져 있는 일이 흔하다. 그걸 확정으로 읽으면 잘못된 알림이 나간다.
+_PLANNED = {"Planned", "Rumored"}
+
+
+def details(tmdb_id, media_type):
+    """개봉·공개일과 그 정밀도. 못 찾으면 None.
+
+    반환: {"날짜", "정밀도", "국내날짜", "상태"}
+    """
+    try:
+        if media_type == "movie":
+            d = _get(f"/movie/{tmdb_id}", language="ko-KR")
+            date = d.get("release_date") or ""
+        else:
+            d = _get(f"/tv/{tmdb_id}", language="ko-KR")
+            date = d.get("first_air_date") or ""
+    except urllib.error.HTTPError:
+        return None
+
+    status = d.get("status") or ""
+    if not date:
+        precision = "미정"
+    elif status in _PLANNED and date[5:] == "01-01":
+        precision = "연도"
+    else:
+        precision = "확정"
+
+    return {
+        "날짜": date or None,
+        "정밀도": precision,
+        "국내날짜": kr_release(tmdb_id, media_type) if media_type == "movie" else None,
+        "상태": status,
+    }

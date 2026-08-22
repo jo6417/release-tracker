@@ -21,6 +21,7 @@
 | `apply_igdb.py` | 매칭 결과를 노션에 반영 |
 | `sync_steam.py` | 스팀 보유·플레이시간을 노션에 반영 |
 | `add_steam_games.py` | 스팀에만 있는 게임을 작품으로 추가 |
+| `refresh_dates.py` | 미확정 작품의 출시일을 IGDB·TMDB에 다시 조회 → 노션 갱신 |
 | `sync_series.py` | 시리즈 방영·완결 상태를 TMDB로 갱신 (완결대기 알림·캘린더) |
 | `sync_intro.py` | 작품 한 줄 소개 채우기 (스팀 한국어 → TMDB ko-KR → IGDB 영문) |
 | `sync_media.py` | 새 트레일러 감지 (유튜브 RSS · 스팀 · TMDB · IGDB) |
