@@ -20,7 +20,15 @@ import describe
 import notify
 import track
 
-SOON_DAYS = 7        # "곧 나온다"로 볼 기간
+# 임박 펄스 — 아직 안 나온 작품을 D-7과 D-1에 딱 두 번 알린다. D-0은 `오늘 공개`
+# 칸이 이미 하고 있어 따로 만들지 않는다.
+#
+# 예전에는 D+1~D+7을 매일 늘어놓았다. 같은 작품이 이레 내내 같은 자리에 뜨는데,
+# 어제 읽은 줄이 오늘 또 오면 그 칸 전체를 넘기게 된다. 세 번만 울리면 그 세 번을
+# 읽는다. D-7은 예매·사전구매처럼 미리 해둘 게 걸리는 시점이고, D-1은 "내일이다"다.
+PULSE_DAYS = (7, 1)
+# 아직 안 나온 상태. 스키마가 게임/영상으로 갈라져 있어 두 값이 같은 뜻이다.
+PULSE_STAGES = ("출시 대기", "공개 대기")
 ENDING_DAYS = 14     # 완결 임박으로 볼 기간
 BACKLOG_PICK = 3     # 하루에 집어 올릴 추천 개수
 # 지금 붙잡고 있는 게 있으면 추천을 줄인다. 할 게 밀려 있는데 매일 새 작품을
@@ -42,6 +50,12 @@ def _date(iso):
         return datetime.date.fromisoformat(iso[:10])
     except (ValueError, TypeError):
         return None
+
+
+def _dday(row, today):
+    d = _date(row.get("이용 가능일"))
+    n = (d - today).days if d else 0
+    return "내일" if n == 1 else f"D-{n}"
 
 
 def _sort_key(row):
@@ -73,8 +87,18 @@ def collect(cur, today):
         gap = (av - today).days
         if gap == 0:
             today_out.append(row)
-        elif 0 < gap <= SOON_DAYS:
-            soon.append(row)
+        elif gap > 0:
+            # 아직 안 나온 것은 펄스 날에만 알리고, 그 외에는 어느 칸에도 넣지
+            # 않는다. 백로그는 "이미 나왔는데 아직 안 한 것"이라, 미출시작이
+            # 섞이면 오늘의 추천이 볼 수도 없는 작품을 들이민다.
+            #
+            # 확정이 아닌 정밀도에서 `출시·개봉일`은 구간의 첫날을 넣어둔
+            # 자리표시다. 그걸로 D-day를 세면 "9월 어느 날"이 9월 1일 기준
+            # D-7로 둔갑한다. 확정만 센다.
+            if (gap in PULSE_DAYS
+                    and row.get("날짜정밀도") == "확정"
+                    and describe.stage_of(row) in PULSE_STAGES):
+                soon.append(row)
         else:
             backlog.append(row)
 
@@ -122,7 +146,7 @@ def build(sections, today):
     """(라벨, 요약, 상세, 종류들)"""
     # 라벨은 알림 카드의 소제목이다. 구어체("아 맞다 이거")는 한 번은 재밌지만
     # 매일 같은 자리에 뜨면 실없어진다. 무엇을 모아둔 칸인지만 적는다.
-    label = {"오늘": "오늘 공개", "곧": f"{SOON_DAYS}일 내 공개",
+    label = {"오늘": "오늘 공개", "곧": "공개 임박",
              "완결임박": "완결 임박", "진행중": "진행 중", "백로그": "오늘의 추천"}
     summary, details, kinds = [], [], []
 
@@ -131,7 +155,13 @@ def build(sections, today):
         if not rows:
             continue
         kinds.append("브리핑")
-        summary.append(f"[{label[key]}] " + ", ".join(r["제목"] for r in rows))
+        if key == "곧":
+            # 며칠 남았는지가 이 칸의 전부다. 제목만 적으면 D-7인지 내일인지
+            # 상세를 열어야 알 수 있다.
+            names = ", ".join(f"{r['제목']} ({_dday(r, today)})" for r in rows)
+        else:
+            names = ", ".join(r["제목"] for r in rows)
+        summary.append(f"[{label[key]}] " + names)
         for row in rows:
             details.append((f"[{label[key]}] {row['제목']}",
                             describe.detail(key, row, None, today)))

@@ -102,10 +102,11 @@ jobs:
         run: |
           git config user.name "release-tracker"
           git config user.email "noreply@github.com"
-          # media_state.json은 어떤 트레일러를 이미 알렸는지 기억한다.
+          # media_state.json은 어떤 트레일러를, refresh_state.json은 어떤 연기를
+          # 이미 알렸는지 기억한다.
           # 커밋하지 않으면 러너가 매번 빈 상태로 시작해 첫 실행 취급이 되고,
           # 그러면 새 영상을 영원히 못 잡는다 (기준값만 다시 잡는다).
-          git add snapshots/ media_state.json youtube_watch.json
+          git add snapshots/ media_state.json youtube_watch.json refresh_state.json
           if git diff --staged --quiet; then
             echo "스냅샷 변경 없음"
             exit 0

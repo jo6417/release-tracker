@@ -11,8 +11,11 @@
 
 건드리는 범위를 좁게 잡았다.
 
-- 날짜정밀도가 `확정`·`완결대기`인 행은 아예 보지 않는다. 사람이 정한 값을
-  소스가 덮어쓰지 않게. 대가로 **출시 연기는 감지하지 못한다**
+- 날짜정밀도가 `확정`인 행은 **고치지 않되, 나오기 전까지 지켜본다**.
+  소스가 다른 날짜를 말하면 노션은 그대로 두고 알림만 보낸다(연기 감시).
+  08-21에 자동 덮어쓰기로 손으로 찍은 6건이 날아간 적이 있어, 사람이 정한
+  값을 소스가 덮는 경로는 두지 않는다. 반영은 사람이 결정한다
+- `완결대기`는 아예 보지 않는다. `sync_series.py`가 맡는 구간이다
 - 정밀도가 **올라갈 때만** 쓴다 (미정 → 연도 → 분기 → 월 → 확정)
 - `월`·`분기`·`연도`면 출시·개봉일에 **그 구간의 첫날**을 넣는다.
   `track.py`의 `released()`가 쓰는 규칙과 같다 — 확정이 아닌 날짜는
@@ -27,6 +30,7 @@
     python refresh_dates.py
 """
 import argparse
+import datetime
 import io
 import json
 import re
@@ -35,6 +39,7 @@ import time
 import urllib.error
 import urllib.request
 
+import notify
 from adapters import igdb, tmdb
 from config import API, headers
 
@@ -42,8 +47,18 @@ IDS_FILE = "db_ids.json"
 
 # 낮을수록 거칠다. 올라갈 때만 쓴다.
 RANK = {"미정": 0, "연도": 1, "분기": 2, "월": 3, "확정": 4}
-# 이 값이 들어 있으면 손대지 않는다. `완결대기`는 사람이 직접 고르는 상태다.
-KEEP = ("확정", "완결대기")
+# 이 값은 아예 보지 않는다. 완결 추적은 `sync_series.py`의 일이다.
+SKIP_PRECISION = ("완결대기",)
+# 연기 감시로 이미 알린 날짜를 적어둔다. 없으면 같은 연기를 매일 다시 알린다.
+STATE_FILE = "refresh_state.json"
+# 이 일수 미만의 차이는 알리지 않는다.
+#
+# 첫 실행에서 6건이 걸렸는데 그중 5건이 1~6일짜리 "앞당김"이었다 (듄3 3일,
+# 어벤져스 2일, 페이블 6일…). 소스가 주는 날짜는 대개 해외 기준이고 노션에는
+# 국내 개봉일이 들어 있어서, 진짜 변경이 아니라 지역 차이가 그대로 잡힌 것이다.
+# 둘을 구분할 방법이 없으므로 며칠짜리는 접는다. 실제 연기는 주 단위로 밀린다
+# — 같은 실행에서 팬텀블레이드 제로가 50일 연기로 걸렸고, 그런 건 남는다.
+MIN_SHIFT = 7
 
 
 def query_all(dbid):
@@ -100,12 +115,16 @@ def placeholder(date, precision):
     return None
 
 
-def read_rows(pages):
+def read_rows(pages, today):
     """조회 대상만 추린다.
+
+    두 종류가 섞여 나온다. `감시`가 False면 정밀도를 올려 노션에 쓰는 대상이고,
+    True면 이미 확정이라 **읽기만** 하는 대상이다(연기 감시). 이미 나온 것은
+    지켜볼 이유가 없어 뺀다 — 연기란 나오기 전에만 성립한다.
 
     반환: (대상 목록, 건너뛴 이유별 집계)
     """
-    rows, skip = [], {"확정·완결대기": 0, "외부ID없음": 0, "종류없음": 0}
+    rows, skip = [], {"완결대기": 0, "외부ID없음": 0, "종류없음": 0, "이미 나옴": 0}
     for p in pages:
         props = p["properties"]
         kind = props["종류"]["select"]
@@ -114,13 +133,21 @@ def read_rows(pages):
             continue
         precision = props["날짜정밀도"]["select"]
         precision = precision["name"] if precision else "미정"
-        if precision in KEEP or precision not in RANK:
-            skip["확정·완결대기"] += 1
+        if precision in SKIP_PRECISION or precision not in RANK:
+            skip["완결대기"] += 1
+            continue
+
+        cur_date = props["출시·개봉일"]["date"]
+        cur_date = cur_date["start"][:10] if cur_date else None
+        watch = precision == "확정"
+        if watch and (not cur_date or cur_date < today):
+            skip["이미 나옴"] += 1
             continue
 
         ext = txt(props["외부ID"])
         row = {"id": p["id"], "제목": txt(props["제목"]), "종류": kind["name"],
-               "정밀도": precision, "props": props}
+               "정밀도": precision, "props": props,
+               "감시": watch, "날짜": cur_date}
 
         if kind["name"] == "게임":
             m = re.search(r"igdb:(\d+)", ext)
@@ -170,6 +197,54 @@ def plan(row, found):
     }
 
 
+def load_state():
+    try:
+        with io.open(STATE_FILE, encoding="utf-8") as f:
+            return json.load(f)
+    except (IOError, ValueError):
+        return {}
+
+
+def save_state(state):
+    with io.open(STATE_FILE, "w", encoding="utf-8") as f:
+        json.dump(state, f, ensure_ascii=False, indent=1, sort_keys=True)
+        f.write("\n")
+
+
+def source_date(found):
+    """소스가 말하는 날짜. 영화는 국내 개봉일을 알면 그쪽 — `plan()`과 같은 규칙."""
+    if found["정밀도"] == "확정" and found.get("국내날짜"):
+        return found["국내날짜"]
+    return found.get("날짜")
+
+
+def report(delayed, today, dry):
+    """노션은 그대로 두고 알림만 보낸다.
+
+    고쳐주지 않는 것이 핵심이다. 08-21에 소스가 사람이 정한 값을 덮어써
+    손으로 찍은 6건이 날아갔다. 무엇이 달라졌는지만 알리고 반영은 사람이 정한다.
+    """
+    d0 = datetime.date.fromisoformat(today)
+    summary, details = [], []
+    for row, src in delayed:
+        new_d = datetime.date.fromisoformat(src)
+        gap = (new_d - datetime.date.fromisoformat(row["날짜"])).days
+        move = f"{abs(gap)}일 {'연기' if gap > 0 else '앞당김'}"
+        summary.append(f"{row['제목']} ({move})")
+        details.append((f"[출시일 변경] {row['제목']}", [
+            f"{row['종류']} · 노션 {row['날짜']} → 소스 {src} · {move}",
+            f"공개까지 {(new_d - d0).days}일",
+            "노션은 그대로 두었다. 반영하려면 채팅으로 알려줄 것",
+        ]))
+
+    if dry:
+        print("\n" + "[알림 예정] " + ", ".join(summary))
+        return
+    notify.send_card(f"출시일 변경 {len(delayed)}건",
+                     summary=["[출시일 변경] " + ", ".join(summary)],
+                     details=details, kinds=["날짜변경"], count=len(delayed))
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry", action="store_true", help="바꾸지 않고 출력만")
@@ -180,11 +255,14 @@ def main():
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
 
-    rows, skip = read_rows(query_all(ids["work_db"]))
+    today = time.strftime("%Y-%m-%d")
+    rows, skip = read_rows(query_all(ids["work_db"]), today)
     games = [r for r in rows if "igdb" in r]
     shows = [r for r in rows if "tmdb" in r]
-    print(f"미확정 {len(rows)}건 — 게임 {len(games)} / 영상 {len(shows)}")
-    print(f"  건너뜀: 확정·완결대기 {skip['확정·완결대기']} / "
+    n_watch = sum(1 for r in rows if r["감시"])
+    print(f"조회 {len(rows)}건 — 게임 {len(games)} / 영상 {len(shows)}"
+          f"  (미확정 {len(rows) - n_watch} / 연기 감시 {n_watch})")
+    print(f"  건너뜀: 완결대기 {skip['완결대기']} / 이미 나옴 {skip['이미 나옴']} / "
           f"외부ID없음 {skip['외부ID없음']} / 종류없음 {skip['종류없음']}")
 
     found = {}
@@ -216,11 +294,29 @@ def main():
                 ok += 1
         print(f"  TMDB 응답 {ok}건 / 조회 {len(targets)}건")
 
-    changed = 0
+    changed, delayed = 0, []
+    state = load_state()
+    sent = state.setdefault("알림", {})
+
     for r in rows:
         d = found.get(r["id"])
         if not d:
             continue
+
+        if r["감시"]:
+            # 확정된 행은 고치지 않는다. 소스가 다른 날을 말할 때만 적어둔다.
+            src = source_date(d)
+            if not src or d["정밀도"] != "확정" or src == r["날짜"]:
+                continue
+            if abs((datetime.date.fromisoformat(src)
+                    - datetime.date.fromisoformat(r["날짜"])).days) < MIN_SHIFT:
+                continue
+            if sent.get(r["id"]) == src:
+                continue          # 같은 연기를 매일 다시 알리지 않는다
+            delayed.append((r, src))
+            sent[r["id"]] = src
+            continue
+
         new = plan(r, d)
         if not new:
             continue
@@ -231,9 +327,17 @@ def main():
             patch(r["id"], new)
             time.sleep(0.34)
 
-    print(f"\n{'갱신 예정' if a.dry else '갱신'} {changed}건")
+    print(f"\n{'갱신 예정' if a.dry else '갱신'} {changed}건 / 날짜 불일치 {len(delayed)}건")
     if changed and not a.dry:
         print("변화는 track.py가 감지해 알림 카드로 내보낸다")
+
+    # 나온 작품의 기록은 남겨둘 이유가 없다. 두면 파일이 계속 자란다.
+    alive = {r["id"] for r in rows if r["감시"]}
+    state["알림"] = {k: v for k, v in sent.items() if k in alive}
+    if delayed:
+        report(delayed, today, a.dry)
+    if not a.dry:
+        save_state(state)
 
 
 if __name__ == "__main__":
