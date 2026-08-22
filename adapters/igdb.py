@@ -102,20 +102,36 @@ def search(name, limit=5):
     rows = query("games", f'search "{name}"; '
                           f"fields name,first_release_date,url,platforms.abbreviation,"
                           f"franchises.name,total_rating; limit {limit};")
-    out = []
-    for g in rows:
-        out.append({
-            "id": g["id"],
-            "이름": g.get("name", ""),
-            "출시일": (time.strftime("%Y-%m-%d", time.localtime(g["first_release_date"]))
-                    if g.get("first_release_date") else None),
-            "플랫폼": [p.get("abbreviation") for p in g.get("platforms", [])
-                    if p.get("abbreviation")],
-            "시리즈": [f["name"] for f in g.get("franchises", [])],
-            "평점": round(g["total_rating"], 1) if g.get("total_rating") else None,
-            "url": g.get("url"),
-        })
-    return out
+    return [_row(g) for g in rows]
+
+
+def _row(g):
+    return {
+        "id": g["id"],
+        "이름": g.get("name", ""),
+        "출시일": (time.strftime("%Y-%m-%d", time.localtime(g["first_release_date"]))
+                if g.get("first_release_date") else None),
+        "플랫폼": [p.get("abbreviation") for p in g.get("platforms", [])
+                if p.get("abbreviation")],
+        "시리즈": [f["name"] for f in g.get("franchises", [])],
+        "평점": round(g["total_rating"], 1) if g.get("total_rating") else None,
+        "url": g.get("url"),
+    }
+
+
+def by_name(name, limit=5):
+    """이름이 정확히 같은 게임을 찾는다.
+
+    `search`는 관련도 순이라 흔한 단어가 제목이면 정작 그 게임이 안 나온다 -
+    "Control"을 검색하면 Star Control이, "원신"의 대역인 Genshin Impact를
+    검색하면 그 DLC가 위로 올라온다. 이름을 안다면 검색이 아니라 조회를
+    해야 한다. 대소문자는 무시한다(~ 연산자).
+    """
+    esc = name.replace('"', '')
+    rows = query("games", f'fields name,first_release_date,url,platforms.abbreviation,'
+                          f'franchises.name,total_rating; '
+                          f'where name ~ "{esc}"; limit {limit};')
+    return [_row(g) for g in rows]
 
 
 def steam_appids(igdb_ids):

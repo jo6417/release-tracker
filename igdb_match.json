@@ -2530,6 +2530,68 @@
   "경로": "steam",
   "확신": "확실"
  },
+ "콜오브듀티: 모던 워페어 4": {
+  "id": 403310,
+  "이름": "Call of Duty: Modern Warfare 4",
+  "출시일": "2026-10-23",
+  "플랫폼": [
+   "Series X|S",
+   "Switch 2",
+   "PC",
+   "PS5"
+  ],
+  "시리즈": [
+   "Call of Duty"
+  ],
+  "평점": null,
+  "url": "https://www.igdb.com/games/call-of-duty-modern-warfare-4",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "도깨비": {
+  "id": 130806,
+  "이름": "DokeV",
+  "출시일": null,
+  "플랫폼": [
+   "PS4",
+   "PC",
+   "XONE"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/dokev",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "블랙 미스: 종규": {
+  "id": 361900,
+  "이름": "Black Myth: Zhong Kui",
+  "출시일": null,
+  "플랫폼": [],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/black-myth-zhong-kui",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "귀무자: 웨이 오브 더 소드": {
+  "id": 325602,
+  "이름": "Onimusha: Way of the Sword",
+  "출시일": "2026-09-04",
+  "플랫폼": [
+   "Series X|S",
+   "Switch 2",
+   "PC",
+   "PS5"
+  ],
+  "시리즈": [
+   "Onimusha"
+  ],
+  "평점": null,
+  "url": "https://www.igdb.com/games/onimusha-way-of-the-sword",
+  "경로": "검색",
+  "확신": "확실"
+ },
  "Dead Island Riptide": {
   "id": 1833,
   "이름": "Dead Island: Riptide",
@@ -2564,20 +2626,16 @@
   "확신": "확실"
  },
  "월드워Z": {
-  "id": 20910,
+  "id": 115272,
   "이름": "World War Z",
-  "출시일": "2019-04-16",
+  "출시일": "2013-05-30",
   "플랫폼": [
-   "PS4",
-   "PC",
-   "XONE",
-   "Switch"
+   "Android",
+   "iOS"
   ],
-  "시리즈": [
-   "World War Z"
-  ],
-  "평점": 72.7,
-  "url": "https://www.igdb.com/games/world-war-z",
+  "시리즈": [],
+  "평점": 25.0,
+  "url": "https://www.igdb.com/games/world-war-z--1",
   "경로": "검색",
   "확신": "확실"
  },
@@ -2796,6 +2854,20 @@
   ],
   "평점": 69.3,
   "url": "https://www.igdb.com/games/call-of-duty-ghosts",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "RYSE:son of rome": {
+  "id": 3812,
+  "이름": "Ryse: Son of Rome",
+  "출시일": "2013-11-22",
+  "플랫폼": [
+   "PC",
+   "XONE"
+  ],
+  "시리즈": [],
+  "평점": 68.3,
+  "url": "https://www.igdb.com/games/ryse-son-of-rome",
   "경로": "검색",
   "확신": "확실"
  },
@@ -3313,18 +3385,19 @@
   "확신": "확실"
  },
  "Stray": {
-  "id": 222370,
-  "이름": "Fantasy Maiden Wars: Dream of the Stray Dreamer",
-  "출시일": "2022-03-31",
+  "id": 177394,
+  "이름": "Stray",
+  "출시일": "2017-02-21",
   "플랫폼": [
+   "Linux",
    "PC",
-   "Switch"
+   "Mac"
   ],
   "시리즈": [],
   "평점": null,
-  "url": "https://www.igdb.com/games/fantasy-maiden-wars-dream-of-the-stray-dreamer",
+  "url": "https://www.igdb.com/games/stray--1",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "커비 : 디스커버리": {
   "id": 208400,
@@ -3504,10 +3577,11 @@
   "확신": "확실"
  },
  "원신": {
-  "id": 288670,
-  "이름": "Genshin Impact: Blades Weaving Betwixt Brocade",
-  "출시일": "2024-03-13",
+  "id": 119277,
+  "이름": "Genshin Impact",
+  "출시일": "2020-09-28",
   "플랫폼": [
+   "Series X|S",
    "PS4",
    "Android",
    "PC",
@@ -3517,10 +3591,10 @@
   "시리즈": [
    "Genshin Impact"
   ],
-  "평점": null,
-  "url": "https://www.igdb.com/games/genshin-impact-blades-weaving-betwixt-brocade",
+  "평점": 81.1,
+  "url": "https://www.igdb.com/games/genshin-impact",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "마피아 리메이크": {
   "id": 134070,
@@ -3791,6 +3865,21 @@
   "경로": "검색",
   "확신": "확실"
  },
+ "요시와 신기한 도감": {
+  "id": 366883,
+  "이름": "Yoshi and the Mysterious Book",
+  "출시일": "2026-05-21",
+  "플랫폼": [
+   "Switch 2"
+  ],
+  "시리즈": [
+   "Yoshi"
+  ],
+  "평점": 81.7,
+  "url": "https://www.igdb.com/games/yoshi-and-the-mysterious-book",
+  "경로": "검색",
+  "확신": "확실"
+ },
  "Master Of Albion": {
   "id": 314272,
   "이름": "Masters of Albion",
@@ -3802,7 +3891,7 @@
   "평점": null,
   "url": "https://www.igdb.com/games/masters-of-albion",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "REPLACED": {
   "id": 152244,
@@ -3996,19 +4085,18 @@
   "확신": "확실"
  },
  "어둠속에 나홀로 리메이크": {
-  "id": 213237,
+  "id": 1958,
   "이름": "Alone in the Dark",
-  "출시일": "2024-03-20",
+  "출시일": "2008-06-20",
   "플랫폼": [
-   "Series X|S",
    "PC",
-   "PS5"
+   "X360"
   ],
   "시리즈": [
    "Alone in the Dark"
   ],
-  "평점": 73.6,
-  "url": "https://www.igdb.com/games/alone-in-the-dark--1",
+  "평점": 51.3,
+  "url": "https://www.igdb.com/games/alone-in-the-dark--2",
   "경로": "검색",
   "확신": "확실"
  },
@@ -4026,7 +4114,7 @@
   "평점": null,
   "url": "https://www.igdb.com/games/grand-theft-auto-vi",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "Reanimal": {
   "id": 314265,
@@ -4379,23 +4467,24 @@
   "확신": "확실"
  },
  "어쌔신 크리드 : 미라지": {
-  "id": 271474,
-  "이름": "Assassin's Creed Mirage & Assassin's Creed Valhalla Bundle",
+  "id": 215060,
+  "이름": "Assassin's Creed Mirage",
   "출시일": "2023-10-05",
   "플랫폼": [
    "Series X|S",
    "PS4",
    "PC",
+   "iOS",
    "PS5",
    "XONE"
   ],
   "시리즈": [
    "Assassin's Creed"
   ],
-  "평점": null,
-  "url": "https://www.igdb.com/games/assassins-creed-mirage-and-assassins-creed-valhalla-bundle",
+  "평점": 74.8,
+  "url": "https://www.igdb.com/games/assassins-creed-mirage",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "Immortals of Aveum": {
   "id": 228531,
@@ -4666,6 +4755,26 @@
   "경로": "검색",
   "확신": "확실"
  },
+ "위쳐3 : 리마스터 및 한국어 더빙 업데이트": {
+  "id": 1942,
+  "이름": "The Witcher 3: Wild Hunt",
+  "출시일": "2015-05-19",
+  "플랫폼": [
+   "Series X|S",
+   "PS4",
+   "PC",
+   "PS5",
+   "XONE",
+   "Switch"
+  ],
+  "시리즈": [
+   "The Witcher"
+  ],
+  "평점": 92.8,
+  "url": "https://www.igdb.com/games/the-witcher-3-wild-hunt",
+  "경로": "검색",
+  "확신": "확실"
+ },
  "서머빌": {
   "id": 41025,
   "이름": "Somerville",
@@ -4845,17 +4954,21 @@
   "확신": "확실"
  },
  "갓오브워: 라그나로크": {
-  "id": 323174,
-  "이름": "Ragnarok: War of Gods",
-  "출시일": "2013-09-12",
+  "id": 112875,
+  "이름": "God of War Ragnarök",
+  "출시일": "2022-11-09",
   "플랫폼": [
-   "Android"
+   "PS4",
+   "PC",
+   "PS5"
   ],
-  "시리즈": [],
-  "평점": null,
-  "url": "https://www.igdb.com/games/ragnarok-war-of-gods",
+  "시리즈": [
+   "God of War"
+  ],
+  "평점": 92.8,
+  "url": "https://www.igdb.com/games/god-of-war-ragnarok",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "고스트 와이어 도쿄": {
   "id": 119308,
@@ -4985,15 +5098,18 @@
   "확신": "확실"
  },
  "리터널": {
-  "id": 267447,
-  "이름": "Return or No Return",
-  "출시일": null,
-  "플랫폼": [],
+  "id": 134584,
+  "이름": "Returnal",
+  "출시일": "2021-04-30",
+  "플랫폼": [
+   "PC",
+   "PS5"
+  ],
   "시리즈": [],
-  "평점": null,
-  "url": "https://www.igdb.com/games/return-or-no-return",
+  "평점": 86.5,
+  "url": "https://www.igdb.com/games/returnal",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "데몬즈소울 리마스터": {
   "id": 134606,
@@ -5098,25 +5214,31 @@
   "확신": "확실"
  },
  "Marvel's Avengers": {
-  "id": 138034,
-  "이름": "LEGO Marvel's Avengers: Marvel's Ant-Man Pack",
-  "출시일": "2016-04-05",
+  "id": 26950,
+  "이름": "Marvel's Avengers",
+  "출시일": "2020-09-04",
   "플랫폼": [
-   "PS3",
+   "Stadia",
+   "Series X|S",
    "PS4",
    "PC",
-   "Mac"
+   "PS5",
+   "XONE"
   ],
   "시리즈": [
-   "LEGO",
    "Marvel",
    "The Avengers",
-   "Ant-Man"
+   "Captain America",
+   "Hulk",
+   "Iron Man",
+   "Thor",
+   "Black Widow",
+   "Ms. Marvel"
   ],
-  "평점": null,
-  "url": "https://www.igdb.com/games/lego-marvels-avengers-marvels-ant-man-pack",
+  "평점": 66.4,
+  "url": "https://www.igdb.com/games/marvels-avengers",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "엔세스터": {
   "id": 10032,
@@ -5316,25 +5438,23 @@
   "확신": "확실"
  },
  "GTA5": {
-  "id": 1020,
+  "id": 239064,
   "이름": "Grand Theft Auto V",
-  "출시일": "2013-09-17",
+  "출시일": "2015-04-14",
   "플랫폼": [
    "Series X|S",
-   "PS3",
    "PS4",
    "PC",
    "PS5",
-   "X360",
    "XONE"
   ],
   "시리즈": [
    "Grand Theft Auto"
   ],
-  "평점": 88.9,
-  "url": "https://www.igdb.com/games/grand-theft-auto-v",
+  "평점": 87.5,
+  "url": "https://www.igdb.com/games/grand-theft-auto-v--2",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "갓오브워": {
   "id": 19560,
@@ -5440,12 +5560,13 @@
   "확신": "확실"
  },
  "오버워치": {
-  "id": 388391,
-  "이름": "Overwatch: Reign of Talon - Season 1: Conquest",
-  "출시일": "2026-02-10",
+  "id": 125174,
+  "이름": "Overwatch",
+  "출시일": "2023-08-10",
   "플랫폼": [
    "Series X|S",
    "PS4",
+   "Switch 2",
    "PC",
    "PS5",
    "XONE",
@@ -5454,10 +5575,10 @@
   "시리즈": [
    "Overwatch"
   ],
-  "평점": null,
-  "url": "https://www.igdb.com/games/overwatch-reign-of-talon-season-1-conquest",
+  "평점": 76.1,
+  "url": "https://www.igdb.com/games/overwatch--1",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "어택 온 타이탄": {
   "id": 14879,
@@ -5725,9 +5846,9 @@
   "확신": "확실"
  },
  "스파이더맨": {
-  "id": 109419,
-  "이름": "Marvel's Spider-Man: The Heist",
-  "출시일": "2018-10-23",
+  "id": 19565,
+  "이름": "Marvel's Spider-Man",
+  "출시일": "2018-09-07",
   "플랫폼": [
    "PS4"
   ],
@@ -5735,10 +5856,10 @@
    "Spider-Man",
    "Marvel"
   ],
-  "평점": 70.5,
-  "url": "https://www.igdb.com/games/marvels-spider-man-the-heist",
+  "평점": 88.5,
+  "url": "https://www.igdb.com/games/marvels-spider-man",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "별의커비:스타얼라이즈": {
   "id": 37137,
@@ -5876,19 +5997,22 @@
   "확신": "확실"
  },
  "컨트롤": {
-  "id": 154237,
-  "이름": "Star Control I & II",
-  "출시일": "1992-11-17",
+  "id": 103329,
+  "이름": "Control",
+  "출시일": "2019-08-27",
   "플랫폼": [
+   "Stadia",
+   "Series X|S",
+   "PS4",
    "PC",
-   "Mac",
-   "DOS"
+   "PS5",
+   "XONE"
   ],
   "시리즈": [],
-  "평점": null,
-  "url": "https://www.igdb.com/games/star-control-i-and-ii",
+  "평점": 83.3,
+  "url": "https://www.igdb.com/games/control",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "보더랜드3": {
   "id": 19164,
@@ -5969,17 +6093,22 @@
   "확신": "확실"
  },
  "레지던트이블2": {
-  "id": 217953,
+  "id": 880,
   "이름": "Resident Evil 2",
-  "출시일": "1998-12-31",
+  "출시일": "1998-01-21",
   "플랫폼": [
-   "Handheld"
+   "PS3",
+   "NGC",
+   "PC",
+   "PS1",
+   "PSP",
+   "DC"
   ],
   "시리즈": [
    "Resident Evil"
   ],
-  "평점": null,
-  "url": "https://www.igdb.com/games/resident-evil-2--4",
+  "평점": 69.4,
+  "url": "https://www.igdb.com/games/resident-evil-2",
   "경로": "검색",
   "확신": "확실"
  },
@@ -6034,6 +6163,26 @@
   "시리즈": [],
   "평점": 70.5,
   "url": "https://www.igdb.com/games/vampyr",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "Division2": {
+  "id": 90099,
+  "이름": "Tom Clancy's The Division 2",
+  "출시일": "2019-03-15",
+  "플랫폼": [
+   "Stadia",
+   "Series X|S",
+   "PS4",
+   "PC",
+   "PS5",
+   "XONE"
+  ],
+  "시리즈": [
+   "Tom Clancy’s"
+  ],
+  "평점": 80.1,
+  "url": "https://www.igdb.com/games/tom-clancys-the-division-2",
   "경로": "검색",
   "확신": "확실"
  },
@@ -6217,17 +6366,19 @@
   "확신": "확실"
  },
  "ZOMBI": {
-  "id": 62849,
-  "이름": "Zombie Zombie Zombie",
-  "출시일": null,
+  "id": 11491,
+  "이름": "Zombi",
+  "출시일": "2015-08-18",
   "플랫폼": [
-   "iOS"
+   "PS4",
+   "PC",
+   "XONE"
   ],
   "시리즈": [],
-  "평점": null,
-  "url": "https://www.igdb.com/games/zombie-zombie-zombie",
+  "평점": 63.6,
+  "url": "https://www.igdb.com/games/zombi--1",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "어쌔신 크리드 : 오리진": {
   "id": 28540,
@@ -6321,10 +6472,11 @@
   "확신": "확실"
  },
  "레인보우식스:시즈": {
-  "id": 158944,
-  "이름": "Tom Clancy's Rainbow Six Siege: North Star",
-  "출시일": "2021-06-14",
+  "id": 7360,
+  "이름": "Rainbow Six Siege",
+  "출시일": "2015-12-01",
   "플랫폼": [
+   "Stadia",
    "Series X|S",
    "PS4",
    "PC",
@@ -6334,10 +6486,10 @@
   "시리즈": [
    "Tom Clancy’s"
   ],
-  "평점": null,
-  "url": "https://www.igdb.com/games/tom-clancys-rainbow-six-siege-north-star",
+  "평점": 76.5,
+  "url": "https://www.igdb.com/games/rainbow-six-siege",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "SOMA": {
   "id": 9727,
@@ -6595,37 +6747,38 @@
   "확신": "확실"
  },
  "검은 사막": {
-  "id": 139914,
-  "이름": "Black Desert Online: Prestige Edition",
-  "출시일": "2020-12-02",
+  "id": 6292,
+  "이름": "Black Desert",
+  "출시일": "2014-12-17",
   "플랫폼": [
    "Series X|S",
    "PS4",
+   "PC",
    "PS5",
    "XONE"
   ],
   "시리즈": [],
-  "평점": null,
-  "url": "https://www.igdb.com/games/black-desert-online-prestige-edition",
+  "평점": 71.2,
+  "url": "https://www.igdb.com/games/black-desert",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "니드포스피드2015": {
-  "id": 3193,
-  "이름": "Need for Speed: Most Wanted",
-  "출시일": "2012-10-30",
+  "id": 10965,
+  "이름": "Need for Speed",
+  "출시일": "2015-11-03",
   "플랫폼": [
-   "PS3",
+   "PS4",
    "PC",
-   "X360"
+   "XONE"
   ],
   "시리즈": [
    "Need for Speed"
   ],
-  "평점": 78.9,
-  "url": "https://www.igdb.com/games/need-for-speed-most-wanted-53b9fef3-adb4-41a0-8ca0-ffcbb0060467",
+  "평점": 61.3,
+  "url": "https://www.igdb.com/games/need-for-speed",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "위쳐3 : 블러드앤와인": {
   "id": 13166,
@@ -6714,16 +6867,17 @@
   "확신": "확실"
  },
  "로드 오브 더 폴른": {
-  "id": 194987,
+  "id": 4847,
   "이름": "Lords of the Fallen",
-  "출시일": "2017-02-06",
+  "출시일": "2014-10-28",
   "플랫폼": [
-   "Android",
-   "iOS"
+   "PS4",
+   "PC",
+   "XONE"
   ],
   "시리즈": [],
-  "평점": 70.2,
-  "url": "https://www.igdb.com/games/lords-of-the-fallen--1",
+  "평점": 67.5,
+  "url": "https://www.igdb.com/games/lords-of-the-fallen",
   "경로": "검색",
   "확신": "확실"
  },

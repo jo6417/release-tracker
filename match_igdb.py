@@ -116,6 +116,17 @@ def main():
                 best = c
                 break
         if best is None:
+            # 검색은 관련도 순이라 흔한 단어가 제목이면 정작 그 게임이 안 나온다.
+            # "Control"은 Star Control에, "Genshin Impact"는 자기 DLC에 밀린다.
+            # 이름을 아는 마당이니 마지막으로 정확 조회를 한 번 더 해본다.
+            try:
+                exact = [c for c in igdb.by_name(query) if norm(c["이름"]) == norm(query)]
+            except Exception:
+                exact = []
+            if exact:
+                best = exact[0]
+
+        if best is None:
             best = cands[0]
             low.append((g["제목"], best["이름"]))
             conf = "낮음"
