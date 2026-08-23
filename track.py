@@ -30,8 +30,10 @@ from config import API, headers
 IDS_FILE = "db_ids.json"
 SNAP_DIR = "snapshots"
 
+# `게임패스` 체크박스는 2026-08-23에 지웠다. 같은 사실을 소유처가 들고 있고,
+# 입점·이탈 알림은 sync_gamepass.py가 직접 만든다.
 WATCH = ["출시·개봉일", "날짜정밀도", "진행도(게임)", "진행도(영상)",
-         "게임패스", "방영상태"]
+         "방영상태"]
 # 진행도는 매체별로 속성이 갈려 있다. 한 행은 둘 중 하나만 쓴다.
 STAGE = describe.STAGE
 # 아직 보거나 하지 않은 단계. 이용 가능일이 지나면 백로그로 넘어가는 것들이다.
@@ -266,8 +268,14 @@ def diff(prev, cur, today=None):
             events.append(event("신규", now))
             continue
         for k in WATCH:
-            if k not in old:
-                continue      # 속성 이름이 바뀐 첫날. 전 행이 알림으로 터지는 걸 막는다
+            if k not in old or k not in now:
+                # 속성이 생기거나 없어진 첫날. 어느 쪽이든 전 행이 알림으로 터진다.
+                #
+                # 2026-08-23에 실제로 났다. `게임패스` 체크박스를 지웠더니
+                # False -> None이 되어 685행이 전부 아래 else로 떨어졌고,
+                # kind가 "게임패스"라 describe가 "게임패스에 들어왔다"로 읽었다.
+                # 스키마에서 사라진 값은 변화가 아니라 변화를 볼 수 없게 된 것이다.
+                continue
             a, b = old.get(k), now.get(k)
             if a == b:
                 continue

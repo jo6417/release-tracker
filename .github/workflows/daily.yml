@@ -141,7 +141,6 @@ jobs:
           git add snapshots/ media_state.json youtube_watch.json refresh_state.json candidates.json
           git add igdb_match.json tmdb_match.json game_title_en.json steam_map.json
           git add gamepass_state.json gamepass_map.json
-          git add ./*확인필요.md
           if git diff --staged --quiet; then
             echo "스냅샷 변경 없음"
             exit 0
