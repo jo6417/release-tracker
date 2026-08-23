@@ -299,13 +299,33 @@ def diff(prev, cur, today=None):
                 else:
                     events.append(event("방영", now, note=f"방영상태 {a} → {b}"))
             elif k == "날짜정밀도" and b == "확정":
+                # 기다리던 것이 날짜를 잡았을 때만 소식이다.
+                #
+                # 값이 없다가 처음 채워진 것은 뒤늦은 입력이지 사건이 아니고,
+                # 이미 나온 작품에 "날짜가 확정됐다"는 말은 뜻이 없다.
+                # 2026-08-23에 외부ID를 채우자 매칭이 옛 출시일을 넣었고,
+                # 2014년에 나온 검은 사막이 날짜확정으로 떴다.
+                when = (now.get("출시·개봉일") or "")[:10]
+                if a is None or not when or when <= today.isoformat():
+                    continue
                 events.append(event("날짜확정", now,
                                     note=f"날짜정밀도 {a} → 확정", urgent=True))
             elif k == "게임패스" and b:
                 events.append(event("게임패스", now, urgent=True))
             elif k == "출시·개봉일":
+                # 같은 사건을 두 번 알리지 않는다. 날짜와 정밀도는 대개 함께
+                # 움직이는데 [날짜확정] 쪽이 더 구체적이라 그것만 남긴다.
+                if old.get("날짜정밀도") != "확정" and now.get("날짜정밀도") == "확정":
+                    continue
+                if a is None or not b or b[:10] <= today.isoformat():
+                    continue
                 events.append(event("날짜변경", now, note=f"날짜 {a} → {b}"))
             elif k in STAGE:
+                # `미확인`에서 벗어난 것은 상태가 변한 게 아니라, 등록할 때
+                # 비워뒀던 칸을 이제야 채운 것이다. 646건을 정리하던 흔적이
+                # 매일 알림으로 올라올 이유가 없다.
+                if a in (None, "미확인"):
+                    continue
                 events.append(event("상태변경", now, note=f"진행도 {a} → {b}"))
             else:
                 events.append(event(k, now, note=f"{k} {a} → {b}"))

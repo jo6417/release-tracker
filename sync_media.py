@@ -169,6 +169,12 @@ def youtube_videos(channel_id):
     return out
 
 
+# 알림에 올릴 영상 종류. 제작 비화나 리액션 영상은 작품 소식이 아니다.
+# 'Creators React: ...' 같은 Featurette가 티저와 나란히 떠서 무엇을 왜 띄웠는지
+# 알 수 없었다. 공식 예고편·티저·게임플레이만 본다.
+VIDEO_KIND = {"Trailer": "예고편", "Teaser": "티저", "Gameplay": "게임플레이"}
+
+
 def tmdb_videos(media_type, tid):
     out = []
     for lang in ("ko-KR", "en-US"):
@@ -179,8 +185,11 @@ def tmdb_videos(media_type, tid):
         for v in d.get("results") or []:
             if v.get("site") != "YouTube":
                 continue
+            kind = VIDEO_KIND.get(v.get("type"))
+            if not kind:
+                continue
             out.append({"id": "tmdb:" + v["id"],
-                        "제목": f"{v.get('type', '영상')} · {v.get('name', '')}".strip(),
+                        "제목": f"{kind} · {v.get('name', '')}".strip(),
                         "url": f"https://youtu.be/{v['key']}",
                         "날짜": (v.get("published_at") or "")[:10] or None})
     return out
@@ -361,14 +370,15 @@ def main():
             snap = {"종류": sel(row["properties"].get("종류")),
                     "소개": txt(row["properties"].get("소개"))}
             intro = describe.intro_line(snap)
-            if intro:
+            # 영어 줄거리는 싣지 않는다. TMDB에 한국어 개요가 없는 작품이 있고
+            # (비전 퀘스트가 그랬다), 읽을 수 없는 문장은 자리만 차지한다.
+            if intro and re.search(r"[가-힣]", intro):
                 lines.append(intro)
         for v in fresh[:3]:
             when = f"{v['날짜']} · " if v.get("날짜") else ""
-            lines.append(f"{when}{v['제목'][:70]}")
-            lines.append(f"  {v['url']}")
-        lines.append("→ 공개 대기 중인 작품의 새 영상입니다")
-        lines_by_work.append((f"[영상] {title}", lines))
+            lines.append(f"{when}{v['제목'][:70]}  {v['url']}")
+        lines.append("→ 공개 대기 중인 작품의 새 예고편입니다")
+        lines_by_work.append((f"[신규 예고편] {title}", lines))
         print(f"  {title[:24]:24} 새 영상 {len(fresh)}건 — {fresh[0]['제목'][:50]}")
 
         # 레퍼런스에 최신 영상 주소를 남겨둔다. 노션에서 바로 눌러 볼 수 있다
@@ -381,8 +391,8 @@ def main():
 
     if alerts and not a.dry:
         notify.send_card(
-            f"새 영상 {len(alerts)}건",
-            summary=["[영상] " + ", ".join(t for _, t, _ in alerts)],
+            f"새 예고편 {len(alerts)}건",
+            summary=["[신규 예고편] " + ", ".join(t for _, t, _ in alerts)],
             details=lines_by_work, kinds=["영상"], count=len(alerts))
         if not notify.spooling():
             print("알림 카드 1장 발송 완료")

@@ -27,6 +27,7 @@ import argparse
 import io
 import json
 import os
+import re
 import sys
 import urllib.error
 import urllib.request
@@ -65,9 +66,29 @@ def _para(rich):
     return {"object": "block", "type": "paragraph", "paragraph": {"rich_text": rich}}
 
 
+def _rich(content):
+    """줄 안의 주소를 눌러지는 링크로 만든다.
+
+    유튜브 주소가 글자로만 박혀 있으면 폰에서 복사해 붙여넣어야 열린다.
+    알림에서 영상 하나 보는 데 그 수고를 들일 사람은 없다.
+    """
+    out, pos = [], 0
+    for m in re.finditer(r"https?://[^ ]+", content):
+        if m.start() > pos:
+            out.append(_text(content[pos:m.start()]))
+        url = m.group(0).rstrip(").,")
+        out.append({"type": "text",
+                    "text": {"content": url[:1900], "link": {"url": url}},
+                    "annotations": {"bold": False}})
+        pos = m.start() + len(url)
+    if pos < len(content):
+        out.append(_text(content[pos:]))
+    return out or [_text(content)]
+
+
 def _bullet(content):
     return {"object": "block", "type": "bulleted_list_item",
-            "bulleted_list_item": {"rich_text": [_text(content)]}}
+            "bulleted_list_item": {"rich_text": _rich(content)}}
 
 
 def _heading(content):
