@@ -2563,6 +2563,21 @@
   "경로": "검색",
   "확신": "확실"
  },
+ "우치 더 웨이페어러": {
+  "id": 360752,
+  "이름": "Woochi the Wayfarer",
+  "출시일": null,
+  "플랫폼": [
+   "Series X|S",
+   "PC",
+   "PS5"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/woochi-the-wayfarer",
+  "경로": "검색",
+  "확신": "확실"
+ },
  "블랙 미스: 종규": {
   "id": 361900,
   "이름": "Black Myth: Zhong Kui",
@@ -2571,6 +2586,23 @@
   "시리즈": [],
   "평점": null,
   "url": "https://www.igdb.com/games/black-myth-zhong-kui",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "애니모": {
+  "id": 348202,
+  "이름": "Aniimo",
+  "출시일": "2026-09-16",
+  "플랫폼": [
+   "Series X|S",
+   "Android",
+   "PC",
+   "iOS",
+   "PS5"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/aniimo",
   "경로": "검색",
   "확신": "확실"
  },
@@ -3674,6 +3706,38 @@
   "경로": "검색",
   "확신": "확실"
  },
+ "갓오브워: 라우페이": {
+  "id": 404063,
+  "이름": "God of War Laufey",
+  "출시일": "2027-02-16",
+  "플랫폼": [
+   "PS5"
+  ],
+  "시리즈": [
+   "God of War"
+  ],
+  "평점": null,
+  "url": "https://www.igdb.com/games/god-of-war-laufey",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "어쌔신크리드 : 블랙플래그 리싱크드": {
+  "id": 337738,
+  "이름": "Assassin's Creed Black Flag Resynced",
+  "출시일": "2026-07-09",
+  "플랫폼": [
+   "Series X|S",
+   "PC",
+   "PS5"
+  ],
+  "시리즈": [
+   "Assassin's Creed"
+  ],
+  "평점": 84.6,
+  "url": "https://www.igdb.com/games/assassins-creed-black-flag-resynced",
+  "경로": "검색",
+  "확신": "확실"
+ },
  "Orbitals": {
   "id": 133119,
   "이름": "Orbitals",
@@ -3860,7 +3924,7 @@
   "시리즈": [
    "Splatoon"
   ],
-  "평점": 86.4,
+  "평점": 86.8,
   "url": "https://www.igdb.com/games/splatoon-raiders",
   "경로": "검색",
   "확신": "확실"
@@ -3924,6 +3988,23 @@
   "경로": "검색",
   "확신": "확실"
  },
+ "이환": {
+  "id": 308535,
+  "이름": "NTE: Neverness to Everness",
+  "출시일": "2026-04-29",
+  "플랫폼": [
+   "Android",
+   "PC",
+   "iOS",
+   "PS5",
+   "Mac"
+  ],
+  "시리즈": [],
+  "평점": 55.7,
+  "url": "https://www.igdb.com/games/nte-neverness-to-everness",
+  "경로": "검색",
+  "확신": "확실"
+ },
  "SAROS": {
   "id": 331215,
   "이름": "Saros",
@@ -3965,7 +4046,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 86.8,
+  "평점": 81.5,
   "url": "https://www.igdb.com/games/beast-of-reincarnation",
   "경로": "검색",
   "확신": "확실"
@@ -6602,6 +6683,21 @@
   "시리즈": [],
   "평점": 69.4,
   "url": "https://www.igdb.com/games/mirrors-edge-catalyst",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "홈프론트2": {
+  "id": 1886,
+  "이름": "Homefront: The Revolution",
+  "출시일": "2016-05-17",
+  "플랫폼": [
+   "PS4",
+   "PC",
+   "XONE"
+  ],
+  "시리즈": [],
+  "평점": 55.8,
+  "url": "https://www.igdb.com/games/homefront-the-revolution",
   "경로": "검색",
   "확신": "확실"
  },
