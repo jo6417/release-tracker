@@ -110,11 +110,18 @@ def main():
         if not cands:
             low.append((g["제목"], None))
             continue
+        # 이름이 같은 게임이 여럿 있다. 리메이크와 원작, 동명이인이 그렇다.
+        # 노션에 적힌 출시 연도가 그것을 가르는 유일한 단서다 - 사람이 그 작품을
+        # 보고 넣은 값이기 때문이다. 2026-08-23에 Stray(2022 고양이 게임)가
+        # 이름이 같은 2017년 게임잼 출품작에 붙어 있는 것을 이렇게 찾아냈다.
+        exact = [c for c in cands if norm(c["이름"]) == norm(query)]
+        year = (g.get("출시일") or "")[:4]
         best = None
-        for c in cands:
-            if norm(c["이름"]) == norm(query):
-                best = c
-                break
+        if year:
+            best = next((c for c in exact
+                         if c.get("출시일") and c["출시일"][:4] == year), None)
+        if best is None and exact:
+            best = exact[0]
         if best is None:
             # 검색은 관련도 순이라 흔한 단어가 제목이면 정작 그 게임이 안 나온다.
             # "Control"은 Star Control에, "Genshin Impact"는 자기 DLC에 밀린다.

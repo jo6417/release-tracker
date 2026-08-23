@@ -80,7 +80,7 @@
   "제목": "블랙 미스: 종규",
   "종류": "게임",
   "생성일": "2026-08-20",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": null,
@@ -98,7 +98,7 @@
    "PC"
   ],
   "소유처": [],
-  "소개": "Black Myth: Zhong Kui is an action-RPG focusing on the legendary Chinese demon-slayer, depicting his journey from a wronged, scholar-turned-ghost into a powerful, fearsome judge of the underworld. The game features a new storyline distinct from Wukong, exploring themes of justice and fighting evil with evil."
+  "소개": "중국 전설의 퇴마사 종규를 다룬 액션 RPG. 억울하게 죽어 귀신이 된 선비가 저승의 두려운 심판자로 거듭나는 과정을 그린다. 오공과는 별개의 이야기다."
  },
  "3c2857fe-7a80-81c9-88c6-fe518537b7ed": {
   "제목": "애니모",
@@ -123,7 +123,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Aniimo is a free-to-play, next-gen creature-catching open-world RPG. Explore the vast continent of Idyll, Twine with unique Aniimo, unlock new abilities. Travel to a sky-floating metropolis, meet other Pathfinders, and battle in exciting competitions. Choose your Aniimo and begin your epic journey!"
+  "소개": "기묘한 생물 애니모를 모으는 무료 오픈월드 RPG. 아이딜 대륙을 탐험하며 애니모와 트와인으로 합체해 새 능력을 얻는다."
  },
  "3c2857fe-7a80-81a6-9afd-f06e0d22843c": {
   "제목": "귀무자: 웨이 오브 더 소드",
@@ -148,7 +148,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Fight through bloodstained battlefields of intense swordplay action. Explore the historic Japanese capital of Edo-era Kyoto, twisted by malevolent clouds of Malice. With every stage cloaked in mystery, danger and intrigue. Battle against monstrosities from the underworld known as Genma in a tale of dark fantasy. Follow the tale of a samurai who wields the Oni Gauntlet, a mystical artifact that gra"
+  "소개": "악의에 뒤틀린 에도 시대 교토를 무대로 한 검극 액션. 지옥에서 올라온 겐마와 맞서는 다크 판타지다."
  },
  "3c1857fe-7a80-811c-9c66-e6e59081f934": {
   "제목": "폴아웃 시즌2",
@@ -368,7 +368,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Grab your balloon crossbow and trusty inflatable hammer, because things are about to get wobbly! Be the last weirdo standing in the world-leading physics-based Battle Royale game."
+  "소개": "풍선 석궁과 고무 망치를 들고 벌이는 물리 기반 배틀로얄. 마지막까지 뒤뚱거리며 살아남아야 한다."
  },
  "3bf857fe-7a80-8139-8a53-d7f38f779104": {
   "제목": "Blade & Sorcery",
@@ -446,7 +446,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "They thought they had escaped Banoi, but can't wake up from this nightmare. Thrown back into the midst of the Zombie outbreak, the fight for survival continues! Dead Island Riptide takes players to the island of Palanai on the Banoi archipelago, infested with bloodthirsty Zombies and only a few remaining Survivors still fighting for their lives. Introducing new terrifying enemies, deadly weapons, "
+  "소개": "바노이를 탈출한 줄 알았지만 악몽은 끝나지 않았다. 좀비가 들끓는 팔라나이 섬에서 생존 싸움이 이어진다."
  },
  "3bf857fe-7a80-818d-af4b-ede9ab2b6875": {
   "제목": "Deadlock",
@@ -498,7 +498,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Pixel Ripped is back with a brand new nostalgia-fueled virtual reality game-within-a-game, this time in 1995! Help our hero Dot face challenging throwbacks to all your favorite 16-bit and 32-bit classics while surviving the struggles of a typical nine-year-old kid."
+  "소개": "게임 속 게임을 다루는 VR 향수 어드벤처. 1995년을 배경으로 16비트·32비트 명작들의 오마주를 헤쳐 나간다."
  },
  "3bf857fe-7a80-81ea-a5da-e226c00c42b6": {
   "제목": "Jotun: Valhalla Edition",
@@ -602,7 +602,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Saints & Sinners is a game unlike any other in The Walking Dead universe. Every challenge you face and decision you make is driven by YOU. Fight the undead, scavenge through the flooded ruins of New Orleans, and face gut-wrenching choices for you and the other survivors. Live The Walking Dead."
+  "소개": "물에 잠긴 뉴올리언스 폐허를 뒤지며 언데드와 싸우고, 생존자들을 두고 괴로운 선택을 내리는 VR 게임."
  },
  "3bf857fe-7a80-8110-8a2d-e13a8116b085": {
   "제목": "Pavlov VR",
@@ -628,7 +628,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Pavlov is a multiplayer shooter in VR with heavy focus on community features. Realistic reloading features and fast paced combat as part of the core experience. Play the #1 most popular VR shooter on PC today."
+  "소개": "커뮤니티 기능에 힘을 준 VR 멀티플레이 슈터. 사실적인 재장전과 빠른 전투가 핵심이다."
  },
  "3bf857fe-7a80-8146-a3a9-e56822179c76": {
   "제목": "Crab Game",
@@ -654,7 +654,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Crab Game is a First-Person Multiplayer game where you play through several different minigames based on children's games, until only one player stands victorious."
+  "소개": "어린이 놀이를 본뜬 여러 미니게임을 마지막 한 명이 남을 때까지 치르는 1인칭 멀티플레이 게임."
  },
  "3bf857fe-7a80-815c-9844-e413d630ba66": {
   "제목": "Primal Planet",
@@ -732,7 +732,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Explore a beautiful, vast and ruined world riddled with dangers and lost technologies."
+  "소개": "위험과 잊힌 기술이 흩어진 아름답고 광활한 폐허의 세계를 탐험한다."
  },
  "3bf857fe-7a80-812e-8e74-c2b1ddd2b199": {
   "제목": "Duck Season",
@@ -758,7 +758,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "The game of your dreams just dropped, DUCK SEASON, a hunter with ridiculous graphics. Luckily, it's summer vacation and Mom just surprised you with a one day rental of it! Unfortunately, as you binge play it becomes apparent that all is not right with Duck Season..."
+  "소개": "여름방학, 하루 빌린 사냥 게임 덕 시즌을 즐기다 보면 무언가 잘못됐음을 알게 된다. VR 호러."
  },
  "3bf857fe-7a80-8148-9701-c5f9d64b3ef0": {
   "제목": "PEAK",
@@ -888,7 +888,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "This massive online sandbox RPG features elements of magic, spellcasting, building, exploring and crafting. As a newly minted apprentice of the magic arts, you will set off to the dangerous world of Ignus. Tame mighty beasts, forge alliances, explore uncharted territories or fight for dominance!"
+  "소개": "마법과 건설, 탐험, 제작이 어우러진 대규모 온라인 샌드박스 RPG. 갓 입문한 마법사가 되어 위험한 세계 이그누스로 나선다."
  },
  "3bf857fe-7a80-81ef-8f6f-eea7e84a2a76": {
   "제목": "ABZÛ",
@@ -914,7 +914,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "From the art director of Journey®, ABZÛ is a beautiful underwater adventure that evokes the dream of diving. Immerse yourself in a vibrant hidden world bursting with color and life as you descend into the heart of the ocean. But beware as you swim deeper as dangers lurk in the depths."
+  "소개": "저니의 아트 디렉터가 만든 아름다운 수중 어드벤처. 색과 생명으로 가득한 숨은 세계를 지나 바다 깊은 곳으로 내려간다."
  },
  "3bf857fe-7a80-81f2-9f8a-e797e9d9c3ec": {
   "제목": "MECCHA CHAMELEON",
@@ -1071,7 +1071,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "You are bread. Your mission, become toast! Take on all hazards to deliciousness as you head on an epic adventure in one of the the toughest games ever baked. All of the game modes (including Bagel Race) are now unlocked so there's sure to be something to suit everyone's taste!"
+  "소개": "당신은 빵이다. 목표는 토스트가 되는 것. 굽히기까지 온갖 장애물을 넘는 괴상한 어드벤처."
  },
  "3bf857fe-7a80-81c9-b2ed-f9522366cf6e": {
   "제목": "Dungreed",
@@ -1255,7 +1255,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Oxenfree is a supernatural thriller about a group of friends who unwittingly open a ghostly rift. You are Alex, and you’ve just brought your new stepbrother Jonas to an overnight island party gone horribly wrong."
+  "소개": "유령의 틈을 열어버린 친구들의 초자연 스릴러. 알렉스가 되어 새 의붓동생 조너스와 간 섬의 하룻밤 파티가 끔찍하게 어긋난다."
  },
  "3bf857fe-7a80-81a4-8995-cfd9d7cf693e": {
   "제목": "Outer Wilds",
@@ -1307,7 +1307,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Kingdom: New Lands builds upon the award-winning gameplay and mystery of Kingdom by introducing an abundance of new content to the IGF-nominated title while maintaining the simplicity and depth that legions of monarchs have come to experience and enjoy."
+  "소개": "왕국을 이끄는 단순하고 깊은 전략에 새 대륙과 콘텐츠를 더한 확장판."
  },
  "3bf857fe-7a80-818e-9993-e52edb12fd59": {
   "제목": "Dead Cells",
@@ -1464,7 +1464,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "This \"spaceship simulation roguelike-like\" allows you to take your ship and crew on an adventure through a randomly generated galaxy filled with glory and bitter defeat."
+  "소개": "무작위로 생성되는 은하를 우주선과 승무원을 이끌고 항해하는 로그라이크."
  },
  "3bf857fe-7a80-8183-bde3-cb532659ca17": {
   "제목": "BONEWORKS",
@@ -1490,7 +1490,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "BONEWORKS is an Experimental Physics VR Adventure. Use found physics weapons, tools, and objects to fight across dangerous playscapes and mysterious architecture."
+  "소개": "물리 실험 같은 VR 어드벤처. 현장에서 주운 무기와 도구, 사물을 써서 위험한 공간과 기묘한 구조물을 헤쳐 나간다."
  },
  "3bf857fe-7a80-81aa-bc7d-de57c04fa3f1": {
   "제목": "Undertale",
@@ -1516,7 +1516,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "UNDERTALE! The RPG game where you don't have to destroy anyone."
+  "소개": "아무도 죽이지 않아도 되는 RPG."
  },
  "3bf857fe-7a80-8130-a5bd-ec9f4ce2d176": {
   "제목": "SANABI",
@@ -1620,7 +1620,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Don’t Starve is an uncompromising wilderness survival game full of science and magic. Enter a strange and unexplored world full of strange creatures, dangers, and surprises. Gather resources to craft items and structures that match your survival style."
+  "소개": "과학과 마법이 뒤섞인 타협 없는 야생 생존 게임. 낯선 생물과 위험이 가득한 미지의 세계에서 자원을 모아 살아남는다."
  },
  "3bf857fe-7a80-8104-9f78-f08abdec55fd": {
   "제목": "Kingdom Two Crowns",
@@ -1700,7 +1700,7 @@
    "스팀",
    "게임패스"
   ],
-  "소개": "Now includes all three premium DLC packs (Unto the Evil, Hell Followed, and Bloodfall), maps, modes, and weapons, as well as all feature updates including Arcade Mode, Photo Mode, and the latest Update 6.66, which brings further multiplayer improvements as well as revamps multiplayer progression."
+  "소개": "프리미엄 DLC 세 종과 맵·모드·무기를 모두 포함한 판본. 아케이드 모드와 포토 모드, 멀티플레이 개편까지 담았다."
  },
  "3bf857fe-7a80-81a7-9bdf-f344f8b3069e": {
   "제목": "Secrets of Grindea",
@@ -1726,7 +1726,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Secrets of Grindea is an old-school Action RPG with co-op support for up to 4 players. Journey through fantastical lands and battle tons of different enemies and bosses in your quest for truth, friendship and, above all, finding the world’s rarest treasures!"
+  "소개": "최대 4인 협동을 지원하는 고전풍 액션 RPG. 환상적인 땅을 여행하며 세상에서 가장 희귀한 보물을 찾는다."
  },
  "3bf857fe-7a80-81ea-85fb-df2277b3caf2": {
   "제목": "CloverPit",
@@ -1884,7 +1884,7 @@
    "스팀",
    "게임패스"
   ],
-  "소개": "From the award-winning developers at Arkane® Studios comes Dishonored®: Death of the Outsider, the next standalone adventure in the critically-acclaimed Dishonored® series."
+  "소개": "아케인 스튜디오가 만든 디스아너드 시리즈의 독립 확장편."
  },
  "3bf857fe-7a80-8193-bd23-ca1c9a205221": {
   "제목": "Noita",
@@ -1962,7 +1962,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Risk of Rain is an action platformer with roguelike elements. With permanent death as a primary feature, players will have to play their best to get as far as possible. Fight on a mysterious planet with randomly spawning enemies and bosses, either alone or with 3 friends in online co-op."
+  "소개": "영구 죽음이 핵심인 로그라이크 액션 플랫포머. 무작위로 등장하는 적과 보스를 상대로 혼자 또는 최대 4인 협동으로 싸운다."
  },
  "3bf857fe-7a80-81d0-8733-c2a92999f397": {
   "제목": "Life is Strange™",
@@ -1988,7 +1988,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Episode 1 now FREE! Life is Strange is an award-winning and critically acclaimed episodic adventure game that allows the player to rewind time and affect the past, present and future."
+  "소개": "시간을 되감아 과거와 현재, 미래를 바꾸는 에피소드형 어드벤처."
  },
  "3bf857fe-7a80-8174-adf3-d6a399ed33ef": {
   "제목": "Grounded",
@@ -2015,7 +2015,7 @@
    "스팀",
    "게임패스"
   ],
-  "소개": "The world is a vast, beautiful and dangerous place – especially when you have been shrunk to the size of an ant. Can you thrive alongside the hordes of giant insects, fighting to survive the perils of the backyard?"
+  "소개": "개미만 한 크기로 줄어든 뒷마당. 거대한 곤충 무리 사이에서 살아남아야 한다."
  },
  "3bf857fe-7a80-8120-aa01-ef7ed76d5e8d": {
   "제목": "Vampire Survivors",
@@ -2147,7 +2147,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "The ultimate DARKSIDERS II experience! 1080p native resolution. Reworked and tuned game balancing and loot distribution. Improved Graphic Render Engine for even higher visual quality, lighting and shadows. Improved and reworked level, character and environment graphics."
+  "소개": "다크사이더스 2의 완전판. 1080p 해상도와 다시 손본 밸런스·전리품 분배, 개선된 렌더링과 그래픽을 담았다."
  },
  "3bf857fe-7a80-8134-8cb6-fcec88e6a237": {
   "제목": "Pacific Drive",
@@ -2278,7 +2278,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Project Zomboid is the ultimate in zombie survival. Alone or in MP: you loot, build, craft, fight, farm and fish in a struggle to survive. A hardcore RPG skillset, a vast map, massively customisable sandbox and a cute tutorial raccoon await the unwary. So how will you die? All it takes is a bite.."
+  "소개": "좀비 생존의 결정판. 혼자 또는 여럿이 약탈하고 짓고 만들고 싸우고 농사짓고 낚시하며 버틴다. 한 번 물리면 끝이다."
  },
  "3bf857fe-7a80-8190-b31e-dc546622f22c": {
   "제목": "Ogu and the Secret Forest",
@@ -2331,7 +2331,7 @@
    "스팀",
    "게임패스"
   ],
-  "소개": "It’s time to join the Brotherhood."
+  "소개": "형제단에 합류할 시간이다."
  },
  "3bf857fe-7a80-81c4-a670-e815d095da1d": {
   "제목": "The Riftbreaker",
@@ -2461,7 +2461,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Stoneshard is a hardcore turn-based RPG about the harsh life of a medieval mercenary: travel with your own caravan, descend into procedurally generated dungeons, learn new skills, survive hunger and injuries - and remember, every mistake can mean death and loss of progress."
+  "소개": "중세 용병의 고단한 삶을 다룬 하드코어 턴제 RPG. 대상을 이끌고 절차적으로 생성되는 던전을 내려가며 굶주림과 부상을 견딘다. 실수 한 번이 죽음이다."
  },
  "3bf857fe-7a80-81c3-9a11-d29692b55f84": {
   "제목": "Palworld",
@@ -2541,7 +2541,7 @@
    "스팀",
    "게임패스"
   ],
-  "소개": "Dig, fight, explore, build! Nothing is impossible in this action-packed adventure game. Four Pack also available!"
+  "소개": "파고 싸우고 탐험하고 짓는다. 무엇이든 가능한 액션 어드벤처."
  },
  "3bf857fe-7a80-8147-b19b-c761df74f82b": {
   "제목": "Graveyard Keeper",
@@ -2619,7 +2619,7 @@
   "소유처": [
    "스팀"
   ],
-  "소개": "Baldur’s Gate 3 is a story-rich, party-based RPG set in the universe of Dungeons & Dragons, where your choices shape a tale of fellowship and betrayal, survival and sacrifice, and the lure of absolute power."
+  "소개": "던전 앤 드래곤 세계를 무대로 한 파티 기반 스토리 RPG. 선택이 우정과 배신, 생존과 희생, 절대 권력의 유혹을 가른다."
  },
  "3bf857fe-7a80-81f2-8db5-c8ac85d216ca": {
   "제목": "RimWorld",
@@ -2694,7 +2694,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Sand Land is an action RPG where you become the main character as Beelzebub, a Fiend Prince. Lead your company of heroic misfits and explore the legendary world of Sand Land developed by the creator of Dragon Ball & Dr. Slump, Akira Toriyama."
+  "소개": "마인 왕자 벨제붑이 되어 진행하는 액션 RPG. 드래곤볼과 닥터 슬럼프를 그린 토리야마 아키라의 사막 세계를 누빈다."
  },
  "3bf857fe-7a80-81da-9bad-ca142b9f5823": {
   "제목": "샌드랜드",
@@ -3835,7 +3835,7 @@
    "Xbox"
   ],
   "소유처": [],
-  "소개": "Murdered: Soul Suspect is a supernatural detective thriller which challenges players to solve possibly the hardest case of all… their own murder. Set in Salem Massachusetts, players have the freedom to explore the New England-style wooden houses, narrow streets, Gothic churches and historical landmarks for clues. They will need to battle demonic spirits to preserve their souls whilst uncovering th"
+  "소개": "자신의 죽음을 스스로 수사하는 초자연 탐정 스릴러. 세일럼의 목조 주택과 좁은 골목, 고딕 성당을 누비며 단서를 모은다."
  },
  "3bf857fe-7a80-81aa-be91-e3b14e25a961": {
   "제목": "콜오브듀티:고스트",
@@ -3931,7 +3931,7 @@
    "Xbox"
   ],
   "소유처": [],
-  "소개": "Ryse: Son of Rome is a stunning action-adventure that follows Marius Titus on a heroic quest to avenge the death of his family, and preserve the honor of Rome, at all costs."
+  "소개": "가족의 죽음을 복수하고 로마의 명예를 지키려는 마리우스 티투스의 액션 어드벤처."
  },
  "3bf857fe-7a80-81f9-a772-ea9f393d0fb8": {
   "제목": "루시",
@@ -4098,7 +4098,7 @@
   "제목": "Need for speed Rivals",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-22",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2013-11-19",
@@ -4121,7 +4121,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Players assume the role of both cops and lawbreakers in Need for Speed: Rivals, which is the inaugural outing of Ghost Games – the rebranded EA Gothenburg studio in Sweden. Ghost Games is made up of talent moved over from UK-based Criterion Games, best known for its work on the Burnout series and shooter Black, along with former DICE staff."
+  "소개": "경찰과 무법자 양쪽을 오가며 벌이는 레이싱. 고스트 게임즈의 첫 작품이다."
  },
  "3bf857fe-7a80-8158-86d1-c179e41bff5d": {
   "제목": "헝거게임:모킹제이",
@@ -4259,7 +4259,7 @@
    "PC"
   ],
   "소유처": [],
-  "소개": "Sid Meier's Civilization: Beyond Earth is a new science-fiction-themed entry into the award-winning Civilization series. Set in the future, global events have destabilized the world leading to a collapse of modern society, a new world order and an uncertain future for humanity. As the human race struggles to recover, the re-developed nations focus their resources on deep space travel to chart a ne"
+  "소개": "문명 시리즈의 SF편. 세계가 무너진 뒤 인류가 새 행성으로 나아가 다시 문명을 세운다."
  },
  "3bf857fe-7a80-8167-b393-d0ed7a980daa": {
   "제목": "어메이징스파이더맨2",
@@ -4467,7 +4467,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "The ultimate all-out warfare experience. In a war of tanks, fighter jets, and massive combat arsenals, your squad is the deadliest weapon."
+  "소개": "전차와 전투기, 거대한 무기고가 오가는 전면전. 그 안에서 가장 강력한 무기는 내 분대다."
  },
  "3bf857fe-7a80-8191-93f6-c688172401dd": {
   "제목": "SILENT HILL f",
@@ -4493,7 +4493,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Silent Hill f is a survival horror game published by Konami as part of the Silent Hill series. It is set in rural Japan during the 1960s, marking a departure from the franchise’s traditional Western settings. The story is written by Ryukishi07 and focuses on psychological horror, social pressure, and transformation."
+  "소개": "1960년대 일본 시골을 무대로 한 사일런트 힐 시리즈의 서바이벌 호러. 서양 배경을 벗어난 첫 작품으로, 류키시07이 각본을 맡아 심리적 공포와 사회적 억압을 다룬다."
  },
  "3bf857fe-7a80-819f-8f6e-fdb7582e47fc": {
   "제목": "마블 좀비즈",
@@ -4732,7 +4732,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "The same gripping story and engrossing world, but now with cutting-edge graphics and 3D audio, which bring the jungle to life. Get ready for the ultimate survival, stealth and action experience."
+  "소개": "스네이크 이터를 최신 그래픽과 3D 음향으로 다시 만든 작품. 정글이 살아 움직인다."
  },
  "3bf857fe-7a80-8111-baa2-cce77d340262": {
   "제목": "엘든링 : 밤의 통치자",
@@ -4899,7 +4899,7 @@
   "공개처": [],
   "플랫폼": [],
   "소유처": [],
-  "소개": "Metro Awakening is a story-driven first-person adventure built for VR that blends atmospheric exploration, stealth and combat in the most immersive Metro experience yet."
+  "소개": "VR로 만든 스토리 중심 1인칭 어드벤처. 분위기 있는 탐험과 잠입, 전투를 섞은 가장 몰입감 높은 메트로다."
  },
  "3bf857fe-7a80-81d9-a98a-e7fc8db8944c": {
   "제목": "드래곤에이지 베일가드",
@@ -4956,7 +4956,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Welcome to the Living Lands, a mysterious island filled with adventure and danger. Set in the fictional world of Eora that was first introduced to players in the Pillars of Eternity franchise, Avowed is a first-person fantasy action RPG from the award-winning team at Obsidian Entertainment. The Living Lands is a place that feels foreign yet somewhat intrinsic to you as it feels the island itself i"
+  "소개": "필라스 오브 이터니티의 세계 에오라를 무대로 한 1인칭 판타지 액션 RPG. 모험과 위험이 뒤섞인 신비의 섬 리빙 랜드로 향한다. 옵시디언 제작."
  },
  "3bf857fe-7a80-816e-b3d8-cbeea119b18a": {
   "제목": "트랜스포머 ONE",
@@ -5053,7 +5053,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "Embark on a magical journey in Disney Epic Mickey: Rebrushed! Shape your adventure with the stroke of a brush and transform Wasteland as Mickey Mouse in this beautifully recreated 3D platformer."
+  "소개": "붓질 한 번으로 모험이 달라지는 3D 플랫포머. 미키 마우스가 되어 황폐해진 세계를 되살린다. 원작을 아름답게 되살린 리메이크."
  },
  "3bf857fe-7a80-81fe-bb00-e93a183c2fc3": {
   "제목": "젤다의 전설 : 지혜의 투영",
@@ -5188,7 +5188,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "Solve puzzles by changing the flow of time in this remaster of the classic, award-winning game Braid. This remaster has new puzzles, hand-repainted graphics and fully reimagined sound, and a completely unreasonable amount of developer commentary."
+  "소개": "시간의 흐름을 바꿔 퍼즐을 푸는 명작 브레이드의 리마스터. 새 퍼즐과 다시 그린 그래픽, 새로 만든 사운드, 과할 정도로 방대한 개발자 코멘터리를 담았다."
  },
  "3bf857fe-7a80-819f-87ed-ed58359266d0": {
   "제목": "루이지맨션2 HD",
@@ -5218,7 +5218,7 @@
   "제목": "라이즈 오브 로닌",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2024-03-22",
@@ -5237,7 +5237,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Rise of the Rōnin is a combat focused open-world action RPG that takes place in Japan at a time of great change. It is the very end of a 300-year long Edo Period, commonly known as “Bakumatsu”. Set in the late 19th century, Japan is facing the darkest of times as it struggles with its oppressive rulers and deadly diseases while western influence permeates as civil war continues to rage between the"
+  "소개": "300년 에도 시대가 끝나가는 막말의 일본을 무대로 한 전투 중심 오픈월드 액션 RPG."
  },
  "3bf857fe-7a80-814c-8bfc-f0e5ffbdf3ef": {
   "제목": "스텔라 블레이드",
@@ -5293,7 +5293,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Dash into a stylish and thrilling action-adventure platformer set in a mythological Persian world where the boundaries of time and space are yours to manipulate. Play as Sargon and evolve from sword-wielding prodigy to extraordinary legend as you master acrobatic combat and unlock new Time Powers and unique super abilities."
+  "소개": "신화 속 페르시아를 무대로 시간과 공간을 다루는 액션 어드벤처 플랫포머. 사르곤이 되어 곡예 같은 전투를 익히고 새로운 시간 능력을 얻는다."
  },
  "3bf857fe-7a80-81d8-b320-eb6372171516": {
   "제목": "스토커2",
@@ -5573,7 +5573,7 @@
    "PC"
   ],
   "소유처": [],
-  "소개": "Made over 72 hours for the 2017 LÖVE Jam."
+  "소개": "폐허가 된 사이버펑크 도시에 홀로 떨어진 길고양이가 되어 집으로 돌아갈 길을 찾는다. 드론 B-12와 함께 기계 주민들의 세계를 누빈다."
  },
  "3bf857fe-7a80-81c1-97f0-e7e9c20ea2d9": {
   "제목": "쉬헐크",
@@ -5970,7 +5970,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "Become the blade that destroys demons! In Solo Mode, follow Tanjiro through the story from the Demon Slayer: Kimetsu no Yaiba anime as he faces demons in order to turn his sister Nezuko, who has become a demon, back into a human. In Versus Mode, characters from the anime, including Tanjiro and Nezuko, can be freely matched against each another in a one-versus-one setting with up to two players onl"
+  "소개": "솔로 모드에서 탄지로가 되어 혈귀가 된 여동생 네즈코를 되돌리려 싸운다. 대전 모드에서는 애니메이션 등장인물들을 자유롭게 골라 겨룰 수 있다."
  },
  "3bf857fe-7a80-8156-9b2b-e3bb6432b369": {
   "제목": "블랙위도우",
@@ -6019,7 +6019,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Final Fantasy VII Remake Intergrade is an enhanced and expanded version of Final Fantasy VII Remake that features a new episode starring Yuffie and introduces an exhilarating new story arc with numerous gameplay additions for players to enjoy."
+  "소개": "파이널 판타지 7 리메이크의 확장판. 유피가 주인공인 새 에피소드와 여러 시스템 추가를 담았다."
  },
  "3bf857fe-7a80-81f4-8143-fe23ced3996c": {
   "제목": "it takes two",
@@ -6055,7 +6055,7 @@
   "제목": "슈퍼마리오 퓨리월드",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2021-02-12",
@@ -6074,7 +6074,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "The Super Mario 3D World + Bowser’s Fury game features the same lively co-op gameplay, creative levels and power-ups as the original game, but with added improvements. In the Super Mario 3D World part of the game, characters move faster and the dash powers up more quickly. Both adventures support the newly added Snapshot Mode, pause the action to get the perfect shot, apply filters, and decorate w"
+  "소개": "슈퍼 마리오 3D 월드에 바우저스 퓨리를 더한 합본. 이동과 대시가 빨라졌고 스냅샷 모드가 새로 들어갔다."
  },
  "3bf857fe-7a80-81cc-8410-e5f2031b1017": {
   "제목": "소울",
@@ -6456,7 +6456,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "God of War: Laufey is an upcoming action-adventure game developed by Santa Monica Studio for PlayStation 5. The game follows Laufey, also known as Faye, after she awakens in a strange afterlife realm following her death. To protect Kratos and Atreus, she travels through the Everywhen, an afterlife of the gods where deities from different mythologies compete for power. The game shifts the focus fro"
+  "소개": "산타모니카 스튜디오가 만드는 PS5 액션 어드벤처. 죽은 뒤 낯선 사후 세계에서 깨어난 라우페이(페이)가 크레토스와 아트레우스를 지키려 신들의 사후 세계 에브리웬을 헤쳐 나간다."
  },
  "3bf857fe-7a80-8137-903a-f66e2ca02374": {
   "제목": "호프",
@@ -6506,7 +6506,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "The iconic solo pirate adventure returns with Assassin's Creed Black Flag Resynced, launching on July 9, 2026. Sail the Caribbean as Edward Kenway during the Golden Age of Piracy in this faithfully enhanced remake featuring stunning visuals, upgraded gameplay, and new content."
+  "소개": "대해적 시대의 카리브해를 에드워드 켄웨이로 누비는 블랙 플래그의 리메이크. 원작에 충실하되 그래픽과 조작을 손보고 새 내용을 더했다."
  },
  "3bf857fe-7a80-81ec-aa63-fbc60597fa45": {
   "제목": "슈퍼걸",
@@ -6534,7 +6534,7 @@
   "제목": "Orbitals",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2026-09-03",
@@ -6552,7 +6552,7 @@
    "PC"
   ],
   "소유처": [],
-  "소개": "Gladiators, Grenades and Gravity Boots! Players battle in arenas filled with monsters, opponents, and friends. Single-player or Co-op story mode. Play with and against friends in online or local multiplayer mayhem."
+  "소개": "검투사와 수류탄과 중력 부츠. 괴물과 상대와 친구가 뒤섞인 아레나에서 싸운다. 싱글·협동 스토리 모드와 온라인·로컬 멀티플레이를 지원한다."
  },
  "3bf857fe-7a80-8190-96c3-e0fd8d0e087b": {
   "제목": "페이블",
@@ -6578,7 +6578,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Become the Hero you want to be in an immersive open-world action-RPG where each choice shapes your journey, reputation is everything, and fairytale endings are never guaranteed."
+  "소개": "선택이 여정을 바꾸고 평판이 전부인 오픈월드 액션 RPG. 동화 같은 결말은 보장되지 않는다."
  },
  "3bf857fe-7a80-8110-bdcd-c73e8fff764e": {
   "제목": "둠 : 다크 에이지스",
@@ -6634,7 +6634,7 @@
   "제목": "End of Abyss",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2026-10-01",
@@ -6654,7 +6654,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Play as the young combat technician, Cel, as she uncovers the truth behind the facility's derelict areas and confronts the monstrous creatures that roam them."
+  "소개": "젊은 전투 기술자 셀이 되어 버려진 시설의 진실을 파헤치고, 그곳을 배회하는 괴물들과 맞선다."
  },
  "3bf857fe-7a80-81c4-bfd9-e381fbc72d58": {
   "제목": "Stranger Than Heaven",
@@ -6680,7 +6680,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Stranger Than Heaven is an upcoming action-adventure game developed by Ryu Ga Gotoku Studio and published by Sega. The game follows a multi-decade story across five eras and five cities, centered on men searching for a place to belong. It combines close-quarters action with narrative elements, historical urban settings, and activities connected to music and performance."
+  "소개": "용과 같이 스튜디오가 만드는 액션 어드벤처. 다섯 시대와 다섯 도시를 가로지르며 있을 곳을 찾는 남자들의 이야기를 그린다."
  },
  "3bf857fe-7a80-81cc-ad4e-dbdbcfaebaff": {
   "제목": "CONTROL : Resonant",
@@ -6706,7 +6706,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Explore a warped Manhattan on the brink of paranatural annihilation in this thrilling action-adventure RPG. Unleash the extraordinary powers of Dylan Faden as he fights for his humanity and survival against a reality-bending cosmic threat."
+  "소개": "초자연 재앙 직전의 뒤틀린 맨해튼을 무대로 한 액션 어드벤처 RPG. 현실을 비트는 우주적 위협에 맞서 딜런 페이든이 인간성과 생존을 걸고 특별한 능력을 펼친다."
  },
  "3bf857fe-7a80-81a8-94be-fb93df78c19b": {
   "제목": "SILENT HILL: Townfall",
@@ -6731,7 +6731,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Silent Hill: Townfall is a full-length, self-contained psychological horror set against the cold, isolated backdrop of Scotland, 1996. Players can explore St. Amelia, where fog-soaked streets, abandoned communities, and forgotten corners tell their story through atmosphere and history. Reality and delusion subtly intertwine to lure players into the depths of St. Amelia's grounded, tangible world."
+  "소개": "1996년 스코틀랜드의 춥고 고립된 마을을 무대로 한 독립 심리 호러. 안개에 잠긴 거리와 버려진 공동체를 탐험하는 사이 현실과 망상이 뒤섞인다."
  },
  "3bf857fe-7a80-81a5-bc29-eead99a70414": {
   "제목": "Tomb Raider: Legacy of Atlantis",
@@ -6758,13 +6758,13 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Tomb Raider: Legacy of Atlantis is a reimagining of Lara Croft’s 1996 genre-defining game with visuals powered by Unreal Engine 5, modern gameplay, and new surprises that honor the spirit of the original."
+  "소개": "장르를 정의한 1996년 툼 레이더를 언리얼 엔진 5로 다시 만든 리이매진. 원작의 정신을 지키면서 현대적인 조작과 새로운 요소를 더했다."
  },
  "3bf857fe-7a80-8186-9d33-dbc3add21cdf": {
   "제목": "울버린",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2026-09-15",
@@ -6782,7 +6782,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Marvel's Wolverine is a single-player action-adventure game and a standalone entry in the Marvel's Spider-Man series, sharing continuity with those titles while telling its own self-contained story. Players control Logan/Wolverine in close-quarters combat, using his adamantium claws against enemies drawn from the X-Men comic book mythology. It is planned as the first installment in a trilogy of ga"
+  "소개": "마블 스파이더맨과 세계관을 공유하는 단독 액션 어드벤처. 로건이 되어 아다만티움 발톱으로 근접전을 벌인다."
  },
  "3bf857fe-7a80-8190-add0-f18121ec0e9c": {
   "제목": "만달로리안과 그로구",
@@ -6854,7 +6854,7 @@
   "제목": "젤다의 전설",
   "종류": "영화",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2027-04-30",
@@ -6872,7 +6872,7 @@
   ],
   "플랫폼": [],
   "소유처": [],
-  "소개": "A live-action adaptation of Nintendo's Legend of Zelda video game series."
+  "소개": "닌텐도 젤다의 전설 시리즈를 실사로 옮긴 영화."
  },
  "3bf857fe-7a80-81ec-8af5-e235dd88c2c9": {
   "제목": "Outbound",
@@ -6902,7 +6902,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Explore a colorful world and build your own cozy home on wheels. Craft workstations, and source energy from the sun, wind, or water. Upgrade and customize your vehicle, grow crops, and live sustainably off-grid with up to 4 players."
+  "소개": "알록달록한 세계를 여행하며 바퀴 달린 내 집을 짓는다. 작업대를 만들고 태양과 바람, 물에서 전기를 얻어 최대 4인이 자급자족한다."
  },
  "3bf857fe-7a80-81d2-89c1-e4e2fd94c9e3": {
   "제목": "서브나우티카2",
@@ -7003,7 +7003,7 @@
   "제목": "듄3",
   "종류": "영화",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2026-12-18",
@@ -7021,7 +7021,7 @@
   ],
   "플랫폼": [],
   "소유처": [],
-  "소개": "Emperor Paul Atreides faces the fallout from his ascent to power as political plots and a galaxy-wide holy war endanger the future only he can see."
+  "소개": "황제가 된 폴 아트레이데스가 권력 상승의 후폭풍을 맞는다. 정치적 음모와 은하 전역의 성전이 그만이 볼 수 있는 미래를 위협한다."
  },
  "3bf857fe-7a80-81b8-ac1c-eb53cba2735c": {
   "제목": "스파이더맨: 브랜드 뉴 데이",
@@ -7069,7 +7069,7 @@
    "Switch2"
   ],
   "소유처": [],
-  "소개": "Join Yoshi for a new adventure in Yoshi and the Mysterious Book, launching on Nintendo Switch 2 in spring 2026. One day, on the island where Yoshi and his friends live, a peculiar talking book named Mr. E suddenly falls from the sky. This peculiar book’s pages contain information about unusual creatures, so Yoshi decides to jump in and help investigate! As Yoshi wanders through the book, you'll ma"
+  "소개": "요시가 사는 섬에 말하는 책 미스터 E가 떨어진다. 기묘한 생물들이 적힌 그 책 속으로 뛰어드는 새 모험."
  },
  "3bf857fe-7a80-8192-bd81-d9de70a06bf5": {
   "제목": "Master Of Albion",
@@ -7093,7 +7093,7 @@
    "PC"
   ],
   "소유처": [],
-  "소개": "In Masters of Albion, shape a living world as a god - or step into it and experience it through your people. Build, guide and defend your town by day, then survive the night when everything is under threat. There is no single solution. Only yours."
+  "소개": "신이 되어 세계를 빚거나, 그 안으로 들어가 사람들의 삶을 산다. 낮에는 마을을 짓고 지키고 밤에는 살아남는다."
  },
  "3bf857fe-7a80-818e-90c4-d2c876bf8dbf": {
   "제목": "REPLACED",
@@ -7120,7 +7120,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Replaced is a 2.5D sci-fi retro-futuristic action platformer where you play as R.E.A.C.H. - an artificial intelligence trapped in a human body against its own will. Replaced combines cinematic platforming, pixel art and free-flow action combat set in an alternative 1980's."
+  "소개": "대체 역사의 1980년대를 배경으로 한 2.5D SF 액션 플랫포머. 원치 않게 인간의 몸에 갇힌 인공지능 R.E.A.C.H.가 되어 픽셀 아트와 영화적 연출 속에서 유려한 전투를 벌인다."
  },
  "3bf857fe-7a80-8165-b80e-e47ac0966a38": {
   "제목": "Gecko Gods",
@@ -7147,7 +7147,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "Explore a mysterious island as a tiny lizard. Complete ancient puzzles, effortlessly climb cliffs, and eat bugs as you make your way across an island civilization lost to time."
+  "소개": "작은 도마뱀이 되어 신비한 섬을 탐험한다. 고대 퍼즐을 풀고 절벽을 자유롭게 오르며, 시간에 잊힌 섬 문명을 가로지른다."
  },
  "3bf857fe-7a80-8111-9349-fc6a3e03c856": {
   "제목": "이환",
@@ -7178,7 +7178,7 @@
   "제목": "SAROS",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2026-04-30",
@@ -7196,7 +7196,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Saros is an action game developed by Housemarque and published by Sony Interactive Entertainment. Players control Arjun Devraj, a Soltari Enforcer investigating a lost off-world colony on Carcosa. The game features fast-paced third-person combat, boss encounters, and progression across repeated attempts."
+  "소개": "하우스마크가 만들고 소니가 내는 액션 게임. 솔타리 집행자 아르준 데브라지가 되어 카르코사의 실종된 외행성 식민지를 조사한다. 빠른 3인칭 전투와 보스전, 반복 도전으로 쌓이는 성장이 축이다."
  },
  "3bf857fe-7a80-816c-b543-d376cdec8a69": {
   "제목": "007 : First Light",
@@ -7223,7 +7223,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "007 First Light is a thrilling espionage action-adventure game from IO Interactive. Players follow James Bond as a young, resourceful, and sometimes reckless recruit in MI6's training program and discover an origin story of the world's most famous spy."
+  "소개": "IO 인터랙티브가 만드는 첩보 액션 어드벤처. MI6 훈련 과정에 있는 젊고 무모한 신참 제임스 본드를 따라가며, 세계에서 가장 유명한 스파이의 시작을 그린다."
  },
  "3bf857fe-7a80-811c-979b-e214508d45eb": {
   "제목": "Beast of Reincarnation",
@@ -7251,13 +7251,13 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "In post-apocalyptic Japan, humanity’s last hope may rest with Emma and her loyal canine companion, Koo. Explore what it means to be human in Beast of Reincarnation, an expansive one-person, one-dog action RPG built around demanding, technical combat. What awaits at journey’s end?"
+  "소개": "종말 이후의 일본, 소녀 엠마와 개 쿠가 인류의 마지막 희망이다. 사람과 개 한 쌍으로 진행하는 대형 액션 RPG로 정교하고 까다로운 전투를 중심에 둔다."
  },
  "3bf857fe-7a80-81fa-8af0-ce7f24fccaaa": {
   "제목": "어벤져스 : 둠스데이",
   "종류": "영화",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-22",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2026-12-18",
@@ -7275,7 +7275,7 @@
   ],
   "플랫폼": [],
   "소유처": [],
-  "소개": "Beloved heroes from three distinct universes are set on a deadly collision course and face an existential threat unlike anything they've ever encountered."
+  "소개": "서로 다른 세 세계의 영웅들이 충돌 직전에 놓이고, 지금껏 겪어본 적 없는 존재의 위협과 마주한다."
  },
  "3bf857fe-7a80-81f1-9d0a-e9ee870417ab": {
   "제목": "팬텀블레이드 제로",
@@ -7300,7 +7300,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Framed for the death of his master and left with a ruined heart, Soul has sixty-six days to live. Alone and hunted by his former comrades, he moves through a world of shifting loyalties and silent blades — determined to unravel the conspiracy that has condemned him. Rain mixes with blood, mercy entangles with vengeance. Soul's journey is one of love, hate, and the fragile search for what it means "
+  "소개": "스승을 죽였다는 누명을 쓰고 심장이 망가진 소울에게 남은 시간은 66일. 옛 동료들에게 쫓기며 자신을 옭아맨 음모를 파헤친다."
  },
  "3bf857fe-7a80-8136-91f5-c022cd94c458": {
   "제목": "프래그마타",
@@ -7711,7 +7711,7 @@
   "제목": "GTA6",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2026-11-19",
@@ -7730,7 +7730,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Grand Theft Auto VI heads to the state of Leonida, home to the neon-soaked streets of Vice City and beyond in the biggest, most immersive evolution of the Grand Theft Auto series yet."
+  "소개": "무대는 네온빛 바이스 시티가 있는 레오니다 주. 시리즈 사상 가장 크고 몰입감 높은 작품으로 확장됐다."
  },
  "3bf857fe-7a80-8103-9da4-da24ce49cb52": {
   "제목": "Reanimal",
@@ -7757,7 +7757,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "The creators of Little Nightmares I & II have returned to take you on a darker, more terrifying journey than ever before. In this horror adventure game, a brother & sister go through hell to rescue their missing friends and escape the island that they used to call home."
+  "소개": "리틀 나이트메어 1·2를 만든 팀이 더 어둡고 무서운 이야기로 돌아왔다. 남매가 사라진 친구들을 구하고 고향이었던 섬에서 탈출하기 위해 지옥을 헤쳐 나가는 호러 어드벤처."
  },
  "3bf857fe-7a80-8157-a3ce-c43a7d28f34b": {
   "제목": "콜오브듀티 : 블랙옵스7",
@@ -7786,7 +7786,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Call of Duty: Black Ops 7 is a first-person shooter set in 2035, co-developed by Treyarch and Raven Software. The game features three main modes: a cooperative campaign playable with up to four players or solo, multiplayer with 6v6 and 20v20 modes, and the round-based Zombies mode. Multiplayer features a perk system split into combat specialties, weapon prestige progression, and scorestreak reward"
+  "소개": "2035년을 무대로 한 FPS. 최대 4인 협동 캠페인, 6대6과 20대20 멀티플레이, 라운드형 좀비 모드를 갖췄다."
  },
  "3bf857fe-7a80-818d-8cfc-ef38e20e60c3": {
   "제목": "포코피아",
@@ -7861,7 +7861,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "Embark on a new adventure in the unique world of Little Nightmares. In Little Nightmares III, you follow the journey of Low & Alone, as they search for a path that could lead them out of the Nowhere. Trapped within the Spiral, a cluster of disturbing places, the two friends will have to work together to survive in a dangerous world full of delusions and escape the grasp of an even greater threat l"
+  "소개": "로우와 얼론이 되어 노웨어를 벗어날 길을 찾는다. 뒤틀린 장소들이 모인 나선 속에서 둘이 협력해야 살아남는다."
  },
  "3bf857fe-7a80-8192-8fa8-f3bd58c3cf64": {
   "제목": "포켓몬스터 ZA",
@@ -8149,7 +8149,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Sword of the Sea is an action-adventure game developed by Giant Squid, the studio behind Abzû and The Pathless. Set in a vast desert landscape, players control a character known as the Wraith, exploring ruins and uncovering a lost world. Movement is centered on the \"Hoversword,\" a tool that combines surfing, skateboarding, and snowboarding mechanics. The game emphasizes fluid traversal, atmospheri"
+  "소개": "아부주와 패스리스를 만든 자이언트 스퀴드의 액션 어드벤처. 광활한 사막에서 '레이스'가 되어 폐허를 탐험하고 잊힌 세계를 밝힌다. 서핑과 스케이트보드를 합친 호버소드 이동이 핵심이다."
  },
  "3bf857fe-7a80-81dc-ab77-e8a164a8d013": {
   "제목": "썬더볼츠*",
@@ -8294,7 +8294,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "The First Berserker: Khazan is a hardcore action role-playing game. The player will become Khazan, the great general of the Pelos empire, whom overcame death, and sets out to reveal the incidents that led to his downfall and seek vengeance on his enemies."
+  "소개": "죽음을 넘어선 펠로스 제국의 대장군 카잔이 되어 자신을 몰락시킨 사건의 진상을 밝히고 복수한다. 하드코어 액션 RPG."
  },
  "3bf857fe-7a80-8194-b3a7-c6175e5d08f6": {
   "제목": "당신의 친절한 이웃 스파이더맨",
@@ -8394,7 +8394,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "A new legend begins as you step into the steel toe boots of Goro Majima, a man who has lost his memory and reinvents himself as a pirate on the open sea. Embark on an over-the-top, modern-day pirate adventure with an ex-yakuza, now pirate captain and his crew as they engage in exhilarating combat on land and sea in the hunt for lost memories and a legendary treasure."
+  "소개": "기억을 잃고 해적으로 다시 태어난 마지마 고로의 이야기. 전직 야쿠자 선장과 선원들이 바다와 육지를 오가며 벌이는 과장된 현대 해적 활극."
  },
  "3bf857fe-7a80-8199-b457-c73d12aadca7": {
   "제목": "마리오&루이지 RPG 브라더십",
@@ -8609,7 +8609,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "Use living liquid creatures to build bridges, grow towers, terraform terrain, and fuel flying machines. The world is beautiful, dangerous, and evolving."
+  "소개": "살아 있는 액체 생물로 다리를 놓고 탑을 세우고 지형을 바꾸고 비행 기계를 움직인다. 아름답고 위험하며 계속 변하는 세계."
  },
  "3bf857fe-7a80-812f-b712-cc5a81f9dfa2": {
   "제목": "Empire of the ants",
@@ -8635,7 +8635,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Embark on an epic journey into the infinitesimal in this photorealistic strategy game. Play as a fearless ant and guide your colony through the dangers of the forest."
+  "소개": "실사에 가까운 그래픽의 전략 게임. 한 마리 개미가 되어 숲의 위험을 헤치며 군락을 이끈다."
  },
  "3bf857fe-7a80-815c-8829-c26180250e44": {
   "제목": "스타워즈:아웃로",
@@ -8743,7 +8743,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Like a Dragon: Infinite Wealth is a turn-based role-playing game developed by Ryu Ga Gotoku Studio and published by Sega. It follows dual protagonists Ichiban Kasuga and Kazuma Kiryu, with the narrative set primarily in Japan and Hawaii. The game uses a party-based combat system that builds on previous Like a Dragon entries, incorporating positioning and environmental interactions. Players engage "
+  "소개": "카스가 이치반과 키류 카즈마 두 주인공이 일본과 하와이를 오가는 턴제 RPG. 파티 전투를 이전작보다 한층 발전시켰다."
  },
  "3bf857fe-7a80-815f-8839-f0a10fff67d2": {
   "제목": "왓이프 시즌2",
@@ -8960,7 +8960,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Assassin’s Creed Mirage is a stealth-focused action-adventure game set in ninth-century Baghdad. It emphasizes parkour, infiltration, and targeted assassinations. The game follows a more compact structure than recent entries in the series. Players control Basim, a young thief drawn into a secretive order. The title blends historical settings with narrative elements tied to the franchise’s establis"
+  "소개": "9세기 바그다드를 무대로 한 잠입 중심 액션 어드벤처. 파쿠르와 침투, 표적 암살에 집중한 압축적인 구성. 도둑 바심이 비밀 결사에 들어가는 이야기다."
  },
  "3bf857fe-7a80-817c-89cd-ec1fdfeac6c6": {
   "제목": "시크릿 인베이젼",
@@ -9012,7 +9012,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "From the creative director of Dead Space and multiple Call of Duty campaigns comes Immortals of Aveum, a single-player first-person magic shooter set in an original fantasy universe engulfed in magic, rife with conflict, and on the verge of oblivion."
+  "소개": "데드 스페이스와 콜 오브 듀티 캠페인을 만든 감독의 1인칭 마법 슈터. 마법에 잠식되고 소멸 직전에 놓인 판타지 세계가 무대다."
  },
  "3bf857fe-7a80-8129-82a3-ea94f60cf44c": {
   "제목": "씨 오브 스타즈",
@@ -9068,7 +9068,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "By combining FromSoftware’s longstanding expertise in mech games and their signature robust gameplay, Armored Core VI: Fires of Rubicon will be a new action experience."
+  "소개": "프롬소프트웨어가 오래 쌓아온 메카 게임 경험과 특유의 묵직한 조작이 합쳐진 액션. 아머드 코어 6: 루비콘의 화염."
  },
  "3bf857fe-7a80-81df-ab2c-fd9f2b4c1d7d": {
   "제목": "블랙미러 시즌6",
@@ -9263,7 +9263,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Lies of P is an action role-playing game set in a dark, Belle Époque-inspired city overrun by deadly puppets. Players control Pinocchio, reimagined as a mechanical warrior, navigating a decaying world while making choices that affect the unfolding narrative. The game features challenging melee combat, weapon customization, and a mechanical arm with various abilities."
+  "소개": "벨 에포크풍 도시가 살인 인형들에 점령된 세계의 액션 RPG. 기계 전사로 다시 태어난 피노키오가 되어 선택으로 이야기를 바꾼다."
  },
  "3bf857fe-7a80-813e-bfa0-d9b5468f735a": {
   "제목": "스파이더맨 : 어크로스 더 유니버스",
@@ -9517,7 +9517,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "In this Action RPG spin-off, the fourth Horseman of the Apocalypse Strife is called upon to save humankind from certain destruction at the hands of Lucifer. True to its roots, Darksiders Genesis will feature intense combat, exploration, puzzle-solving, epic boss battles and serpent holes from heaven to hell. The game marks the first, full-scale Darksiders adventure played from the top-down perspec"
+  "소개": "묵시록의 네 기사 중 스트라이프가 루시퍼에게서 인류를 구한다. 격렬한 전투와 탐험, 퍼즐, 보스전을 갖춘 액션 RPG 스핀오프."
  },
  "3bf857fe-7a80-81a7-8701-f10294d499c2": {
   "제목": "스타필드",
@@ -9650,7 +9650,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Like a Dragon: Ishin! is an action-adventure game developed by Ryu Ga Gotoku Studio and published by Sega. Released in February 2023, it is a remake of the 2014 Japan-exclusive Ryu Ga Gotoku Ishin! and reimagines the Like a Dragon series in a historical setting. Set in the Bakumatsu period of Japan (mid-1800s), the game follows Sakamoto Ryoma, modelled after Kazuma Kiryu, as he navigates political"
+  "소개": "막말 일본을 무대로 용과 같이 시리즈를 다시 상상한 액션 어드벤처. 2014년 일본 한정작 유신을 리메이크했다."
  },
  "3bf857fe-7a80-813f-b797-cbf65b2818bd": {
   "제목": "디아블로4",
@@ -9679,7 +9679,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Endless demons to slaughter. Deep customization through Talents, Skill Points, Runes, and Legendary loot. Randomized dungeons contained in a dynamic open world. Survive and conquer darkness—or succumb to the shadows."
+  "소개": "끝없이 몰려오는 악마들. 특성과 스킬 포인트, 룬, 전설 장비로 깊이 있게 다듬는 육성. 역동적인 오픈 월드에 무작위로 생성되는 던전이 놓인다."
  },
  "3bf857fe-7a80-81dc-9e4c-ce31e320e783": {
   "제목": "위쳐3 : 리마스터 및 한국어 더빙 업데이트",
@@ -9709,7 +9709,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "The Witcher 3: Wild Hunt is an open-world action role-playing game developed by CD Projekt Red. Set in a dark fantasy world, the game follows Geralt of Rivia, a monster hunter searching for his adopted daughter, Ciri, while navigating political conflicts and supernatural threats. Gameplay features exploration, combat, character progression, and branching narratives shaped by player choices. Widely"
+  "소개": "CD 프로젝트 레드의 오픈월드 액션 RPG. 다크 판타지 세계에서 괴물 사냥꾼 게롤트가 양녀 시리를 찾아 정치적 갈등과 초자연적 위협을 헤쳐 나간다."
  },
  "3bf857fe-7a80-8115-86ba-ed2175c4375a": {
   "제목": "서머빌",
@@ -9736,7 +9736,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Somerville is a science fiction adventure game that follows a family separated in the aftermath of a large-scale catastrophe involving extraterrestrial forces. The story focuses on the personal impact of the invasion as the protagonist searches for a way to reunite with their loved ones. Players navigate a rural environment, solving environmental challenges and uncovering details about the events "
+  "소개": "외계의 힘이 얽힌 대재앙으로 흩어진 가족을 그린 SF 어드벤처. 침공의 규모보다 한 사람에게 남은 상처에 초점을 맞춘다."
  },
  "3bf857fe-7a80-817b-81e9-e1ff4f81c11d": {
   "제목": "SCORN",
@@ -9762,7 +9762,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Scorn is an atmospheric first person horror adventure game set in a nightmarish universe of odd forms and somber tapestry. It is designed around an idea of \"being thrown into the world\". Isolated and lost inside this dream-like world you will explore different interconnected regions in a non-linear fashion. The unsettling environment is a character itself. Every location contains its own theme (st"
+  "소개": "기괴한 형상과 음울한 질감으로 채워진 악몽 같은 세계의 1인칭 호러 어드벤처. 설명 없이 세계에 던져진 채 서로 이어진 지역들을 원하는 순서로 탐험한다."
  },
  "3bf857fe-7a80-81ac-a471-fb0e5496ce31": {
   "제목": "이블웨스트",
@@ -10082,7 +10082,7 @@
   "제목": "Nope",
   "종류": "영화",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2022-08-17",
@@ -10098,7 +10098,7 @@
   "공개처": [],
   "플랫폼": [],
   "소유처": [],
-  "소개": "The short film is a reflection on our society, as it looks at our relationship with drugs and the internet and the way these forms of addiction tend to dilute the value we place on human interactions. However, Nope! isn’t a criticism generally associated with these themes, but rather an ironic, light and playful insight into today’s youth culture. The new generation of dreamers and creators is rep"
+  "소개": "약물과 인터넷에 대한 우리의 관계, 그리고 그런 중독이 사람 사이의 가치를 희석하는 방식을 다룬 단편. 비판보다는 아이러니와 가벼운 시선으로 접근한다."
  },
  "3bf857fe-7a80-8147-a796-c97770efd33d": {
   "제목": "아이엠그루트",
@@ -10612,7 +10612,7 @@
    "PC"
   ],
   "소유처": [],
-  "소개": "Returnal is a 2021 roguelike third-person shooter video game developed by Housemarque and published by Sony Interactive Entertainment. It follows Selene Vassos, an astronaut who lands on the planet Atropos in search of the mysterious \"White Shadow\" signal and finds herself trapped in a time loop. After crash-landing on a shape-shifting alien planet, Selene finds herself fighting tooth and nail for"
+  "소개": "하우스마크가 만든 로그라이크 3인칭 슈터. 우주비행사 셀레네가 아트로포스 행성에 불시착해 죽을 때마다 되돌아가는 시간의 고리에 갇힌다."
  },
  "3bf857fe-7a80-813c-9649-d46ce3e5974f": {
   "제목": "리틀 나이트메어2",
@@ -10976,7 +10976,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Marvel’s Avengers is an action-adventure game developed by Crystal Dynamics and published by Square Enix in 2020. It features both a single-player campaign and multiplayer missions, combining narrative-driven gameplay with cooperative online play. The story follows Kamala Khan as she reunites the Avengers after a catastrophic event. Players can control multiple heroes, each with unique abilities a"
+  "소개": "크리스탈 다이내믹스가 만든 액션 어드벤처. 싱글 캠페인과 협동 멀티플레이를 함께 담았고, 카말라 칸이 흩어진 어벤져스를 다시 모은다."
  },
  "3bf857fe-7a80-81d4-9a01-ec4e67ed209d": {
   "제목": "Ori and the Will of the Wisps",
@@ -11696,7 +11696,7 @@
    "PS4"
   ],
   "소유처": [],
-  "소개": "Set sail on an all-new ONE PIECE adventure in ONE PIECE World Seeker! Luffy and the Straw Hat Pirates are back in a new story that puts players’ into Luffy’s point of view, as he battles and explores an expansive and seamless world. Open landscapes provide many paths for players to experience Luffy’s gum-gum abilities and swing into action."
+  "소개": "루피의 시점에서 진행하는 새 원피스 모험. 이음매 없는 넓은 세계를 고무고무 능력으로 누빈다."
  },
  "3bf857fe-7a80-8164-907e-efdc87dc604a": {
   "제목": "쿠르스크",
@@ -11950,7 +11950,7 @@
   "제목": "GTA5",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-22",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2013-09-17",
@@ -11972,7 +11972,7 @@
    "PS5"
   ],
   "소유처": [],
-  "소개": "Grand Theft Auto V is a vast open world game set in Los Santos, a sprawling sun-soaked metropolis struggling to stay afloat in an era of economic uncertainty and cheap reality TV. The game blends storytelling and gameplay in new ways as players repeatedly jump in and out of the lives of the game’s three lead characters, playing all sides of the game’s interwoven story."
+  "소개": "경제 불안과 싸구려 리얼리티 TV의 시대, 햇빛에 절은 대도시 로스 산토스를 무대로 한 오픈월드. 세 주인공의 삶을 오가며 이야기가 진행된다."
  },
  "3bf857fe-7a80-8137-bbb4-df1dd1597302": {
   "제목": "갓오브워",
@@ -12582,7 +12582,7 @@
   "제목": "완다와거상 RE",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2018-02-06",
@@ -12600,7 +12600,7 @@
    "PS3"
   ],
   "소유처": [],
-  "소개": "In a desolate land where beasts as big as mountains roam free, a lone hero and his horse must ride into the unknown on a quest for ancient power. Shadow of the Colossus, an undisputed PlayStation 2 masterpiece, is about to be reborn with the power of PlayStation 3."
+  "소개": "산맥만 한 거수들이 배회하는 황량한 땅에서 한 소년과 말이 고대의 힘을 찾아 떠난다. PS2의 명작 완다와 거상을 새로 만든 작품."
  },
  "3bf857fe-7a80-817a-91e6-d55a702a0c6c": {
   "제목": "저스트코즈3",
@@ -12878,7 +12878,7 @@
    "Xbox"
   ],
   "소유처": [],
-  "소개": "Frostpunk, the newest title from the creators of This War of Mine, is a society survival game where heat means life and every decision comes at a price. In an entirely frozen world, people develop steam-powered technology to oppose the overwhelming cold. You face the task of building the last city on Earth and securing the means necessary for your community to survive. Optimization and resource ma"
+  "소개": "열이 곧 생명인 혹한의 세계에서 마지막 도시를 세우는 사회 생존 게임. 모든 결정에 대가가 따른다. 디스 워 오브 마인 제작진의 작품."
  },
  "3bf857fe-7a80-81fe-ae0e-c9ced5110e84": {
   "제목": "더 크루",
@@ -13335,7 +13335,7 @@
   "제목": "The Outer Worlds",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-22",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2019-10-25",
@@ -13360,7 +13360,7 @@
    "에픽",
    "게임패스"
   ],
-  "소개": "The Outer Worlds is a new single-player sci-fi RPG from Obsidian Entertainment and Private Division. As you explore the furthest reaches of space and encounter a host of factions all vying for power, who you decide to become will determine the fate of everyone in Halcyon. In the corporate equation for the colony, you are the unplanned variable."
+  "소개": "옵시디언의 싱글 SF RPG. 권력을 다투는 세력들이 얽힌 우주 변두리에서, 어떤 사람이 되기로 하느냐가 핼시온 전체의 운명을 정한다."
  },
  "3bf857fe-7a80-811b-a95d-ea214b8e683a": {
   "제목": "마이 프렌드 페드로",
@@ -13387,7 +13387,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "My Friend Pedro is a violent ballet about friendship, imagination, and one man’s struggle to obliterate anyone in his path at the behest of a sentient banana."
+  "소개": "우정과 상상, 그리고 말하는 바나나의 지시에 따라 앞을 가로막는 모두를 쓸어버리는 한 남자의 폭력적인 발레."
  },
  "3bf857fe-7a80-8177-8846-f79d47002691": {
   "제목": "데스스트랜딩",
@@ -13735,7 +13735,7 @@
   "제목": "Anthem",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2019-02-22",
@@ -13755,7 +13755,7 @@
    "Xbox"
   ],
   "소유처": [],
-  "소개": "Anthem is a shared-world action RPG, where players can delve into a vast landscape teeming with amazing technology and forgotten treasures. This is a world where Freelancers are called upon to defeat savage beasts, ruthless marauders, and forces plotting to conquer humanity."
+  "소개": "놀라운 기술과 잊힌 보물이 널린 세계를 무대로 한 공유형 액션 RPG. 프리랜서가 되어 야수와 약탈자, 인류를 노리는 세력에 맞선다."
  },
  "3bf857fe-7a80-8163-890f-f23944131b52": {
   "제목": "세키로",
@@ -13981,7 +13981,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "London, 1918. You are newly-turned Vampyr Dr. Jonathan Reid. As a doctor, you must find a cure to save the city’s flu-ravaged citizens. As a Vampyr, you are cursed to feed on those you vowed to heal. Will you embrace the monster within? Survive and fight against Vampyr hunters, undead skals, and other supernatural creatures. Use your unholy powers to manipulate and delve into the lives of those ar"
+  "소개": "1918년 런던, 갓 뱀파이어가 된 의사 조너선 리드가 주인공. 독감으로 무너지는 도시를 구할 치료법을 찾아야 하지만 살리기로 맹세한 사람들의 피를 마셔야 하는 저주에 걸렸다."
  },
  "3bf857fe-7a80-8127-abac-e7d54bb97621": {
   "제목": "미션임파서블:폴아웃",
@@ -14076,7 +14076,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "The Division 2 is an action-shooter RPG set in an open-world. Play in co-op and PvP modes that offer more variety in missions and challenges, new progression systems with unique twists and surprises, and fresh gaming innovations to engage players for years to come."
+  "소개": "오픈월드를 무대로 한 액션 슈터 RPG. 협동과 PvP 모드, 새로운 성장 체계를 갖췄다."
  },
  "3bf857fe-7a80-8186-ad1b-dc1bc462bcca": {
   "제목": "블레이드 러너 2049",
@@ -14124,7 +14124,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "Deadbolt is an extremely challenging stealth-action hybrid that allows you to take control of the reaper to quell the recent undead uprising."
+  "소개": "사신이 되어 언데드 봉기를 잠재우는, 극도로 까다로운 잠입 액션."
  },
  "3bf857fe-7a80-8128-a91d-c301f829358f": {
   "제목": "블랙팬서",
@@ -15524,7 +15524,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "SOMA is a sci-fi horror game from Frictional Games, the creators of Amnesia: The Dark Descent. It is an unsettling story about identity, consciousness, and what it means to be human. Enter the world of SOMA and face horrors buried deep beneath the ocean waves. Delve through locked terminals and secret documents to uncover the truth behind the chaos. Seek out the last remaining inhabitants and take"
+  "소개": "암네시아를 만든 프릭셔널 게임즈의 SF 호러. 정체성과 의식, 인간다움이란 무엇인가를 묻는다. 바다 깊은 곳에 묻힌 공포와 마주한다."
  },
  "3bf857fe-7a80-8158-b069-d0aeecbd0c6a": {
   "제목": "마션",
@@ -15630,7 +15630,7 @@
   "제목": "디오더:1886",
   "종류": "게임",
   "생성일": "2026-08-17",
-  "수정일": "2026-08-20",
+  "수정일": "2026-08-23",
   "작성자": "출시 트래커",
   "수정자": "출시 트래커",
   "출시·개봉일": "2015-02-20",
@@ -15648,7 +15648,7 @@
    "PS4"
   ],
   "소유처": [],
-  "소개": "The Order: 1886 introduces players to a unique vision of Victorian-Era London where Man uses advanced technology to battle a powerful and ancient foe. As a member of an elite order of knights, join a centuries-old war that will determine the course of history forever."
+  "소개": "인류가 첨단 기술로 오랜 적과 싸우는 빅토리아 시대 런던. 정예 기사단의 일원이 되어 수백 년째 이어진 전쟁에 뛰어든다."
  },
  "3bf857fe-7a80-81f2-84e7-d346a1572bcb": {
   "제목": "핵소고지",
@@ -15941,7 +15941,7 @@
    "Xbox"
   ],
   "소유처": [],
-  "소개": "Homefront: The Revolution is an open-world first person shooter where you must lead the Resistance movement in guerrilla warfare against a superior military force.A living, breathing, open world responds to your actions - you and your Resistance Cell can inspire a rebellion on the streets and turn Occupation into Revolution, as oppressed civilians take up the fight."
+  "소개": "압도적인 군사력에 맞서 게릴라전을 이끄는 오픈월드 1인칭 슈터. 내 행동에 반응하는 세계에서 저항군을 조직해 거리의 반란을 일으킨다."
  },
  "3bf857fe-7a80-8179-8ad9-c4812b14c6e5": {
   "제목": "옥자",
@@ -15990,7 +15990,7 @@
    "Switch"
   ],
   "소유처": [],
-  "소개": "Outlast 2 is the sequel to the acclaimed survival horror game Outlast. Set in the same universe as the first game, but with different characters and a different setting, Outlast 2 is a twisted new journey into the depths of the human mind and its dark secrets. No conflict is ever black and white."
+  "소개": "호평받은 서바이벌 호러 아웃라스트의 후속작. 같은 세계관에 새 인물과 새 무대로 인간 정신의 밑바닥과 그 비밀을 파고든다."
  },
  "3bf857fe-7a80-816f-930c-f99382a47e2d": {
   "제목": "브라보팀",
@@ -16280,7 +16280,7 @@
   "소유처": [
    "게임패스"
   ],
-  "소개": "Call of Duty: WWII creates the definitive World War II next generation experience across three different game modes: Campaign, Multiplayer, and Co-Operative. Featuring stunning visuals, the Campaign transports players to the European theater as they engage in an all-new Call of Duty story set in iconic World War II battles. Multiplayer marks a return to original, boots-on-the ground Call of Duty g"
+  "소개": "캠페인과 멀티플레이, 협동 세 모드로 2차 세계대전을 그린다. 캠페인은 유럽 전선의 상징적인 전투들을 무대로 한다."
  },
  "3bf857fe-7a80-816b-b617-dbd0eece727e": {
   "제목": "킹스맨2:골드서클",
