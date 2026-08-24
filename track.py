@@ -343,6 +343,47 @@ def group(events):
     return [(k, [e for e in events if e["kind"] == k]) for k in kinds]
 
 
+# 조용한 아침에 함께 싣는 `진행 중` 줄 수. 저녁 브리핑은 15건까지 늘어놓지만,
+# 아침 카드의 본래 일은 "달라진 것"이라 여기서는 최근에 손댄 순으로 몇 개만 적는다.
+QUIET_PLAYING = 5
+
+
+def quiet_card(cur, today, since=None, dry=False):
+    """변한 게 없는 날에도 아침 카드 한 장은 보낸다.
+
+    아무것도 오지 않으면 조용한 날인지 시스템이 죽은 날인지 구분할 수가 없다.
+    2026-08-24 월요일이 그랬다 — 워크플로는 초록불이었고 대조가 0건이라 카드를
+    안 만들었는데, 받는 쪽에서는 알림이 끊긴 것으로 보였다. 침묵도 결과이므로
+    결과라고 말한다.
+
+    말할 게 없다는 말만 있으면 그것대로 빈 카드라, 지금 붙잡고 있는 것을 몇 줄
+    같이 싣는다.
+    """
+    import briefing   # briefing이 track을 읽는다. 위에서 부르면 순환이다
+
+    playing = briefing.collect(cur, today)["진행중"][:QUIET_PLAYING]
+    since = f"{since} 이후" if since else "어제 이후"
+    summary = [f"[변경 없음] {since} 변경 사항이 없습니다 (추적 중 {len(cur)}건)"]
+    details = []
+    if playing:
+        summary.append("[진행 중] " + ", ".join(r["제목"] for r in playing))
+        details = [(f"[진행 중] {r['제목']}",
+                    describe.detail("진행중", r, None, today)) for r in playing]
+
+    print("")
+    print(notify.card_title("변경 없음", today.isoformat()))
+    for line in summary:
+        print("  " + line)
+    for headline, lines in details:
+        print("  " + headline)
+        for line in lines:
+            print("      " + line)
+    if dry:
+        return False
+    return notify.send_card("변경 없음", summary, details,
+                            kinds=["브리핑"], count=0, date=today.isoformat())
+
+
 def build_card(events, today=None):
     """(제목, 요약, 상세, 종류들). 요약은 제목만, 상세는 날짜와 할 일까지."""
     today = today or datetime.date.today()
@@ -379,11 +420,13 @@ def main():
     print(f"작품 {len(cur)}행 스냅샷")
 
     prev = load_prev()
+    prev_since = None
     if prev is None:
         print("이전 스냅샷이 없습니다. 오늘 것을 기준으로 저장합니다.")
         events = []
     else:
         prev_data, prev_name = prev
+        prev_since = os.path.splitext(prev_name)[0]
         events = diff(prev_data, cur, datetime.date.today())
         print(f"{prev_name}과 대조 — 변경 {len(events)}건")
 
@@ -401,7 +444,14 @@ def main():
     events += available_check(cur)
 
     if not events:
-        print("변경 없음 — 알림 보내지 않습니다.")
+        # 앞 단계가 이미 모아둔 게 있으면 그쪽이 오늘의 소식이다. 거기에
+        # `변경 없음`을 얹으면 한 카드가 앞뒤로 다른 말을 하게 된다.
+        waiting = notify.pending()
+        if waiting:
+            print(f"변경 없음 — 모아둔 알림 {waiting}장이 있어 따로 보내지 않습니다.")
+            return
+        print("변경 없음 — 변화가 없다는 카드를 보냅니다.")
+        quiet_card(cur, datetime.date.today(), prev_since, a.dry)
         return
 
     title, summary, details, kinds = build_card(events)

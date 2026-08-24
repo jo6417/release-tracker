@@ -203,6 +203,17 @@ def spooling():
     return bool(os.environ.get(SPOOL_ENV))
 
 
+def pending(path=None):
+    """모아둔 카드 수. "이번 실행에서 나갈 소식이 이미 있나"를 묻는 데 쓴다.
+
+    `track.py`가 변경 0건인 아침에 그래도 한 장 보내려면, 앞 단계(가격·트레일러)가
+    이미 모아둔 것이 있는지 알아야 한다. 있으면 그쪽이 소식이고, `변경 없음`은
+    같은 카드에 붙어 앞뒤가 안 맞는 말이 된다.
+    """
+    path = path or os.environ.get(SPOOL_ENV)
+    return len(_read_spool(path)) if path else 0
+
+
 def _read_spool(path):
     if not os.path.exists(path):
         return []
