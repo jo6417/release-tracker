@@ -5,7 +5,7 @@
 두 개와, 공식 블로그의 태그 피드를 쓴다. 2026-08-22에 셋 다 실측했다.
 
   sigls          컬렉션에 든 상품 ID 목록. 콘솔 558건 / PC 472건
-  displaycatalog 상품 ID -> 한국어 제목·개발사. 요청당 20개 남짓씩 끊는다
+  displaycatalog 상품 ID -> 제목·개발사·소개·출시일. 요청당 20개 남짓씩 끊는다
   태그 피드       'Coming to XBOX Game Pass' 글에 입점 예정일과 이탈 목록이 있다
 
 문서화된 API가 아니라 예고 없이 바뀔 수 있다. 그래서 카탈로그가 비거나 절반으로
@@ -74,6 +74,40 @@ def titles(product_ids, lang=LANG):
             name = (loc.get("ProductTitle") or "").strip()
             if name:
                 out[p["ProductId"]] = name
+    return out
+
+
+def info(product_ids, lang=LANG):
+    """상품 ID -> {제목, 개발사, 소개, 출시일}. 미등록 입점작의 상세에 쓴다.
+
+    `titles()`와 같은 엔드포인트지만 카탈로그가 주는 나머지 칸까지 받는다.
+    카탈로그에 이름만 있으면 "이게 뭔 게임이지"로 끝나서 알림이 무용지물이다.
+    개발사는 ko-kr 응답에서 비어 오는 상품이 있어 배급사로 대신한다.
+    """
+    out = {}
+    ids = list(product_ids)
+    for i in range(0, len(ids), BATCH):
+        chunk = ",".join(ids[i:i + BATCH])
+        url = (f"{CATALOG}?bigIds={chunk}&market={MARKET}&languages={lang}"
+               f"&MS-CV=release-tracker")
+        try:
+            d = json.loads(_get(url))
+        except Exception:
+            continue                      # 한 묶음이 죽어도 나머지는 받는다
+        for p in d.get("Products", []):
+            loc = (p.get("LocalizedProperties") or [{}])[0]
+            name = (loc.get("ProductTitle") or "").strip()
+            if not name:
+                continue
+            mk = (p.get("MarketProperties") or [{}])[0]
+            out[p["ProductId"]] = {
+                "제목": name,
+                "개발사": (loc.get("DeveloperName")
+                          or loc.get("PublisherName") or "").strip(),
+                "소개": (loc.get("ShortDescription")
+                        or loc.get("ProductDescription") or "").strip(),
+                "출시일": (mk.get("OriginalReleaseDate") or "")[:10],
+            }
     return out
 
 

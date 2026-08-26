@@ -10,7 +10,8 @@ gamepass_map.json에 쌓는다 (steam_map.json과 같은 구조다).
 알림은 세 갈래다.
   - 등록해둔 작품의 이탈 -> 개별로 상세히. 시한이 있어 행동해야 하는 알림이다
   - 등록해둔 작품의 입점 -> 개별로. 사려던 것이 공짜가 된 것이다
-  - 등록 안 한 작품의 입점 -> 목록 한 줄. 등록할 만한 게 보이면 사용자가 말한다
+  - 등록 안 한 작품의 입점 -> 요약은 목록 한 줄, 상세는 소개까지. 등록할
+    만한 게 보이면 사용자가 말한다
 
 이탈 예고는 Xbox Wire 태그 피드에서 온다. 카탈로그 비교로는 내려간 다음 날에야
 알 수 있는데, 그때는 이미 늦다. 게임패스는 2주쯤 전에 공식 발표를 한다.
@@ -30,6 +31,7 @@ import re
 import time
 import urllib.request
 
+import describe
 import notify
 from adapters import gamepass
 from config import API, headers
@@ -39,6 +41,7 @@ STATE = "gamepass_state.json"
 MAP = "gamepass_map.json"
 TAG = "게임패스"
 LIST_MAX = 10          # 미등록 입점작을 이름으로 몇 개까지 적을지
+DAYONE_DAYS = 7        # 이 안에 나온 게임이면 "출시 첫날 입점"으로 본다
 NOTICE_DAYS = 21       # 이탈 예고를 이 기간 안의 것만 알린다
 
 
@@ -201,6 +204,49 @@ def set_tag(row, on, dry):
     return True
 
 
+SUFFIX = re.compile(r"[,\s]+(pte\.?\s*ltd|co\.?\s*,?\s*ltd|ltd|llc|inc|"
+                    r"corp|corporation|gmbh|plc)\.?\s*$", re.I)
+
+
+def studio(name):
+    """개발사 표기를 사람이 읽는 이름으로. 카탈로그는 법인명을 그대로 준다
+    ("NETEASE INTERACTIVE ENTERTAINMENT PTE.LTD"). 꼬리를 떼고, 전부 대문자면
+    낱말 첫 글자만 남긴다 - 알림에서 혼자 소리지르는 줄이 되면 안 된다.
+    """
+    n = SUFFIX.sub("", name.strip()).strip(" ,.")
+    if n.isupper() and len(n) > 3:
+        n = n.title()
+    return n or name.strip()
+
+
+def detail_new(meta, today):
+    """미등록 입점작 한 건의 상세.
+
+    작품 DB에 없어서 제목만으로는 뭔지 안 떠오르는 게임들이다. 소개 한 줄이
+    이 알림의 전부라고 봐도 된다 - 없으면 "이게 뭐지"로 끝나고 넘어가게 된다.
+    """
+    dev = studio(meta.get("개발사") or "")
+    lines = [f"게임 · {dev}" if dev else "게임"]
+
+    intro = describe.intro_line({"소개": meta.get("소개") or ""})
+    if intro:
+        lines.append(intro)
+
+    out = (meta.get("출시일") or "").strip()
+    if out:
+        try:
+            days = (today - datetime.date.fromisoformat(out)).days
+        except ValueError:
+            days = None
+        line = f"{out} 출시"
+        if days is not None and -DAYONE_DAYS <= days <= DAYONE_DAYS:
+            line += " · 출시 첫날부터 게임패스"
+        lines.append(line)
+
+    lines.append("작품 DB에 없는 게임입니다. 등록해두면 이후 변경도 추적합니다")
+    return lines
+
+
 def detail_leave(row, when, today):
     left = (when - today).days
     lines = [f"게임 · {row['진행도'] or '미확인'} · 게임패스",
@@ -289,14 +335,26 @@ def main():
         ]))
 
     # 3) 등록 안 한 작품의 입점 - 목록 한 줄. 등록할 만한 게 보이면 사용자가 말한다
-    new_names = [name_of(gmap, i) for i in entered
-                 if i in gmap and not find(index, gmap, i)]
-    new_names = [n for n in new_names if n]
-    if new_names:
-        head = ", ".join(new_names[:LIST_MAX])
-        if len(new_names) > LIST_MAX:
-            head += f" 외 {len(new_names) - LIST_MAX}건"
+    new_ids = [i for i in entered
+               if i in gmap and name_of(gmap, i) and not find(index, gmap, i)]
+    if new_ids:
+        names = [name_of(gmap, i) for i in new_ids]
+        head = ", ".join(names[:LIST_MAX])
+        if len(names) > LIST_MAX:
+            head += f" 외 {len(names) - LIST_MAX}건"
         summary.append(f"[게임패스 신규] {head}")
+
+        # 요약의 이름만으로는 뭔지 알 수 없어 상세를 같이 만든다. 여기 쓰는
+        # 소개·개발사는 작품 DB가 아니라 카탈로그에서 바로 온다.
+        try:
+            meta = gamepass.info(new_ids[:LIST_MAX])
+        except Exception as e:
+            # 상세를 못 받았다고 이탈 알림까지 죽일 수는 없다. 목록만 나간다
+            meta = {}
+            print(f"  [경고] 신규작 상세를 못 받았습니다 - 목록만 알립니다: {e}")
+        for i in new_ids[:LIST_MAX]:
+            details.append((f"[게임패스 신규] {name_of(gmap, i)}",
+                            detail_new(meta.get(i) or {}, today)))
 
     # 4) 예고 없이 이미 내려간 것 - 사후 통보지만 소유처를 되돌려야 한다
     for i in left:

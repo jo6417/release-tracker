@@ -397,13 +397,13 @@ def build_card(events, today=None):
         title = f"오늘의 변경 {len(events)}건"
 
     grouped = group(events)
-    summary = [f"[{kind}] " + ", ".join(e["title"] for e in g)
+    summary = [f"[{describe.label(kind)}] " + ", ".join(e["title"] for e in g)
                for kind, g in grouped]
 
     # 상세는 급한 것부터. 그 안에서는 요약과 같은 순서라 위아래로 찾아가기 쉽다.
     ordered = [e for _, g in grouped for e in g]
     ordered.sort(key=lambda e: not e["urgent"])
-    details = [(f"[{e['kind']}] {e['title']}",
+    details = [(f"[{describe.label(e['kind'])}] {e['title']}",
                 describe.detail(e["kind"], e["row"], e["note"], today))
                for e in ordered]
 
