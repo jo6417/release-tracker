@@ -49,7 +49,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 85.0,
+  "평점": 82.5,
   "url": "https://www.igdb.com/games/ogu-and-the-secret-forest",
   "경로": "steam",
   "확신": "확실"
@@ -208,7 +208,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 88.6,
+  "평점": 88.3,
   "url": "https://www.igdb.com/games/black-myth-wukong",
   "경로": "steam",
   "확신": "확실"
@@ -301,7 +301,7 @@
    "Dungeons & Dragons",
    "Forgotten Realms"
   ],
-  "평점": 94.8,
+  "평점": 94.7,
   "url": "https://www.igdb.com/games/baldurs-gate-iii",
   "경로": "steam",
   "확신": "확실"
@@ -436,7 +436,11 @@
   "이름": "Mewgenics",
   "출시일": "2026-02-10",
   "플랫폼": [
-   "PC"
+   "Series X|S",
+   "Switch 2",
+   "PC",
+   "PS5",
+   "Switch"
   ],
   "시리즈": [],
   "평점": 91.3,
@@ -1015,7 +1019,7 @@
    "PC"
   ],
   "시리즈": [],
-  "평점": 69.8,
+  "평점": 69.9,
   "url": "https://www.igdb.com/games/secrets-of-grindea",
   "경로": "steam",
   "확신": "확실"
@@ -1786,7 +1790,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 80.1,
+  "평점": 80.2,
   "url": "https://www.igdb.com/games/no-rest-for-the-wicked--1",
   "경로": "steam",
   "확신": "확실"
@@ -1967,7 +1971,7 @@
   "시리즈": [
    "Cyberpunk"
   ],
-  "평점": 79.0,
+  "평점": 79.1,
   "url": "https://www.igdb.com/games/cyberpunk-2077",
   "경로": "steam",
   "확신": "확실"
@@ -2136,7 +2140,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 90.1,
+  "평점": 90.3,
   "url": "https://www.igdb.com/games/split-fiction",
   "경로": "steam",
   "확신": "확실"
@@ -2484,7 +2488,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 89.3,
+  "평점": 89.4,
   "url": "https://www.igdb.com/games/it-takes-two",
   "경로": "steam",
   "확신": "확실"
@@ -2506,7 +2510,7 @@
   "시리즈": [
    "Tomb Raider"
   ],
-  "평점": 78.8,
+  "평점": 78.7,
   "url": "https://www.igdb.com/games/shadow-of-the-tomb-raider",
   "경로": "steam",
   "확신": "확실"
@@ -2530,10 +2534,130 @@
   "경로": "steam",
   "확신": "확실"
  },
+ "Moonlighter 2: The Endless Vault": {
+  "id": 324570,
+  "이름": "Moonlighter 2: The Endless Vault",
+  "출시일": "2025-11-19",
+  "플랫폼": [
+   "Series X|S",
+   "Switch 2",
+   "PC",
+   "PS5"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/moonlighter-2-the-endless-vault",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "Alkahest": {
+  "id": 306919,
+  "이름": "Alkahest",
+  "출시일": null,
+  "플랫폼": [
+   "PC",
+   "PS5"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/alkahest",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "Graveyard Keeper 2": {
+  "id": 397817,
+  "이름": "Graveyard Keeper II",
+  "출시일": "2026-09-22",
+  "플랫폼": [
+   "Series X|S",
+   "Switch 2",
+   "PC",
+   "PS5",
+   "Switch"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/graveyard-keeper-ii",
+  "경로": "검색",
+  "확신": "낮음"
+ },
+ "Greak 2: Alliance of the Storms": {
+  "id": 415149,
+  "이름": "Greak 2: Alliance of the Storms",
+  "출시일": "2027-12-31",
+  "플랫폼": [
+   "Series X|S",
+   "PC",
+   "PS5",
+   "Switch"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/greak-2-alliance-of-the-storms",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "Nodusfall": {
+  "id": 414966,
+  "이름": "Nodusfall",
+  "출시일": null,
+  "플랫폼": [],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/nodusfall",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "Petit Planet": {
+  "id": 370095,
+  "이름": "Petit Planet",
+  "출시일": "2026-12-31",
+  "플랫폼": [
+   "Android",
+   "PC",
+   "iOS"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/petit-planet",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "NO LAW": {
+  "id": 381205,
+  "이름": "No Law",
+  "출시일": "2027-12-31",
+  "플랫폼": [
+   "Series X|S",
+   "PC",
+   "PS5"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/no-law",
+  "경로": "검색",
+  "확신": "확실"
+ },
+ "Acornia: Mirror Worlds": {
+  "id": 414957,
+  "이름": "Acornia: Mirror Worlds",
+  "출시일": "2027-12-31",
+  "플랫폼": [
+   "Series X|S",
+   "Switch 2",
+   "PC",
+   "PS5"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/acornia-mirror-worlds",
+  "경로": "검색",
+  "확신": "확실"
+ },
  "콜오브듀티: 모던 워페어 4": {
   "id": 403310,
   "이름": "Call of Duty: Modern Warfare 4",
-  "출시일": "2026-10-23",
+  "출시일": "2026-10-16",
   "플랫폼": [
    "Series X|S",
    "Switch 2",
@@ -2658,16 +2782,20 @@
   "확신": "확실"
  },
  "월드워Z": {
-  "id": 115272,
+  "id": 20910,
   "이름": "World War Z",
-  "출시일": "2013-05-30",
+  "출시일": "2019-04-16",
   "플랫폼": [
-   "Android",
-   "iOS"
+   "PS4",
+   "PC",
+   "XONE",
+   "Switch"
   ],
-  "시리즈": [],
-  "평점": 25.0,
-  "url": "https://www.igdb.com/games/world-war-z--1",
+  "시리즈": [
+   "World War Z"
+  ],
+  "평점": 72.7,
+  "url": "https://www.igdb.com/games/world-war-z",
   "경로": "검색",
   "확신": "확실"
  },
@@ -3248,7 +3376,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 76.6,
+  "평점": 76.8,
   "url": "https://www.igdb.com/games/braid-anniversary-edition",
   "경로": "검색",
   "확신": "확실"
@@ -3348,18 +3476,19 @@
   "확신": "확실"
  },
  "데드스페이스 리메이크": {
-  "id": 131931,
+  "id": 159119,
   "이름": "Dead Space",
-  "출시일": "2011-01-25",
+  "출시일": "2023-01-27",
   "플랫폼": [
-   "Android",
-   "iOS"
+   "Series X|S",
+   "PC",
+   "PS5"
   ],
   "시리즈": [
    "Dead Space"
   ],
-  "평점": 72.7,
-  "url": "https://www.igdb.com/games/dead-space--2",
+  "평점": 87.1,
+  "url": "https://www.igdb.com/games/dead-space--1",
   "경로": "검색",
   "확신": "확실"
  },
@@ -3417,17 +3546,22 @@
   "확신": "확실"
  },
  "Stray": {
-  "id": 177394,
+  "id": 110248,
   "이름": "Stray",
-  "출시일": "2017-02-21",
+  "출시일": "2022-07-19",
   "플랫폼": [
-   "Linux",
+   "Series X|S",
+   "PS4",
+   "Switch 2",
    "PC",
-   "Mac"
+   "PS5",
+   "Mac",
+   "XONE",
+   "Switch"
   ],
   "시리즈": [],
-  "평점": null,
-  "url": "https://www.igdb.com/games/stray--1",
+  "평점": 83.3,
+  "url": "https://www.igdb.com/games/stray",
   "경로": "검색",
   "확신": "확실"
  },
@@ -3491,7 +3625,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 89.6,
+  "평점": 89.0,
   "url": "https://www.igdb.com/games/ghost-of-tsushima-directors-cut",
   "경로": "검색",
   "확신": "확실"
@@ -3670,7 +3804,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 90.2,
+  "평점": 90.1,
   "url": "https://www.igdb.com/games/ghost-of-tsushima",
   "경로": "검색",
   "확신": "확실"
@@ -3739,15 +3873,15 @@
   "확신": "확실"
  },
  "Orbitals": {
-  "id": 133119,
+  "id": 381237,
   "이름": "Orbitals",
-  "출시일": "2021-12-31",
+  "출시일": "2026-09-03",
   "플랫폼": [
-   "PC"
+   "Switch 2"
   ],
   "시리즈": [],
   "평점": null,
-  "url": "https://www.igdb.com/games/orbitals",
+  "url": "https://www.igdb.com/games/orbitals--1",
   "경로": "검색",
   "확신": "확실"
  },
@@ -3924,7 +4058,7 @@
   "시리즈": [
    "Splatoon"
   ],
-  "평점": 86.8,
+  "평점": 86.3,
   "url": "https://www.igdb.com/games/splatoon-raiders",
   "경로": "검색",
   "확신": "확실"
@@ -3939,7 +4073,7 @@
   "시리즈": [
    "Yoshi"
   ],
-  "평점": 81.7,
+  "평점": 80.8,
   "url": "https://www.igdb.com/games/yoshi-and-the-mysterious-book",
   "경로": "검색",
   "확신": "확실"
@@ -4046,7 +4180,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 81.5,
+  "평점": 81.4,
   "url": "https://www.igdb.com/games/beast-of-reincarnation",
   "경로": "검색",
   "확신": "확실"
@@ -4084,7 +4218,7 @@
    "Wonder Woman",
    "The Flash"
   ],
-  "평점": 55.1,
+  "평점": 55.8,
   "url": "https://www.igdb.com/games/suicide-squad-kill-the-justice-league",
   "경로": "검색",
   "확신": "확실"
@@ -4166,18 +4300,19 @@
   "확신": "확실"
  },
  "어둠속에 나홀로 리메이크": {
-  "id": 1958,
+  "id": 213237,
   "이름": "Alone in the Dark",
-  "출시일": "2008-06-20",
+  "출시일": "2024-03-20",
   "플랫폼": [
+   "Series X|S",
    "PC",
-   "X360"
+   "PS5"
   ],
   "시리즈": [
    "Alone in the Dark"
   ],
-  "평점": 51.3,
-  "url": "https://www.igdb.com/games/alone-in-the-dark--2",
+  "평점": 73.6,
+  "url": "https://www.igdb.com/games/alone-in-the-dark--1",
   "경로": "검색",
   "확신": "확실"
  },
@@ -4323,7 +4458,7 @@
   "시리즈": [
    "Donkey Kong"
   ],
-  "평점": 91.9,
+  "평점": 91.5,
   "url": "https://www.igdb.com/games/donkey-kong-bananza",
   "경로": "검색",
   "확신": "확실"
@@ -4542,7 +4677,7 @@
   "시리즈": [
    "James Cameron's Avatar"
   ],
-  "평점": 73.3,
+  "평점": 73.2,
   "url": "https://www.igdb.com/games/avatar-frontiers-of-pandora",
   "경로": "검색",
   "확신": "확실"
@@ -4598,7 +4733,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 86.2,
+  "평점": 86.1,
   "url": "https://www.igdb.com/games/sea-of-stars",
   "경로": "검색",
   "확신": "확실"
@@ -4668,7 +4803,7 @@
   "시리즈": [
    "Cyberpunk"
   ],
-  "평점": 91.9,
+  "평점": 92.1,
   "url": "https://www.igdb.com/games/cyberpunk-2077-phantom-liberty",
   "경로": "검색",
   "확신": "확실"
@@ -5270,7 +5405,7 @@
   "시리즈": [
    "The Last of Us"
   ],
-  "평점": 92.6,
+  "평점": 92.7,
   "url": "https://www.igdb.com/games/the-last-of-us-part-ii",
   "경로": "검색",
   "확신": "확실"
@@ -5519,21 +5654,23 @@
   "확신": "확실"
  },
  "GTA5": {
-  "id": 239064,
+  "id": 1020,
   "이름": "Grand Theft Auto V",
-  "출시일": "2015-04-14",
+  "출시일": "2013-09-17",
   "플랫폼": [
    "Series X|S",
+   "PS3",
    "PS4",
    "PC",
    "PS5",
+   "X360",
    "XONE"
   ],
   "시리즈": [
    "Grand Theft Auto"
   ],
-  "평점": 87.5,
-  "url": "https://www.igdb.com/games/grand-theft-auto-v--2",
+  "평점": 88.9,
+  "url": "https://www.igdb.com/games/grand-theft-auto-v",
   "경로": "검색",
   "확신": "확실"
  },
@@ -5641,23 +5778,20 @@
   "확신": "확실"
  },
  "오버워치": {
-  "id": 125174,
+  "id": 8173,
   "이름": "Overwatch",
-  "출시일": "2023-08-10",
+  "출시일": "2016-05-24",
   "플랫폼": [
-   "Series X|S",
    "PS4",
-   "Switch 2",
    "PC",
-   "PS5",
    "XONE",
    "Switch"
   ],
   "시리즈": [
    "Overwatch"
   ],
-  "평점": 76.1,
-  "url": "https://www.igdb.com/games/overwatch--1",
+  "평점": 85.4,
+  "url": "https://www.igdb.com/games/overwatch",
   "경로": "검색",
   "확신": "확실"
  },
@@ -5681,17 +5815,17 @@
   "확신": "확실"
  },
  "완다와거상 RE": {
-  "id": 139896,
+  "id": 37094,
   "이름": "Shadow of the Colossus",
-  "출시일": "2012-01-12",
+  "출시일": "2018-02-06",
   "플랫폼": [
-   "PS3"
+   "PS4"
   ],
   "시리즈": [
    "Ico"
   ],
-  "평점": 83.4,
-  "url": "https://www.igdb.com/games/shadow-of-the-colossus--2",
+  "평점": 88.8,
+  "url": "https://www.igdb.com/games/shadow-of-the-colossus--1",
   "경로": "검색",
   "확신": "확실"
  },
@@ -6111,7 +6245,7 @@
   "시리즈": [
    "Borderlands"
   ],
-  "평점": 78.7,
+  "평점": 78.6,
   "url": "https://www.igdb.com/games/borderlands-3",
   "경로": "검색",
   "확신": "확실"
@@ -6174,22 +6308,23 @@
   "확신": "확실"
  },
  "레지던트이블2": {
-  "id": 880,
+  "id": 19686,
   "이름": "Resident Evil 2",
-  "출시일": "1998-01-21",
+  "출시일": "2019-01-25",
   "플랫폼": [
-   "PS3",
-   "NGC",
+   "Series X|S",
+   "PS4",
    "PC",
-   "PS1",
-   "PSP",
-   "DC"
+   "iOS",
+   "PS5",
+   "Mac",
+   "XONE"
   ],
   "시리즈": [
    "Resident Evil"
   ],
-  "평점": 69.4,
-  "url": "https://www.igdb.com/games/resident-evil-2",
+  "평점": 90.1,
+  "url": "https://www.igdb.com/games/resident-evil-2--1",
   "경로": "검색",
   "확신": "확실"
  },
@@ -6224,7 +6359,7 @@
   "시리즈": [
    "Battlefield"
   ],
-  "평점": 74.1,
+  "평점": 74.0,
   "url": "https://www.igdb.com/games/battlefield-v",
   "경로": "검색",
   "확신": "확실"
@@ -6335,7 +6470,7 @@
   "시리즈": [
    "Resident Evil"
   ],
-  "평점": 84.7,
+  "평점": 84.6,
   "url": "https://www.igdb.com/games/resident-evil-7-biohazard",
   "경로": "검색",
   "확신": "확실"
@@ -6585,7 +6720,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 81.9,
+  "평점": 82.0,
   "url": "https://www.igdb.com/games/soma",
   "경로": "검색",
   "확신": "확실"
