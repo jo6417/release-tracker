@@ -5,7 +5,9 @@
 쌓일수록 어제 것과 오늘 것이 뒤엉켜서 읽을 수가 없었다. 카드로 나누면 갤러리·
 보드 뷰에서 날짜·종류로 걸러 볼 수 있고, 읽은 건 `확인함`으로 지울 수 있다.
 
-카드 제목은 날짜로 시작하고(`card_title`), 본문은 항상 같은 순서다:
+카드 제목은 늘 같은 꼴이다 — `2026-08-29 (토) 09시 · 오늘의 브리핑`.
+날짜·시각만 바뀌고 뒷문장은 고정이라, 목록을 훑을 때 눈이 날짜에 먼저 간다.
+무엇이 들어 있는지는 `종류` 태그와 `건수`가 말한다. 본문은 항상 같은 순서다:
     멘션 한 줄(푸시용) → 요약(제목만) → 상세(날짜·할 일)
 요약만 보고 넘길 수 있어야 하고, 궁금하면 그 아래에 답이 있어야 한다.
 
@@ -44,6 +46,18 @@ SPOOL_ENV = "NOTIFY_SPOOL"
 # 할인과 영상은 훑어보는 것이라 뒤로 보낸다.
 PART_RANK = {"점검": 0, "브리핑": 1, "할인": 8, "영상": 9}
 PART_RANK_DEFAULT = 5      # track이 만드는 변경류(신규·상태변경·날짜변경…)
+
+# 합친 카드의 제목은 늘 이 한 문장이다. 예전에는 각 스크립트가 낸 라벨을 이어
+# 붙여서 "오늘의 변경 8건, 목표가 도달 1건, 새 예고편 2건"처럼 매일 다른 문장이
+# 됐다. 목록에서 훑을 때 정작 필요한 날짜·시각이 그 문장에 묻힌다.
+# 무엇이 들어 있는지는 `종류` 태그와 `건수`, 그리고 본문이 말한다.
+BRIEFING_LABEL = "오늘의 브리핑"
+
+# 슬롯 이름 -> (제목에 적을 KST 시각, 예약이 걸린 UTC 시각)
+SLOTS = {"아침": (9, 0), "저녁": (19, 10)}
+# GitHub은 워크플로의 `name:`을 GITHUB_WORKFLOW에 넣어준다. 그래서 워크플로
+# 파일을 고치지 않고도 어느 슬롯인지 알 수 있다. `name:`을 바꾸면 여기도 바꿀 것.
+WORKFLOW_SLOT = {"매일 추적": "아침", "저녁 브리핑": "저녁"}
 
 
 def _ids():
@@ -135,24 +149,47 @@ def _legacy(user_id, page_id, title, summary, details):
     return True
 
 
-def card_title(label, date=None):
-    """'2026-08-19 (수) · 오늘의 변경 4건'.
+def card_title(label, date=None, hour=None):
+    """'2026-08-29 (토) 09시 · 오늘의 브리핑'.
 
-    날짜가 맨 앞이라 카드 목록이 그대로 시간순으로 읽힌다. 날짜만 쓰면 하루에
-    여러 장(변경·할인·브리핑) 나올 때 카드가 전부 같은 제목이 되므로 뒤에 라벨을
-    붙인다.
+    날짜가 맨 앞이라 카드 목록이 그대로 시간순으로 읽힌다. 뒤의 시각은 아침 것과
+    저녁 것을 가른다. 이 값은 예약 시각이라 고정이다 -- 실행이 밀려 오후에 와도
+    아침 카드는 09시로 적힌다. 도착 시각이 아니라 "무엇의 브리핑인지"가 제목에
+    필요한 정보이기 때문이다.
     """
     import datetime
     d = datetime.date.fromisoformat(date) if date else datetime.date.today()
     head = f"{d.isoformat()} ({WEEKDAY[d.weekday()]})"
+    if hour is not None:
+        head = f"{head} {hour:02d}시"
     return f"{head} · {label}" if label else head
 
 
-def _send_now(label, summary, details, kinds, count, date):
+def slot(name=None):
+    """(제목에 적을 시각, 예약된 UTC 시각). 슬롯을 모르면 None."""
+    key = name or WORKFLOW_SLOT.get(os.environ.get("GITHUB_WORKFLOW", ""))
+    return SLOTS.get(key or "")
+
+
+def slot_date(utc_hour, now=None):
+    """예약이 걸린 날. 실행이 늦어도 카드에 적히는 날짜가 흔들리지 않는다.
+
+    예약이 밀려 저녁 브리핑이 22:00Z(다음날 07:00 KST)에 돌면 `today()`는
+    하루 뒤를 가리킨다. 그 카드는 어제 19시 것이므로 여기서 되돌린다.
+    """
+    import datetime
+    now = now or datetime.datetime.now(datetime.timezone.utc)
+    d = now.date()
+    if now.hour < utc_hour:
+        d -= datetime.timedelta(days=1)
+    return d.isoformat()
+
+
+def _send_now(label, summary, details, kinds, count, date, hour=None):
     """실제로 노션에 카드 한 장을 만든다. 스풀을 거치지 않는다."""
     ids = _ids()
     summary, details = list(summary), list(details)
-    title = card_title(label, date)
+    title = card_title(label, date, hour)
 
     if not ids.get("notify_db"):
         return _legacy(ids["user_id"], ids["notify_page"], title, summary, details)
@@ -226,7 +263,7 @@ def _read_spool(path):
         return []
 
 
-def flush(path=None, dry=False):
+def flush(path=None, dry=False, slot_name=None):
     """모아둔 카드를 한 장으로 합쳐 보낸다. 워크플로 마지막 스텝이 부른다."""
     import datetime
     path = path or os.environ.get(SPOOL_ENV)
@@ -240,15 +277,22 @@ def flush(path=None, dry=False):
 
     cards.sort(key=lambda c: min([PART_RANK.get(k, PART_RANK_DEFAULT)
                                   for k in c["kinds"]] or [PART_RANK_DEFAULT]))
-    label = ", ".join(c["label"] for c in cards if c["label"])
+    label = BRIEFING_LABEL
     summary = [s for c in cards for s in c["summary"]]
     details = [(d[0], d[1]) for c in cards for d in c["details"]]
     kinds = list(dict.fromkeys(k for c in cards for k in c["kinds"]))
     counts = [c["count"] for c in cards if c["count"] is not None]
-    date = next((c["date"] for c in cards if c["date"]),
-                datetime.date.today().isoformat())
+    hours = slot(slot_name)
+    if hours:
+        hour, utc_hour = hours
+        date = slot_date(utc_hour)
+    else:
+        # 슬롯 밖에서 부른 경우(로컬 손실행 등). 예전처럼 스풀의 날짜를 쓴다.
+        hour = None
+        date = next((c["date"] for c in cards if c["date"]),
+                    datetime.date.today().isoformat())
 
-    print(f"{card_title(label, date)}")
+    print(f"{card_title(label, date, hour)}")
     print(f"  카드 {len(cards)}장을 한 장으로 합칩니다: "
           + " + ".join(c["label"] for c in cards))
     if dry:
@@ -256,7 +300,7 @@ def flush(path=None, dry=False):
         return False
 
     _send_now(label, summary, details, kinds,
-              sum(counts) if counts else None, date)
+              sum(counts) if counts else None, date, hour)
     # 보내고 나면 비운다. 남겨두면 다음 실행에서 같은 알림이 또 나간다
     os.remove(path)
     print("알림 카드 1장 발송 완료")
@@ -274,8 +318,10 @@ if __name__ == "__main__":
     ap.add_argument("--flush", action="store_true", help="스풀을 합쳐 발송")
     ap.add_argument("--spool", help="스풀 파일 경로 (기본: $NOTIFY_SPOOL)")
     ap.add_argument("--dry", action="store_true", help="보내지 않고 결과만 출력")
+    ap.add_argument("--slot", choices=sorted(SLOTS),
+                    help="아침/저녁 (기본: GITHUB_WORKFLOW로 자동 판별)")
     a = ap.parse_args()
     if not a.flush:
         ap.print_help()
         sys.exit(1)
-    flush(a.spool, a.dry)
+    flush(a.spool, a.dry, a.slot)
