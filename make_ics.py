@@ -36,6 +36,7 @@ SKIP_SCHED_KINDS = {"시즌시작"}
 # 뜬다(2026-09-04 귀무자, 2026-09-16 애니모). 여기서 한 번 더 거른다.
 DEDUP_SCHED_KINDS = CALENDAR_VISIBLE
 PRODID = "-//release-tracker//jo6417//KO"
+TAB = chr(9)
 
 
 def query_all(dbid, flt=None):
@@ -101,12 +102,90 @@ def day_after(d):
     return time.strftime("%Y%m%d", time.localtime(time.mktime(t) + 86400))
 
 
-def stamp_of(page, fallback):
-    """DTSTAMP는 노션의 마지막 수정 시각을 쓴다.
+def unfold(text):
+    """접힌 줄을 되돌린다. 이어지는 줄은 공백이나 탭으로 시작한다(RFC 5545)."""
+    out = []
+    for line in text.splitlines():
+        if line[:1] in (" ", TAB) and out:
+            out[-1] += line[1:]
+        else:
+            out.append(line)
+    return out
 
-    생성 시각을 쓰면 데이터가 그대로여도 파일이 매번 바뀐다.
-    짧은 주기로 돌릴 때 의미 없는 커밋이 하루 수백 개씩 쌓이므로,
-    내용이 같으면 파일도 바이트 단위로 같아야 한다.
+
+def _events(lines):
+    """UID -> (DTSTAMP 줄, 그 밖의 줄들). VEVENT 블록만 본다."""
+    found, block = {}, None
+    for line in lines:
+        if line == "BEGIN:VEVENT":
+            block = []
+        elif line == "END:VEVENT" and block is not None:
+            uid = next((l for l in block if l.startswith("UID:")), None)
+            stamp = next((l for l in block if l.startswith("DTSTAMP:")), None)
+            if uid:
+                found[uid] = (stamp,
+                              tuple(l for l in block
+                                    if not l.startswith("DTSTAMP:")))
+            block = None
+        elif block is not None:
+            block.append(line)
+    return found
+
+
+def keep_stamps(lines, path):
+    """캘린더에 보이는 값이 그대로인 이벤트는 이전 DTSTAMP를 그대로 둔다.
+
+    `stamp_of`가 주는 노션 수정시각은 캘린더와 상관없는 이유로도 움직인다.
+    추적기가 그 행에 `소개`나 `현재가`를 써넣기만 해도 갱신되므로, 출시일이
+    그대로인데 파일이 달라져 커밋과 Pages 재배포가 돈다 (2026-08-29 커밋은
+    변경분이 DTSTAMP 한 줄뿐이었다).
+
+    DTSTAMP의 뜻이 "이 이벤트 정보가 마지막으로 고쳐진 때"이므로, 보이는 값이
+    같으면 옛 값을 두는 쪽이 규격에도 맞다.
+
+    무엇이 바뀌었는지를 따로 표시해 두는 방법도 있지만, 노션에 쓰는 곳이
+    여섯 군데(track·sync_prices·sync_gamepass·sync_media·apply_candidates·
+    사람)라 한 곳만 빠뜨려도 캘린더가 조용히 멈춘다. 출력물끼리 대보면
+    빠뜨릴 곳이 없다.
+    """
+    try:
+        with io.open(path, encoding="utf-8", newline="") as f:
+            old = _events(unfold(f.read()))
+    except (IOError, OSError):
+        return lines               # 첫 실행 — 비교할 것이 없다
+    if not old:
+        return lines
+
+    out, block, kept = [], None, 0
+    for line in lines:
+        if line == "BEGIN:VEVENT":
+            block = [line]
+            continue
+        if block is None:
+            out.append(line)
+            continue
+        block.append(line)
+        if line != "END:VEVENT":
+            continue
+        inner = block[1:-1]
+        uid = next((l for l in inner if l.startswith("UID:")), None)
+        rest = tuple(l for l in inner if not l.startswith("DTSTAMP:"))
+        prev = old.get(uid)
+        if prev and prev[0] and prev[1] == rest:
+            block = [prev[0] if l.startswith("DTSTAMP:") else l for l in block]
+            kept += 1
+        out += block
+        block = None
+    if kept:
+        print(f"  변경 없는 이벤트 {kept}건은 이전 DTSTAMP를 유지합니다")
+    return out
+
+
+def stamp_of(page, fallback):
+    """DTSTAMP의 1차값 — 노션의 마지막 수정 시각.
+
+    생성 시각을 쓰면 데이터가 그대로여도 파일이 매번 바뀌므로 그것보다는 낫다.
+    다만 이 값도 캘린더와 무관하게 움직여서, 위 `keep_stamps`가 한 번 더 거른다.
     """
     t = page.get("last_edited_time") or ""
     if not t:
@@ -247,6 +326,10 @@ def main():
         n_sched += 1
 
     body.append("END:VCALENDAR")
+
+    # 캘린더에 보이는 값이 그대로인 이벤트는 DTSTAMP도 그대로 둔다.
+    # 이 한 줄이 없으면 출시일이 안 바뀐 날에도 커밋과 재배포가 돈다.
+    body = keep_stamps(body, out_path)
 
     folded = []
     for line in body:
