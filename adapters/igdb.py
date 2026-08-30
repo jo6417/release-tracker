@@ -182,14 +182,39 @@ def _precision(row):
     return "미정"
 
 
-def releases(ids):
-    """IGDB 게임 id → {"날짜": "YYYY-MM-DD", "정밀도": ...}
+# release_dates.status — 1 알파, 2 베타, 3 얼리액세스, 4 오프라인, 5 취소,
+# 6 정식 출시(1.0), 34 선행 플레이(예약구매·특정 에디션), 7 목록 삭제.
+# 값이 없는 줄도 많은데, 그건 대개 평범한 정식 출시다.
+_CANCELLED = 5
+_FULL = 6
 
-    지역·플랫폼마다 줄이 따로 있어서 가장 이른 것을 쓴다.
+
+def _pick(rows):
+    """한 게임의 출시일 줄들 중에서 쓸 것을 고른다.
+
+    지역·플랫폼마다 줄이 따로 있고, 그중에서는 가장 이른 것을 쓴다.
+
+    다만 얼리액세스·베타·선행 플레이는 "같은 것의 다른 지역판"이 아니라 아예
+    다른 사건이다. 그냥 가장 이른 것을 고르면 얼리액세스 시작일을 정식
+    출시일로 착각한다 -- Moonlighter 2는 얼리액세스가 2025-11-19, 정식이
+    2026-09-02인데 전자를 골라서 "287일 앞당겨졌다"고 잘못 알렸다(2026-08-30).
+    요즘 인디 게임은 대부분 이 경로라 그냥 두면 계속 재발한다.
+
+    그래서 정식 출시 줄이 하나라도 있으면 그중에서만 고른다. 아직 얼리액세스만
+    나온 게임은 비교할 정식 줄이 없으므로 예전처럼 가장 이른 것을 쓴다 --
+    그 편이 "미정"으로 비우는 것보다 쓸모 있다.
     """
-    out = {}
+    rows = [r for r in rows if r.get("status") != _CANCELLED]
+    full = [r for r in rows if r.get("status") in (_FULL, None)]
+    use = full or rows
+    return min(use, key=lambda r: r["date"]) if use else None
+
+
+def releases(ids):
+    """IGDB 게임 id → {"날짜": "YYYY-MM-DD", "정밀도": ...}"""
+    out, by_game = {}, {}
     ids = list(ids)
-    fields = "fields game,date,category,date_format,human;"
+    fields = "fields game,date,category,date_format,human,status;"
     for i in range(0, len(ids), 25):
         chunk = ids[i:i + 25]
         q = (f"{fields} where game = ({','.join(map(str, chunk))}) "
@@ -199,18 +224,19 @@ def releases(ids):
         except urllib.error.HTTPError as e:
             if e.code != 400:
                 raise
-            # 필드 하나가 없는 API 버전 — 최소한으로 다시 묻는다
+            # 필드 하나가 없는 API 버전 — 최소한으로 다시 묻는다.
+            # status가 빠지면 _pick은 예전처럼 가장 이른 것을 고른다.
             fields = "fields game,date,human;"
             q = (f"{fields} where game = ({','.join(map(str, chunk))}) "
                  f"& date != null; sort date asc; limit 500;")
             rows = query("release_dates", q)
         for r in rows:
-            gid = r.get("game")
-            if not gid or not r.get("date"):
-                continue
-            date = time.strftime("%Y-%m-%d", time.gmtime(r["date"]))
-            prev = out.get(gid)
-            if prev and prev["날짜"] <= date:
-                continue
-            out[gid] = {"날짜": date, "정밀도": _precision(r)}
+            if r.get("game") and r.get("date"):
+                by_game.setdefault(r["game"], []).append(r)
+
+    for gid, rows in by_game.items():
+        best = _pick(rows)
+        if best:
+            out[gid] = {"날짜": time.strftime("%Y-%m-%d", time.gmtime(best["date"])),
+                        "정밀도": _precision(best)}
     return out
