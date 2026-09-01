@@ -625,6 +625,15 @@
   ],
   "확인": "2026-09-01"
  },
+ "3ce857fe-7a80-81d8-ab5b-e0f8a4ff8fe6": {
+  "본것": [
+   "tmdb:6a43a2eab5d10e74a5d7b24d",
+   "tmdb:6a43a39d9b73571497f65674",
+   "tmdb:6a45d8a23d6c96d40f8a35de",
+   "tmdb:6a87979443734a8c20ebff78"
+  ],
+  "확인": "2026-09-01"
+ },
  "yt:UC6NvS8_TrfDcCK65KawCxZg": {
   "본것": [
    "yt:1xGiPUeevCM",
@@ -643,6 +652,6 @@
    "yt:qOsDHymg_Yo",
    "yt:sqe3j4Qch1Y"
   ],
-  "확인": "2026-08-31"
+  "확인": "2026-09-01"
  }
 }
