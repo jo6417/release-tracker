@@ -1,10 +1,13 @@
 name: 저녁 브리핑
 
 on:
-  schedule:
-    - cron: "0 10 * * *"      # 19:00 KST (UTC 10:00)
-                              # 아침 09:00 daily.yml은 '달라진 것'을,
-                              # 이쪽은 '지금 상태'를 보낸다
+  # ── 예약 중단 (2026-09-06) ───────────────────────────────────────────
+  # GitHub 예약이 2~8시간씩 밀려서 Cloudflare Worker(release-tracker-waker)가
+  # 정시에 workflow_dispatch 로 깨우는 방식으로 옮겼다. 아래 예약을 살려두면
+  # 외부 호출과 예약이 각각 돌아 알림 카드가 하루 두 배로 나간다.
+  # 되돌리려면 아래 두 줄 앞의 '# ' 만 지우면 된다.
+  # schedule:
+  #   - cron: "0 10 * * *"      # 19:00 KST (UTC 10:00)
   workflow_dispatch:          # 수동 실행 버튼
 
 permissions:
