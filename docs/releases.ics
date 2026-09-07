@@ -522,14 +522,4 @@ SUMMARY:🏁 황천의 츠가이 최종화
 DESCRIPTION:최종화
 URL:https://app.notion.com/p/3c0857fe7a8081d089d5e81387559d9e
 END:VEVENT
-BEGIN:VEVENT
-UID:test-pipeline-20260907@release-tracker
-DTSTAMP:20260907T004923Z
-DTSTART;VALUE=DATE:20260907
-DTEND;VALUE=DATE:20260908
-SUMMARY:🧪 파이프라인 점검용 임시 일정
-DESCRIPTION:토큰 교체 검증용으로 손으로 넣은 가짜 일정
- 입니다. 다음 갱신에서 저절로 사라지면 전 구간이 정
- 상입니다.
-END:VEVENT
 END:VCALENDAR
