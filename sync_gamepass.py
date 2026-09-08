@@ -250,13 +250,13 @@ def detail_new(meta, today):
 def detail_leave(row, when, today):
     left = (when - today).days
     lines = [f"게임 · {row['진행도'] or '미확인'} · 게임패스",
-             f"{when.strftime('%m월 %d일')}에 내려간다 · 남은 {left}일"]
+             f"{when.strftime('%m월 %d일')}에 내려갑니다 · 남은 {left}일"]
     if row["진행도"] in ("졸업", "중단"):
-        lines.append("이미 한 작품이다. 내려가도 상관없다")
+        lines.append("이미 플레이한 작품입니다. 내려가도 무방합니다")
     elif set(row["소유처"]) - {TAG}:
-        lines.append(f"{', '.join(sorted(set(row['소유처']) - {TAG}))}에도 있다. 내려가도 할 수 있다")
+        lines.append(f"{', '.join(sorted(set(row['소유처']) - {TAG}))}에도 있습니다. 내려가도 이용할 수 있습니다")
     else:
-        lines.append("지금 하거나, 놓치면 사야 한다")
+        lines.append("지금 이용하지 않으면 이후에는 구매하셔야 합니다")
     return lines
 
 
@@ -330,8 +330,8 @@ def main():
         summary.append(f"[게임패스 입점] {row['제목']}")
         details.append((f"[게임패스 입점] {row['제목']}", [
             f"게임 · {row['진행도'] or '미확인'}",
-            "오늘부터 게임패스로 이용할 수 있다",
-            "사지 않아도 된다" if row["진행도"] == "구매 대기" else "구독 중이라 바로 할 수 있다",
+            "오늘부터 게임패스로 이용할 수 있습니다",
+            "구매하지 않으셔도 됩니다" if row["진행도"] == "구매 대기" else "구독 중이라 바로 이용할 수 있습니다",
         ]))
 
     # 3) 등록 안 한 작품의 입점 - 목록 한 줄. 등록할 만한 게 보이면 사용자가 말한다

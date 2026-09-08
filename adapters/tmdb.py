@@ -60,19 +60,47 @@ def search(title, year=None):
     return out
 
 
+# TMDB release_dates.type - 1 시사회, 2 극장 제한 개봉, 3 극장 개봉,
+# 4 디지털 공개, 5 물리 매체, 6 TV 방영.
+_PREMIERE = 1
+# 앞선 단계가 있으면 그것을 쓴다. 극장 개봉이 없는 작품(넷플릭스 영화 등)은
+# 디지털 공개일이 곧 그 작품의 공개일이라 다음 단계로 내려간다.
+_KR_TIERS = ((3, 2), (4,), (6,))
+
+
 def kr_release(tmdb_id, media_type):
-    """국내 개봉일. 없으면 None."""
+    """국내 개봉일. 없으면 None.
+
+    시사회를 빼고 극장 -> 디지털 -> TV 순으로 고른다. 같은 단계에 줄이
+    여럿이면 그중 가장 이른 것을 쓴다(같은 사건의 중복 등록).
+
+    한 나라 안의 여러 줄을 무턱대고 min()으로 묶으면 안 된다. 중복 등록일
+    때만 맞는 규칙인데, 시사회와 정식 개봉은 중복이 아니라 다른 사건이다.
+    인턴은 시사회 2026-09-04, 정식 개봉 2026-09-16인데 앞의 것을 골라
+    "12일 앞당겨졌다"고 잘못 알렸다(2026-09-08). IGDB의 얼리액세스를
+    _pick()으로 걸러낸 것과 같은 문제이고, 이쪽만 처리가 빠져 있었다.
+
+    시사회밖에 없는 영화는 None이 되어 호출부가 해외 날짜로 내려간다.
+    국내 날짜를 틀리게 아는 것보다 해외 날짜인 줄 아는 편이 낫다.
+    """
     try:
-        if media_type == "movie":
-            d = _get(f"/movie/{tmdb_id}/release_dates")
-            for entry in d.get("results", []):
-                if entry.get("iso_3166_1") == "KR":
-                    dates = [x["release_date"][:10] for x in entry.get("release_dates", [])
-                             if x.get("release_date")]
-                    return min(dates) if dates else None
-        else:
+        if media_type != "movie":
             d = _get(f"/tv/{tmdb_id}", language="ko-KR")
             return d.get("first_air_date") or None
+        d = _get(f"/movie/{tmdb_id}/release_dates")
+        for entry in d.get("results", []):
+            if entry.get("iso_3166_1") != "KR":
+                continue
+            rows = [x for x in entry.get("release_dates", [])
+                    if x.get("release_date") and x.get("type") != _PREMIERE]
+            for tier in _KR_TIERS:
+                dates = [x["release_date"][:10] for x in rows
+                         if x.get("type") in tier]
+                if dates:
+                    return min(dates)
+            # 종류를 안 적어둔 줄만 남았으면 예전처럼 가장 이른 것을 쓴다.
+            dates = [x["release_date"][:10] for x in rows if x.get("type") is None]
+            return min(dates) if dates else None
     except urllib.error.HTTPError:
         return None
     return None

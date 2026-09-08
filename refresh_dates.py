@@ -234,7 +234,7 @@ def source_date(found):
 
 
 def report(delayed, today, dry):
-    """노션은 그대로 두고 알림만 보낸다.
+    """소스가 더 뒤의 날짜를 말한다 - 연기 감시.
 
     고쳐주지 않는 것이 핵심이다. 08-21에 소스가 사람이 정한 값을 덮어써
     손으로 찍은 6건이 날아갔다. 무엇이 달라졌는지만 알리고 반영은 사람이 정한다.
@@ -248,8 +248,8 @@ def report(delayed, today, dry):
         summary.append(f"{row['제목']} ({move})")
         details.append((f"[출시일 변경] {row['제목']}", [
             f"{row['종류']} · 노션 {row['날짜']} → 소스 {src} · {move}",
-            f"공개까지 {(new_d - d0).days}일",
-            "노션은 그대로 두었다. 반영하려면 채팅으로 알려줄 것",
+            f"공개까지 {(new_d - d0).days}일 남았습니다",
+            "노션은 변경하지 않았습니다. 반영하시려면 채팅으로 알려주세요",
         ]))
 
     if dry:
@@ -258,6 +258,44 @@ def report(delayed, today, dry):
     notify.send_card(f"출시일 변경 {len(delayed)}건",
                      summary=["[출시일 변경] " + ", ".join(summary)],
                      details=details, kinds=["날짜변경"], count=len(delayed))
+
+
+def report_checks(checks, today, dry):
+    """소스가 말하는 날짜가 이미 지났다 - 확인 필요.
+
+    "앞당겨졌다"고 단정하면 거짓말이 된다. 지나간 날로 앞당겨질 수는 없다.
+    2026-09-08에 인턴을 "12일 앞당김 / 공개까지 -4일"로 알렸는데, 실제로는
+    소스가 유료 시사회 날짜를 준 것이었다.
+
+    그렇다고 조용히 버리면 안 된다. 노션 날짜가 지나면 그 행은 감시에서
+    빠지므로, 정말로 공개를 놓친 경우 이 알림이 그것을 알 수 있는 유일한
+    신호다. 놓친 작품을 찾는 것이 이 시스템의 1순위 목적이다.
+
+    그래서 방향을 단정하는 대신 두 날짜를 나란히 놓고 확인을 요청한다.
+    한 번 보내고 마는 대신 확인될 때까지 매일 다시 보낸다 - 아침 카드
+    한 장을 못 보고 넘기면 다시는 묻지 않기 때문이다.
+    """
+    d0 = datetime.date.fromisoformat(today)
+    summary, details = [], []
+    for row, src, days in checks:
+        ago = (d0 - datetime.date.fromisoformat(src)).days
+        summary.append(f"{row['제목']} — 소스 기준 {src}")
+        details.append((f"[확인 필요] {row['제목']}", [
+            f"{row['종류']} · 노션 {row['날짜']} · 소스 {src} ({ago}일 전)",
+            "소스가 말하는 날짜가 이미 지났습니다. 시사회·선공개일 수도 있고,"
+            " 실제 공개를 놓친 것일 수도 있습니다",
+            "노션은 변경하지 않았습니다. 확인 후 반영하시려면 채팅으로 알려주세요",
+            f"확인될 때까지 매일 안내합니다 ({days}일째)",
+        ]))
+
+    if dry:
+        print("")
+        print("[확인 필요 예정] " + ", ".join(summary))
+        return
+    notify.send_card(f"확인 필요 {len(checks)}건",
+                     summary=["[확인 필요] " + ", ".join(summary)],
+                     details=details, kinds=["확인필요", "날짜변경"],
+                     count=len(checks))
 
 
 def main():
@@ -309,7 +347,7 @@ def main():
                 ok += 1
         print(f"  TMDB 응답 {ok}건 / 조회 {len(targets)}건")
 
-    changed, delayed = 0, []
+    changed, delayed, checks = 0, [], []
     state = load_state()
     sent = state.setdefault("알림", {})
 
@@ -323,13 +361,28 @@ def main():
             src = source_date(d)
             if not src or d["정밀도"] != "확정" or src == r["날짜"]:
                 continue
-            if abs((datetime.date.fromisoformat(src)
+            past = src < today
+            # 지나간 날짜는 차이의 크기와 무관하게 묻는다. 며칠짜리여도
+            # "이미 나왔다"는 뜻이라 지역 차이로 넘길 수 없다.
+            if not past and abs((datetime.date.fromisoformat(src)
                     - datetime.date.fromisoformat(r["날짜"])).days) < MIN_SHIFT:
                 continue
-            if sent.get(r["id"]) == src:
+            prev = sent.get(r["id"])
+            if isinstance(prev, str):      # 옛 형식 - 날짜만 적혀 있다
+                prev = {"날짜": prev, "처음": today}
+            same = bool(prev) and prev.get("날짜") == src
+            if past:
+                # 확인될 때까지 매일 다시 알린다. 카드 한 장을 놓치면
+                # 다시 묻지 않으므로 한 번만 보내서는 안 된다.
+                first = prev["처음"] if same else today
+                checks.append((r, src, (datetime.date.fromisoformat(today)
+                                        - datetime.date.fromisoformat(first)).days + 1))
+                sent[r["id"]] = {"날짜": src, "처음": first}
+                continue
+            if same:
                 continue          # 같은 연기를 매일 다시 알리지 않는다
             delayed.append((r, src))
-            sent[r["id"]] = src
+            sent[r["id"]] = {"날짜": src, "처음": today}
             continue
 
         new = plan(r, d)
@@ -342,7 +395,7 @@ def main():
             patch(r["id"], new)
             time.sleep(0.34)
 
-    print(f"\n{'갱신 예정' if a.dry else '갱신'} {changed}건 / 날짜 불일치 {len(delayed)}건")
+    print(f"\n{'갱신 예정' if a.dry else '갱신'} {changed}건 / 연기 {len(delayed)}건 / 확인 필요 {len(checks)}건")
     if changed and not a.dry:
         print("변화는 track.py가 감지해 알림 카드로 내보낸다")
 
@@ -351,6 +404,8 @@ def main():
     state["알림"] = {k: v for k, v in sent.items() if k in alive}
     if delayed:
         report(delayed, today, a.dry)
+    if checks:
+        report_checks(checks, today, a.dry)
     if not a.dry:
         save_state(state)
 

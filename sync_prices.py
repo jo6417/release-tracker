@@ -146,8 +146,8 @@ def main():
             if low:
                 gap = d["현재최저가"] - low
                 lines.append(f"역대최저 {low:,.0f}원"
-                             + (" — 지금이 역대최저" if gap <= 0
-                                else f" (지금은 {gap:,.0f}원 비쌈)"))
+                             + (" — 현재가 역대 최저가입니다" if gap <= 0
+                                else f" (현재 {gap:,.0f}원 비쌉니다)"))
             lines.append(f"→ {stage}" + (f" · {'/'.join(plats)}" if plats else ""))
             alerts.append((title,
                            f"{title} {d['할인율']}% {d['현재최저가']:,.0f}원",
