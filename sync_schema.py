@@ -7,6 +7,7 @@ config에 없는 속성(관계 등)은 건드리지 않는다.
 사용법:
     python sync_schema.py            # 작품 DB
     python sync_schema.py --schedule # 일정 DB
+    python sync_schema.py --purchase # 구매DB
 """
 import argparse
 import io
@@ -15,7 +16,7 @@ import sys
 import urllib.error
 import urllib.request
 
-from config import API, SCHEDULE_SCHEMA, WORK_SCHEMA, headers
+from config import API, PURCHASE_SCHEMA, SCHEDULE_SCHEMA, WORK_SCHEMA, headers
 
 IDS_FILE = "db_ids.json"
 
@@ -23,12 +24,17 @@ IDS_FILE = "db_ids.json"
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--schedule", action="store_true", help="일정 DB에 반영")
+    ap.add_argument("--purchase", action="store_true", help="구매DB에 반영")
     a = ap.parse_args()
 
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
-    dbid = ids["schedule_db" if a.schedule else "work_db"]
-    schema = SCHEDULE_SCHEMA if a.schedule else WORK_SCHEMA
+    if a.purchase:
+        dbid, schema = ids["purchase_db"], PURCHASE_SCHEMA
+    elif a.schedule:
+        dbid, schema = ids["schedule_db"], SCHEDULE_SCHEMA
+    else:
+        dbid, schema = ids["work_db"], WORK_SCHEMA
 
     req = urllib.request.Request(f"{API}/databases/{dbid}",
                                  data=json.dumps({"properties": schema}).encode(),

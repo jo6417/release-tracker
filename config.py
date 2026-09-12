@@ -249,3 +249,43 @@ SCHEDULE_SCHEMA = {
 
 # 캘린더 기본 노출 대상
 CALENDAR_VISIBLE = {"정식출시", "극장개봉", "국내개봉", "OTT공개", "시즌시작"}
+
+# ─────────────────────────────────────────────
+# 구매DB 스키마 (기존 살림 DB에 구매·배송 추적 속성만 얹는다)
+# ─────────────────────────────────────────────
+# 상태·카테고리는 기존 옵션을 전부 그대로 나열한다. 여기 하나라도 빠뜨리면
+# sync_schema.py가 그 옵션을 지워서 이미 있는 16건 중 일부가 값을 잃는다.
+PURCHASE_SCHEMA = {
+    "상태": {"select": {"options": [
+        {"name": "고민 중", "color": "gray"},
+        {"name": "구매 필요", "color": "orange"},
+        {"name": "조사 중", "color": "yellow"},
+        # 결제는 끝났지만 물건이 아직 세상에 없는 구간(예약구매). 발매일까지
+        # 기다리는 게 정상이라 '주문·배송 중'과 알림 기준이 다르다.
+        {"name": "예약주문", "color": "blue"},
+        {"name": "주문·배송 중", "color": "blue"},
+        {"name": "구매 완료", "color": "green"},
+        {"name": "보류·취소", "color": "red"},
+    ]}},
+    "카테고리": {"select": {"options": [
+        {"name": "생활용품", "color": "blue"},
+        {"name": "다이소", "color": "orange"},
+        {"name": "음식", "color": "green"},
+        {"name": "위시리스트", "color": "purple"},
+        {"name": "게임·하드웨어", "color": "pink"},
+    ]}},
+    "구입처": {"select": {"options": [
+        {"name": "사줘", "color": "red"},
+        {"name": "아마존재팬", "color": "orange"},
+        {"name": "쿠팡", "color": "blue"},
+        {"name": "알리", "color": "yellow"},
+        {"name": "네이버", "color": "green"},
+        {"name": "닌텐도스토어", "color": "gray"},
+        {"name": "스팀", "color": "brown"},
+        {"name": "오프라인", "color": "default"},
+    ]}},
+    "결제액": {"number": {"format": "won"}},
+    # 예약구매는 발매일, 직구는 예상 도착일. 배송 알림의 근거가 되는 값이다.
+    "도착예정": {"date": {}},
+    "주문번호": {"rich_text": {}},
+}
