@@ -39,6 +39,20 @@ GIT_TERMINAL_PROMPT=0 gh workflow run calendar.yml --repo jo6417/release-tracker
 gh run list --workflow=calendar.yml --limit 1 --repo jo6417/release-tracker
 ```
 
+## 확인 큐 번호(q1, q2…)로 답하면 그 자리에서 처리하라
+
+아침 카드의 `[확인 필요]`는 `refresh_dates.py` 등이 "노션에 반영할까요?"
+싶은 것을 쌓아두는 자리다. 답이 없으면 다음 날도 그대로 다시 뜬다 —
+`candidates.py`의 c번호와 같은 구조다.
+
+- "q1 반영해줘" / "q1, q2 반영" -> `python answer_confirm.py 반영 q1 q2`
+- "q3 무시" / "q3 아니야"        -> `python answer_confirm.py 무시 q3`
+- "q4 나중에" / "q4 일단 보류"   -> `python answer_confirm.py 나중에 q4` (7일 뒤 다시 물어봄)
+- 지금 뭐가 걸려 있는지 물으면    -> `python answer_confirm.py --목록`
+
+`반영`은 큐에 저장된 패치를 그대로 노션에 적용한다 — 노션 쓰기가 생기므로
+**끝나고 캘린더를 밀어야 한다**(위 절 참고, work_db를 건드리는 경우).
+
 ## 후보 번호로 답하면 그 자리에서 처리하라
 
 저녁 브리핑 카드에는 `등록 후보`가 최대 두 건 올라간다. 각 줄 앞에 `c17`

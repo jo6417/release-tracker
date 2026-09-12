@@ -158,6 +158,12 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python track.py
 
+      # refresh_dates.py 등이 confirm_queue.json에 쌓아둔 "반영할까요?"를
+      # 하루 한 장으로 알린다. 답이 없으면 다음날도 그대로 다시 뜬다.
+      - name: 확인 큐 알림
+        run: python notify_confirm_queue.py
+        continue-on-error: true
+
       # 매월 1일에만 실제로 보낸다 (heartbeat.py가 날짜를 스스로 판단)
       - name: 월 1회 생존 신호
         env:
@@ -184,7 +190,12 @@ jobs:
           git add snapshots/ media_state.json youtube_watch.json refresh_state.json candidates.json
           git add igdb_match.json tmdb_match.json game_title_en.json steam_map.json
           git add gamepass_state.json gamepass_map.json
-          git add hardware_news_state.json sweettracker_key.json
+          git add hardware_news_state.json
+          # 처음 생기기 전까지는 파일이 없다 — 없으면 git add가 실패해서
+          # bash -e 때문에 이 스텝 전체가 죽는다. 있을 때만 더한다.
+          for f in sweettracker_key.json confirm_queue.json; do
+            [ -f "$f" ] && git add "$f"
+          done
           if git diff --staged --quiet; then
             echo "스냅샷 변경 없음"
             exit 0

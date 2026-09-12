@@ -40,6 +40,7 @@ import time
 import urllib.error
 import urllib.request
 
+import confirm_queue
 import notify
 from adapters import igdb, tmdb
 from config import API, headers
@@ -237,27 +238,40 @@ def report(delayed, today, dry):
     """소스가 더 뒤의 날짜를 말한다 - 연기 감시.
 
     고쳐주지 않는 것이 핵심이다. 08-21에 소스가 사람이 정한 값을 덮어써
-    손으로 찍은 6건이 날아갔다. 무엇이 달라졌는지만 알리고 반영은 사람이 정한다.
+    손으로 찍은 6건이 날아갔다. 무엇이 달라졌는지만 확인 큐에 넣고,
+    반영은 사람이 채팅으로 "q번호 반영" 이라고 답할 때까지 기다린다.
+
+    예전엔 여기서 바로 notify.send_card를 불러 그날 한 번만 알렸다.
+    그러면 카드를 못 보고 지나친 날 그 사실이 영영 사라졌다 — 확인 큐로
+    옮긴 이유가 이거다. 큐에만 넣어두면 `notify_confirm_queue.py`가
+    답할 때까지 매일 다시 알린다.
     """
-    d0 = datetime.date.fromisoformat(today)
-    summary, details = [], []
+    state = confirm_queue.load()
+    added = []
     for row, src in delayed:
-        new_d = datetime.date.fromisoformat(src)
-        gap = (new_d - datetime.date.fromisoformat(row["날짜"])).days
+        gap = (datetime.date.fromisoformat(src)
+              - datetime.date.fromisoformat(row["날짜"])).days
         move = f"{abs(gap)}일 {'연기' if gap > 0 else '앞당김'}"
-        summary.append(f"{row['제목']} ({move})")
-        details.append((f"[출시일 변경] {row['제목']}", [
-            f"{row['종류']} · 노션 {row['날짜']} → 소스 {src} · {move}",
-            f"공개까지 {(new_d - d0).days}일 남았습니다",
-            "노션은 변경하지 않았습니다. 반영하시려면 채팅으로 알려주세요",
-        ]))
+        item = confirm_queue.add(state, {
+            "키": f"{row['id']}:{src}",
+            "질문": f"{row['제목']} 출시일 변경 — 반영할까요?",
+            "근거": [f"{row['종류']} · 노션 {row['날짜']} → 소스 {src} · {move}"],
+            "db": "work_db",
+            "페이지ID": row["id"],
+            "패치": {"출시·개봉일": {"date": {"start": src}},
+                    "마지막확인": {"date": {"start": today}}},
+        }, today)
+        if item:
+            added.append(item)
 
     if dry:
-        print("\n" + "[알림 예정] " + ", ".join(summary))
+        print("\n" + "[확인 큐에 넣을 예정] " +
+              ", ".join(c["질문"] for c in added or
+                       [{"질문": f"{r['제목']} ({s})"} for r, s in delayed]))
         return
-    notify.send_card(f"출시일 변경 {len(delayed)}건",
-                     summary=["[출시일 변경] " + ", ".join(summary)],
-                     details=details, kinds=["날짜변경"], count=len(delayed))
+    if added:
+        confirm_queue.save(state)
+        print(f"확인 큐에 {len(added)}건 추가 (알림은 notify_confirm_queue.py가 낸다)")
 
 
 def report_checks(checks, today, dry):
