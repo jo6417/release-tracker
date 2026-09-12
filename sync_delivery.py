@@ -10,10 +10,12 @@
 같은 앱(스마트택배)의 한계이기도 하다. `송장번호`·`택배사`가 채워진 뒤부터만
 동작한다.
 
-**프리 등급은 월 100건, 키는 1개월 만료.** 그래서 대상을 좁힌다 —
-`상태`가 `주문·배송 중`인 것만 매일 조회하고(`예약주문`은 아직 물건이
-없으니 조회할 이유가 없다), `구매 완료`가 되는 즉시 뺀다. 키 만료
-임박(발급 후 25일)도 여기서 감지해 알린다.
+**송장번호가 있다고 자동으로 조회하지 않는다.** 프리 등급이 월 100건
+한도라(2026-09-12), 동시에 여러 개를 사면 하루 한 번씩만 돌아도 금방
+바닥난다. 그래서 `배송추적` 체크박스가 켜진 것만 본다 — 채팅으로
+"추적해줘"라고 답한 물건만이다. `구매 완료`로 닫으면서 체크도 같이
+꺼서 다음부터는 조회 대상에서 빠지게 한다. 키 만료 임박(발급 후
+25일)도 여기서 감지해 알린다.
 
 사용법:
     python sync_delivery.py --dry
@@ -112,8 +114,10 @@ def main():
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
 
+    # 송장번호가 있다고 자동으로 조회하지 않는다. `배송추적`을 채팅으로
+    # 켜달라고 답한 것만 본다 — 프리 등급 월 100건을 아무 물건에나 안 쓰려고.
     rows = query_all(ids["purchase_db"],
-                     {"property": "상태", "select": {"equals": "주문·배송 중"}})
+                     {"property": "배송추적", "checkbox": {"equals": True}})
     targets = []
     for p in rows:
         pr = p["properties"]
@@ -122,7 +126,7 @@ def main():
         if invoice and courier:
             targets.append((p, txt(pr["이름"]), courier, invoice))
 
-    print(f"배송 중 {len(targets)}건 (송장 등록된 것만)")
+    print(f"배송 추적 대상 {len(targets)}건 (배송추적 켜짐 + 송장 등록된 것만)")
 
     lines, done = [], []
     for p, name, courier, invoice in targets:
@@ -152,8 +156,11 @@ def main():
 
     if not a.dry:
         for pid, name, when in done:
+            # 완료되면 추적도 꺼서 다음 실행부터 호출 대상에서 빠지게 한다
+            # (안 끄면 배송추적 체크가 남아 있는 한 매번 조회해 API를 낭비한다).
             patch_page(pid, {"상태": {"select": {"name": "구매 완료"}},
-                             "구매일": {"date": {"start": when}}})
+                             "구매일": {"date": {"start": when}},
+                             "배송추적": {"checkbox": False}})
             print(f"자동 완료 처리: {name} ({when})")
 
     key_age = check_key_age()

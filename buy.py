@@ -190,9 +190,13 @@ def cmd_update(ids, a):
         props["택배사"] = {"rich_text": [{"type": "text", "text": {"content": code}}]}
         # 송장번호가 생겼다는 건 국내 배송이 시작됐다는 뜻 — 아직 예약주문
         # 그대로면 여기서 한 단계 올려준다. 사람이 이미 다른 값으로
-        # 바꿔뒀으면 손대지 않는다.
+        # 바꿔뒀으면 손대지 않는다. 실제 API 조회 여부는 --추적과 별개다.
         if not a.상태 and state == "예약주문":
             props["상태"] = {"select": {"name": "주문·배송 중"}}
+    if a.추적:
+        props["배송추적"] = {"checkbox": True}
+    if a.추적중지:
+        props["배송추적"] = {"checkbox": False}
 
     if not props:
         print("바꿀 값이 없습니다 (--상태·--도착예정 등 하나 이상 주세요)")
@@ -260,6 +264,8 @@ def main():
     p3.add_argument("--메모")
     p3.add_argument("--송장번호")
     p3.add_argument("--택배사", help="회사명(CJ대한통운 등) 또는 코드")
+    p3.add_argument("--추적", action="store_true", help="스마트택배 자동 조회 켜기")
+    p3.add_argument("--추적중지", action="store_true", help="스마트택배 자동 조회 끄기")
 
     a = ap.parse_args()
 
