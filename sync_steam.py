@@ -23,6 +23,8 @@ import time
 import urllib.error
 import urllib.request
 
+import notify
+
 from config import API, headers
 from adapters import steam
 
@@ -144,6 +146,21 @@ def main():
     print(f"\n갱신 {done['갱신']}건 (진행도 변경 {done['보유함']}건: 미확인 → 보유함)")
     if done["누락"]:
         print("매칭 실패:", done["누락"])
+        # steam_map.json은 제목으로 작품 DB를 찾는다 — 그 제목을 노션에서
+        # 고치면 다음 실행부터 조용히 이 목록에 떨어진다. 콘솔에만 찍고
+        # 끝나면 아무도 안 본다(아무도 Actions 로그를 매일 안 읽는다).
+        # 아침 카드에 실어야 사람이 알아채고 steam_map.json을 고친다.
+        if not a.dry:
+            notify.send_card(
+                f"스팀 매칭 실패 {len(done['누락'])}건",
+                summary=["[스팀 매칭 실패] " + ", ".join(done["누락"])],
+                details=[("[스팀 매칭 실패]",
+                          [f"steam_map.json의 '{t}'을(를) 작품 DB에서 못 찾았습니다"
+                           for t in done["누락"]] +
+                          ["→ 작품 제목을 바꾸셨다면 steam_map.json도 같이 고쳐주세요"])],
+                kinds=["스팀"], count=len(done["누락"]))
+            if not notify.spooling():
+                print("알림 카드 1장 발송 완료")
     if a.dry:
         print("--dry 모드: 노션 미변경")
 
