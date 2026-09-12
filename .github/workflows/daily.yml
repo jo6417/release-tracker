@@ -144,6 +144,15 @@ jobs:
         run: python sync_hardware_news.py
         continue-on-error: true
 
+      # 국내 택배로 넘어온 주문만 매일 확인. 도착하면 자동으로 구매 완료
+      # 처리해 사람이 "받았어"라고 말할 필요를 없앤다.
+      - name: 배송 추적 (스마트택배)
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          SWEETTRACKER_API_KEY: ${{ secrets.SWEETTRACKER_API_KEY }}
+        run: python sync_delivery.py
+        continue-on-error: true
+
       - name: 변화 감지 및 알림
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -175,7 +184,7 @@ jobs:
           git add snapshots/ media_state.json youtube_watch.json refresh_state.json candidates.json
           git add igdb_match.json tmdb_match.json game_title_en.json steam_map.json
           git add gamepass_state.json gamepass_map.json
-          git add hardware_news_state.json
+          git add hardware_news_state.json sweettracker_key.json
           if git diff --staged --quiet; then
             echo "스냅샷 변경 없음"
             exit 0

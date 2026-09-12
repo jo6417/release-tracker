@@ -25,7 +25,7 @@ import time
 import urllib.error
 import urllib.request
 
-from config import API, headers
+from config import API, COURIER_CODE, headers
 
 IDS_FILE = "db_ids.json"
 DONE_STATES = {"구매 완료", "보류·취소"}
@@ -183,6 +183,16 @@ def cmd_update(ids, a):
         props["도착예정"] = {"date": {"start": a.도착예정}}
     if a.메모:
         props["메모"] = {"rich_text": [{"type": "text", "text": {"content": a.메모}}]}
+    if a.송장번호:
+        props["송장번호"] = {"rich_text": [{"type": "text", "text": {"content": a.송장번호}}]}
+    if a.택배사:
+        code = COURIER_CODE.get(a.택배사, a.택배사)
+        props["택배사"] = {"rich_text": [{"type": "text", "text": {"content": code}}]}
+        # 송장번호가 생겼다는 건 국내 배송이 시작됐다는 뜻 — 아직 예약주문
+        # 그대로면 여기서 한 단계 올려준다. 사람이 이미 다른 값으로
+        # 바꿔뒀으면 손대지 않는다.
+        if not a.상태 and state == "예약주문":
+            props["상태"] = {"select": {"name": "주문·배송 중"}}
 
     if not props:
         print("바꿀 값이 없습니다 (--상태·--도착예정 등 하나 이상 주세요)")
@@ -248,6 +258,8 @@ def main():
     p3.add_argument("--주문번호")
     p3.add_argument("--도착예정")
     p3.add_argument("--메모")
+    p3.add_argument("--송장번호")
+    p3.add_argument("--택배사", help="회사명(CJ대한통운 등) 또는 코드")
 
     a = ap.parse_args()
 
