@@ -37,6 +37,34 @@ jobs:
         run: python sync_media.py
         continue-on-error: true
 
+      # 같은 이유로 게임쇼·하드웨어 뉴스도 저녁에 한 번 더 본다 — 낮에
+      # 다이렉트가 뜨거나 기사가 나오면 다음날 아침까지 안 기다리게.
+      #
+      # 스마트택배(sync_delivery.py)는 뺐다. 프리 등급이 월 100건 한도라
+      # 하루 두 번 돌리면 소비 속도가 배로 늘어 키가 월말 전에 바닥난다.
+      - name: 게임쇼 관심작 감지
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python sync_events.py
+        continue-on-error: true
+
+      - name: 게임쇼 사전 예고 감지
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python sync_upcoming_shows.py
+        continue-on-error: true
+
+      - name: 하드웨어·메이저 게임쇼 뉴스 감지
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NAVER_API_KEY_ID: ${{ secrets.NAVER_API_KEY_ID }}
+          NAVER_API_KEY: ${{ secrets.NAVER_API_KEY }}
+        run: python sync_hardware_news.py
+        continue-on-error: true
+
       # 브리핑 자체는 노션을 읽기만 한다
       - name: 저녁 브리핑
         env:
@@ -56,6 +84,7 @@ jobs:
           # candidates.json에는 어떤 후보를 몇 번 보여줬는지가 들어 있다.
           # 커밋하지 않으면 러너가 매번 빈 상태로 시작해 같은 둘만 매일 올라온다.
           git add media_state.json youtube_watch.json candidates.json
+          [ -f hardware_news_state.json ] && git add hardware_news_state.json
           if git diff --staged --quiet; then
             echo "영상 기록 변경 없음"
             exit 0
