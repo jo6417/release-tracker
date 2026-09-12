@@ -11,6 +11,7 @@ GitHub Pages로 올리면 구글·네이버·폰 기본 캘린더에서 구독�
     python make_ics.py
 """
 import argparse
+import datetime
 import io
 import json
 import time
@@ -193,14 +194,35 @@ def stamp_of(page, fallback):
     return t.replace("-", "").replace(":", "")[:15] + "Z"
 
 
+def _utc_stamp(iso, plus_hours=0):
+    """Notion의 오프셋 포함 ISO 시각을 iCalendar UTC 스탬프로 바꾼다.
+
+    TZID(Asia/Seoul)를 그대로 쓰려면 VTIMEZONE 블록을 캘린더 안에 정의해야
+    하고, 그걸 안 하면 일부 캘린더 앱이 그 이벤트를 조용히 무시한다. UTC로
+    바꿔서 실으면 그 블록이 필요 없다 — 폰·구글·네이버 전부 알아서 KST로
+    보여준다.
+    """
+    dt = datetime.datetime.fromisoformat(iso)
+    if plus_hours:
+        dt += datetime.timedelta(hours=plus_hours)
+    return dt.astimezone(datetime.timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+
+
 def event(uid, start, end, summary, desc, url, stamp):
     lines = ["BEGIN:VEVENT",
              f"UID:{uid}@release-tracker",
-             f"DTSTAMP:{stamp}",
-             f"DTSTART;VALUE=DATE:{start.replace('-', '')}",
-             # 종료일은 하루 뒤 (iCalendar 종일 일정은 끝을 배타적으로 본다)
-             f"DTEND;VALUE=DATE:{day_after(end or start)}",
-             f"SUMMARY:{esc(summary)}"]
+             f"DTSTAMP:{stamp}"]
+    if "T" in start:
+        # 시각이 있는 일정 (게임쇼 등). 종일이 아니라 특정 시각 하나를
+        # 가리키므로 DATE가 아니라 DATE-TIME으로 낸다. 끝이 없으면 1시간짜리로
+        # 둔다 — 발표 방송 시간을 몰라도 "몇 시에 시작하는지"가 핵심 정보다.
+        lines.append(f"DTSTART:{_utc_stamp(start)}")
+        lines.append(f"DTEND:{_utc_stamp(end) if end else _utc_stamp(start, plus_hours=1)}")
+    else:
+        lines.append(f"DTSTART;VALUE=DATE:{start.replace('-', '')}")
+        # 종료일은 하루 뒤 (iCalendar 종일 일정은 끝을 배타적으로 본다)
+        lines.append(f"DTEND;VALUE=DATE:{day_after(end or start)}")
+    lines.append(f"SUMMARY:{esc(summary)}")
     if desc:
         lines.append(f"DESCRIPTION:{esc(desc)}")
     if url:
@@ -212,21 +234,28 @@ def event(uid, start, end, summary, desc, url, stamp):
 # 캘린더에서는 한 줄에 여러 일정이 겹쳐 보이므로 앞 글자만으로 뭔지 알아야 한다.
 # `[게임]` 같은 말머리는 자리를 많이 먹어 제목이 잘렸다. 아이콘 한 글자로 바꾼다.
 #
-# **아이콘은 5개까지만 늘린다.** 종류마다 다른 그림을 주면 20개가 되고, 그러면
-# 아무도 외우지 못해서 아이콘이 그냥 앞에 붙은 장식이 된다. 매체 넷 + 완결 하나면
-# 격자에서 구별하기에 충분하다. 나머지 정보(예약구매인지 DLC인지)는 일정 이름과
-# DESCRIPTION에 이미 글자로 들어 있다.
+# **아이콘은 6개까지만 늘린다.** 종류마다 다른 그림을 주면 20개가 되고, 그러면
+# 아무도 외우지 못해서 아이콘이 그냥 앞에 붙은 장식이 된다. 매체 넷 + 완결 하나 +
+# 물건 하나면 격자에서 구별하기에 충분하다. 나머지 정보(예약구매인지 DLC인지)는
+# 일정 이름과 DESCRIPTION에 이미 글자로 들어 있다.
 #
 # 고를 때 **주 색깔이 서로 겹치지 않는지**를 본다. 격자에서 14px로 줄면 그림이
 # 아니라 색덩어리로 읽히기 때문이다. 🎬·📺·🎮는 셋 다 어두운 회색이라 구별이
 # 안 됐고, 그래서 영화를 🍿(빨강), 만화를 📗(초록)로 바꿨다.
-#   🎮 회색 · 🍿 빨강 · 📺 갈색 · 📗 초록 · 🏁 흑백
+#   🎮 회색 · 🍿 빨강 · 📺 갈색 · 📗 초록 · 🏁 흑백 · 🎁 노랑+빨강 리본
+#
+# 🎁는 🍿와 빨강이 겹치지만 리본 때문에 덩어리 모양이 달라 붙어 있어도 갈린다.
+# 굿즈·하드웨어는 한 달에 한두 줄이라 겹쳐 보일 일 자체가 드물다.
 WORK_ICON = {
     "게임": "🎮",
     "영화": "🍿",
     "시리즈": "📺",
     "만화": "📗",
     "도서": "📗",      # `종류`에 아직 없다. 나중에 추가되면 그대로 붙는다
+    # 아미보·굿즈·본체·주변기기. 매체가 아니라 "사는 물건"이라 선물상자로 묶는다
+    # (2026-09-09 사용자 지시). 폴백 📌로 두면 무엇인지가 안 읽혔다
+    "하드웨어": "🎁",
+    "굿즈": "🎁",      # `종류`에 아직 없다. 나중에 갈라지면 같은 그림을 쓴다
 }
 # 애니메이션 체크는 아이콘으로 나누지 않는다. 서양 애니·애니 극장판까지 묶는
 # 축이라 흔히 쓰는 🍥가 절반은 틀린 그림이 된다.
