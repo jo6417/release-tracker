@@ -125,6 +125,15 @@ jobs:
         run: python sync_events.py
         continue-on-error: true
 
+      # 닌텐도 다이렉트·State of Play·Xbox 쇼케이스는 IGDB에 잡히기 전에
+      # 유튜브 "예정된 라이브"로 먼저 안다 — 방송 며칠 전에 미리 알린다.
+      - name: 게임쇼 사전 예고 감지
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python sync_upcoming_shows.py
+        continue-on-error: true
+
       - name: 변화 감지 및 알림
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
