@@ -134,6 +134,16 @@ jobs:
         run: python sync_upcoming_shows.py
         continue-on-error: true
 
+      # 하드웨어(스위치2 젤다 에디션 등)는 IGDB·TMDB 어디에도 없어 출시일을
+      # 자동 확인할 수단이 없다. 뉴스로 대신 감지만 하고 반영은 사람이 한다.
+      - name: 하드웨어·메이저 게임쇼 뉴스 감지
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          NAVER_API_KEY_ID: ${{ secrets.NAVER_API_KEY_ID }}
+          NAVER_API_KEY: ${{ secrets.NAVER_API_KEY }}
+        run: python sync_hardware_news.py
+        continue-on-error: true
+
       - name: 변화 감지 및 알림
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -165,6 +175,7 @@ jobs:
           git add snapshots/ media_state.json youtube_watch.json refresh_state.json candidates.json
           git add igdb_match.json tmdb_match.json game_title_en.json steam_map.json
           git add gamepass_state.json gamepass_map.json
+          git add hardware_news_state.json
           if git diff --staged --quiet; then
             echo "스냅샷 변경 없음"
             exit 0
