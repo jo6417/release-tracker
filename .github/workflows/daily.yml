@@ -114,6 +114,17 @@ jobs:
         run: python sync_gamepass.py
         continue-on-error: true
 
+      # 게임쇼(다이렉트·State of Play 등)에서 공개된 관심작 감지. IGDB가
+      # 사후 등록형이라 지난 며칠치만 보면 되고, 매일 돌아도 겹치는 걸
+      # 외부ID로 걸러 중복 생성하지 않는다.
+      - name: 게임쇼 관심작 감지
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python sync_events.py
+        continue-on-error: true
+
       - name: 변화 감지 및 알림
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}

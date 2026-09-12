@@ -39,6 +39,7 @@ import urllib.error
 import urllib.request
 
 import config  # noqa: F401  (.env 로드)
+import notify
 from adapters import igdb
 from config import API, headers
 
@@ -101,7 +102,8 @@ def txt(prop):
 
 
 def work_igdb_map(work_db):
-    """작품 DB의 igdb 외부ID -> page id. 제목 매칭은 쓰지 않는다."""
+    """작품 DB의 igdb 외부ID -> {page id, 제목}. 제목 매칭은 쓰지 않는다 —
+    relation을 걸 때는 id만 쓰고, 제목은 알림 카드에 표시할 때만 쓴다."""
     out = {}
     for p in query_all(work_db):
         kind = p["properties"]["종류"]["select"]
@@ -109,7 +111,7 @@ def work_igdb_map(work_db):
             continue
         m = re.search(r"igdb:(\d+)", txt(p["properties"]["외부ID"]))
         if m:
-            out[int(m.group(1))] = p["id"]
+            out[int(m.group(1))] = {"id": p["id"], "제목": txt(p["properties"]["제목"])}
     return out
 
 
@@ -185,6 +187,7 @@ def main():
     names = fetch_game_names(unmatched_ids) if unmatched_ids else {}
 
     n_created = n_linked = 0
+    alerts = []  # 알림 카드용: (쇼 이름, 관심작 제목 목록)
     for e, matched in targets:
         when = kst_iso(e["start_time"])
         props = {
@@ -198,8 +201,9 @@ def main():
         }
         if e.get("live_stream_url"):
             props["스트림"] = {"url": e["live_stream_url"]}
+        matched_titles = [igdb_map[gid]["제목"] for gid in matched]
         if matched:
-            props["작품"] = {"relation": [{"id": igdb_map[gid]} for gid in matched]}
+            props["작품"] = {"relation": [{"id": igdb_map[gid]["id"]} for gid in matched]}
             n_linked += len(matched)
 
         cand_ids = [gid for gid in (e.get("games") or []) if gid not in matched]
@@ -219,9 +223,26 @@ def main():
             create_page(ids["schedule_db"], props)
             time.sleep(0.34)
         n_created += 1
+        alerts.append((e["name"], matched_titles))
 
     print(f"\n{'기록 예정' if a.dry else '기록'} {n_created}건 "
           f"(관심작 연결 {n_linked}건)")
+
+    # 노션에 쓰기만 하고 알림이 없으면 캘린더를 직접 열어보기 전엔 아무도
+    # 모른다. 관심작이 있는 쇼만 카드에 올린다 — 없는 건 이미 조용히
+    # 지나가는 게 맞다(놓쳐도 큰 쇼는 다시 걸린다는 게 이 스크립트의 전제).
+    reportable = [(name, titles) for name, titles in alerts if titles]
+    if reportable and not a.dry:
+        summary = ["[게임쇼] " + ", ".join(name for name, _ in reportable)]
+        details = [(f"[게임쇼] {name}", [f"· {t}" for t in titles])
+                   for name, titles in reportable]
+        notify.send_card(
+            f"게임쇼 관심작 발견 {sum(len(t) for _, t in reportable)}건",
+            summary=summary, details=details, kinds=["게임쇼"],
+            count=len(reportable))
+        if not notify.spooling():
+            print("알림 카드 1장 발송 완료")
+
     if a.dry:
         print("--dry 모드: 노션 미변경")
 
