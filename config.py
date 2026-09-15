@@ -202,6 +202,10 @@ WORK_SCHEMA = {
 SCHEDULE_SCHEMA = {
     "이름": {"title": {}},
     "종류": {"select": {"options": [
+        # 행사 — 게임쇼 그 자체(TGS·gamescom·TGA 등). "발표"는 그 안에서
+        # 나오는 개별 신작 소식이라 다른 개념이다. 2026-09-15 사용자가
+        # 노션에서 직접 만든 옵션 — 여기 안 적으면 sync_schema.py가 지운다.
+        {"name": "행사", "color": "red"},
         # 게임
         {"name": "발표", "color": "gray"},
         {"name": "예약구매", "color": "yellow"},

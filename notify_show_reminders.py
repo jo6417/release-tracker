@@ -93,7 +93,8 @@ def main():
     today = now.date()
 
     rows = query_all(ids["schedule_db"], {
-        "and": [{"property": "종류", "select": {"equals": "발표"}},
+        "and": [{"or": [{"property": "종류", "select": {"equals": "발표"}},
+                        {"property": "종류", "select": {"equals": "행사"}}]},
                 {"property": "캘린더노출", "checkbox": {"equals": True}},
                 {"property": "날짜", "date": {"on_or_after": today.isoformat()}}]})
 
