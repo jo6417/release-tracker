@@ -496,28 +496,6 @@ DESCRIPTION:Xbox/PC/PS5 · 보유: 스팀
 URL:https://app.notion.com/p/3bf857fe7a80810496d4e5e9ff875b91
 END:VEVENT
 BEGIN:VEVENT
-UID:3e4857fe7a8081fa96f0fa569b1d3d5c@release-tracker
-DTSTAMP:20260923T000800Z
-DTSTART:20261003T090000Z
-DTEND:20261003T100000Z
-SUMMARY:🎮 GT World Series 2026 | Round 3 - Singapore | Manufacturers C
- up [ENGLISH]
-DESCRIPTION:발표
-URL:https://app.notion.com/p/GT-World-Series-2026-Round-3-Singapore-Manuf
- acturers-Cup-ENGLISH-3e4857fe7a8081fa96f0fa569b1d3d5c
-END:VEVENT
-BEGIN:VEVENT
-UID:3e4857fe7a8081468956ce6e43969e1e@release-tracker
-DTSTAMP:20260923T000800Z
-DTSTART:20261003T120000Z
-DTEND:20261003T130000Z
-SUMMARY:🎮 GT World Series 2026 | Round 3 - Singapore | Nations Cup [EN
- GLISH]
-DESCRIPTION:발표
-URL:https://app.notion.com/p/GT-World-Series-2026-Round-3-Singapore-Natio
- ns-Cup-ENGLISH-3e4857fe7a8081468956ce6e43969e1e
-END:VEVENT
-BEGIN:VEVENT
 UID:3e2857fe7a80812c8025e7755bd79e90@release-tracker
 DTSTAMP:20260921T000800Z
 DTSTART:20260920T160000Z
@@ -526,16 +504,6 @@ SUMMARY:🎮 PC Gaming Show Tokyo Direct 2026
 DESCRIPTION:발표
 URL:https://app.notion.com/p/PC-Gaming-Show-Tokyo-Direct-2026-3e2857fe7a8
  0812c8025e7755bd79e90
-END:VEVENT
-BEGIN:VEVENT
-UID:3e1857fe7a8081b2990af85f6d50d073@release-tracker
-DTSTAMP:20260920T100200Z
-DTSTART:20260924T000000Z
-DTEND:20260924T010000Z
-SUMMARY:🎮 Marvel’s Wolverine Soundtrack Listening Party
-DESCRIPTION:발표
-URL:https://app.notion.com/p/Marvel-s-Wolverine-Soundtrack-Listening-Part
- y-3e1857fe7a8081b2990af85f6d50d073
 END:VEVENT
 BEGIN:VEVENT
 UID:3e0857fe7a8081878edad0ec2aa4a3df@release-tracker
