@@ -53,6 +53,27 @@ PLATFORM_HINT = {
 }
 MAX_예측 = 5
 
+# 게임쇼로 인정할 제목 패턴 (2026-09-23 사용자 요청).
+# 채널의 예정 라이브를 전부 잡았더니 "Marvel's Wolverine Soundtrack Listening
+# Party" 같은 단일 작품 홍보 방송까지 게임쇼 예고로 떴다. 사용자가 게임쇼
+# 알림을 받는 이유는 일정 등록·변경뿐이라, 여러 작품이 나오는 쇼케이스형
+# 방송만 남긴다. 허용 목록 방식 — 새 쇼 형식이 안 잡히면 여기에 추가한다
+# (걸러진 방송은 로그에 "[제외]"로 찍히니 거기서 확인).
+#
+# `game/games/gaming show`는 클로드가 덧붙였다 — 일정 DB에 이미 들어와 있던
+# "The FPS Games Show"·"PC Gaming Show Tokyo Direct"가 위 목록엔 안 걸린다.
+# 둘 다 IGDB 경로로 들어와 이번엔 무사했지만, 유튜브로 들어왔으면 조용히
+# 잘렸을 제목이다. 단일 작품 홍보는 이런 이름을 쓰지 않아 오탐 위험이 낮다.
+SHOW_PATTERNS = re.compile(
+    r"state of play|\bdirect\b|showcase|indie world|broadcast|"
+    r"gamescom|tokyo game show|\btgs\b|game awards|summer game fest|"
+    r"\bgam(?:e|es|ing) show\b",
+    re.I)
+
+
+def is_show(title):
+    return bool(SHOW_PATTERNS.search(title))
+
 
 def _yt_get(path, params):
     params = dict(params, key=_key())
@@ -193,6 +214,9 @@ def main():
             continue
         for vid, title, st in items:
             if vid in known:
+                continue
+            if not is_show(title):
+                print(f"  [{name}] [제외] {title[:60]} — 쇼케이스 아님")
                 continue
             when = datetime.datetime.fromisoformat(st.replace("Z", "+00:00"))
             kst = when.astimezone(datetime.timezone(datetime.timedelta(hours=9)))
