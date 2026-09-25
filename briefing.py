@@ -188,13 +188,29 @@ def main():
     today = datetime.date.today()
     cur = track.snapshot()
     print(f"작품 {len(cur)}행")
+    briefing_card(cur, today, mark=True, dry=a.dry)
 
+
+def briefing_card(cur, today, mark=True, dry=False, skip=()):
+    """브리핑 카드 한 장. 저녁(`main`)과 아침(`track.py`)이 같이 쓴다.
+
+    2026-09-25 사용자 요청으로 아침·저녁 카드 내용을 통일했다. 아침에는
+    두 가지만 다르게 부른다.
+
+    mark  — 등록 후보의 제시 횟수를 올릴지. 아침에도 올리면 하루에 두 번 센
+            것이 돼 후보가 두 배 빨리 밀려난다. 아침은 안 올리고 저녁만 올린다
+            (그래서 아침과 저녁에 같은 후보가 뜬다).
+    skip  — 뺄 섹션. 아침은 `track.available_check`가 `오늘 공개`를 이미 내므로
+            여기서 같은 칸을 또 만들면 한 카드에 두 번 뜬다.
+    """
     sections = collect(cur, today)
+    for key in skip:
+        sections[key] = []
     queue = candidates.load()
     picked = candidates.pick(queue)
     if not any(sections.values()) and not picked:
         print("브리핑할 내용이 없습니다.")
-        return
+        return False
 
     head, summary, details, kinds = build(sections, today)
     if picked:
@@ -216,18 +232,19 @@ def main():
         for line in lines:
             print("      " + line)
 
-    if a.dry:
-        return
+    if dry:
+        return False
     notify.send_card(head, summary, details, kinds=["브리핑"],
                      count=sum(len(v) for v in sections.values()),
                      date=today.isoformat())
-    if picked:
+    if picked and mark:
         # 보여준 뒤에 적어야 한다. 카드가 안 나갔는데 제시 횟수만 오르면
         # 그 후보는 아무도 못 본 채로 뒤로 밀린다.
         candidates.mark(queue, picked, today.isoformat())
         candidates.save(queue)
     if not notify.spooling():
         print("\n브리핑 카드 1장 발송 완료")
+    return True
 
 
 if __name__ == "__main__":

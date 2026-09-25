@@ -44,8 +44,10 @@ SPOOL_ENV = "NOTIFY_SPOOL"
 # 합친 카드 안에서 부분이 놓이는 순서. 작을수록 앞이다.
 # 저녁은 브리핑이 본편이고, 아침은 "무슨 일이 있었나"(변경)가 먼저다.
 # 할인과 영상은 훑어보는 것이라 뒤로 보낸다.
-# "진행중"은 아침 카드 맨 끝 — 아침의 주인공은 바뀐 것이고, 진행 중은 참고다.
-PART_RANK = {"점검": 0, "브리핑": 1, "할인": 8, "영상": 9, "진행중": 10}
+PART_RANK = {"점검": 0, "브리핑": 1, "할인": 8, "영상": 9}
+# 아침에도 브리핑이 붙은 뒤(2026-09-25, 아침·저녁 통일)로는 아침의 브리핑을
+# 맨 끝으로 보낸다. 내용은 같아도 아침의 주인공은 밤사이 바뀐 것이다.
+PART_RANK_MORNING = dict(PART_RANK, 브리핑=10)
 PART_RANK_DEFAULT = 5      # track이 만드는 변경류(신규·상태변경·날짜변경…)
 
 # 합친 카드의 제목은 늘 이 한 문장이다. 예전에는 각 스크립트가 낸 라벨을 이어
@@ -276,7 +278,9 @@ def flush(path=None, dry=False, slot_name=None):
         print("모아둔 알림이 없습니다 — 보내지 않습니다.")
         return False
 
-    cards.sort(key=lambda c: min([PART_RANK.get(k, PART_RANK_DEFAULT)
+    slot_key = slot_name or WORKFLOW_SLOT.get(os.environ.get("GITHUB_WORKFLOW", ""))
+    rank = PART_RANK_MORNING if slot_key == "아침" else PART_RANK
+    cards.sort(key=lambda c: min([rank.get(k, PART_RANK_DEFAULT)
                                   for k in c["kinds"]] or [PART_RANK_DEFAULT]))
     label = BRIEFING_LABEL
     summary = [s for c in cards for s in c["summary"]]

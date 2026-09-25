@@ -353,57 +353,34 @@ def quiet_card(cur, today, since=None, dry=False):
     안 만들었는데, 받는 쪽에서는 알림이 끊긴 것으로 보였다. 침묵도 결과이므로
     결과라고 말한다.
 
-    말할 게 없다는 말만 있으면 그것대로 빈 카드라, 지금 붙잡고 있는 것을 몇 줄
-    같이 싣는다.
+    예전에는 여기서 `진행 중` 몇 줄을 같이 실었다. 2026-09-25부터 아침에도
+    브리핑 카드 전체(`morning_briefing`)가 붙으므로 이 카드는 한 줄만 낸다.
     """
-    import briefing   # briefing이 track을 읽는다. 위에서 부르면 순환이다
-
-    # 저녁 브리핑과 같은 목록·같은 개수를 쓴다(2026-09-25 사용자 요청: 통일).
-    playing = briefing.collect(cur, today)["진행중"]
     since = f"{since} 이후" if since else "어제 이후"
     summary = [f"[변경 없음] {since} 변경 사항이 없습니다 (추적 중 {len(cur)}건)"]
-    details = []
-    if playing:
-        summary.append("[진행 중] " + ", ".join(r["제목"] for r in playing))
-        details = [(f"[진행 중] {r['제목']}",
-                    describe.detail("진행중", r, None, today)) for r in playing]
-
     print("")
     print(notify.card_title("변경 없음", today.isoformat()))
     for line in summary:
         print("  " + line)
-    for headline, lines in details:
-        print("  " + headline)
-        for line in lines:
-            print("      " + line)
     if dry:
         return False
-    return notify.send_card("변경 없음", summary, details,
-                            kinds=["브리핑"], count=0, date=today.isoformat())
+    return notify.send_card("변경 없음", summary, [],
+                            kinds=["변경없음"], count=0, date=today.isoformat())
 
 
-def playing_card(cur, today, dry=False):
-    """소식이 있는 아침에도 `진행 중` 칸을 붙인다 (2026-09-25 사용자 요청).
+def morning_briefing(cur, today, dry=False):
+    """아침 카드에도 저녁 브리핑 전체를 붙인다 (2026-09-25 사용자 요청: 통일).
 
-    원래 아침 카드는 "바뀐 것"만 싣고 진행 중은 조용한 날의 빈칸 채우기로만
-    썼다. 그런데 게임쇼·뉴스·게임패스 알림이 늘면서 조용한 아침이 거의 없어져
-    9/20~25 아침 카드에 진행 중이 한 번도 안 떴다. 저녁 브리핑과 같은 목록을
-    따로 한 장 스풀해 두면 합칠 때 맨 끝(`notify.PART_RANK`)에 붙는다.
+    원래 아침은 "바뀐 것"만, 저녁은 "지금 상태"(오늘 공개·공개 임박·완결 임박·
+    진행 중·오늘의 추천·등록 후보)를 맡았다. 사용자가 두 카드 내용을 같게
+    원해 저녁과 같은 함수로 같은 칸을 만든다. 차이는 둘뿐이다.
+
+    - `오늘 공개`는 뺀다. `available_check`가 같은 작품을 이미 변경 칸에 낸다
+    - 등록 후보의 제시 횟수는 세지 않는다. 저녁에만 센다(하루 두 번 세면
+      후보가 두 배 빨리 밀려난다). 그래서 아침·저녁에 같은 후보가 뜬다
     """
-    import briefing
-
-    playing = briefing.collect(cur, today)["진행중"]
-    if not playing:
-        return False
-    summary = ["[진행 중] " + ", ".join(r["제목"] for r in playing)]
-    details = [(f"[진행 중] {r['제목']}", describe.detail("진행중", r, None, today))
-               for r in playing]
-    for line in summary:
-        print("  " + line)
-    if dry:
-        return False
-    return notify.send_card("진행 중", summary, details, kinds=["진행중"],
-                            date=today.isoformat())
+    import briefing   # briefing이 track을 읽는다. 위에서 부르면 순환이다
+    return briefing.briefing_card(cur, today, mark=False, dry=dry, skip=("오늘",))
 
 
 def build_card(events, today=None):
@@ -471,10 +448,11 @@ def main():
         waiting = notify.pending()
         if waiting:
             print(f"변경 없음 — 모아둔 알림 {waiting}장이 있어 따로 보내지 않습니다.")
-            playing_card(cur, datetime.date.today(), a.dry)
+            morning_briefing(cur, datetime.date.today(), a.dry)
             return
         print("변경 없음 — 변화가 없다는 카드를 보냅니다.")
         quiet_card(cur, datetime.date.today(), prev_since, a.dry)
+        morning_briefing(cur, datetime.date.today(), a.dry)
         return
 
     title, summary, details, kinds = build_card(events)
@@ -488,11 +466,11 @@ def main():
             print("      " + line)
 
     if a.dry:
-        playing_card(cur, datetime.date.today(), a.dry)
+        morning_briefing(cur, datetime.date.today(), a.dry)
         return
     notify.send_card(title, summary, details, kinds=kinds, count=len(events),
                      date=today)
-    playing_card(cur, datetime.date.today(), a.dry)
+    morning_briefing(cur, datetime.date.today(), a.dry)
     if not notify.spooling():
         print("\n알림 카드 1장 발송 완료")
 
