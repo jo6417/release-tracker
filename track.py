@@ -343,9 +343,6 @@ def group(events):
     return [(k, [e for e in events if e["kind"] == k]) for k in kinds]
 
 
-# 조용한 아침에 함께 싣는 `진행 중` 줄 수. 저녁 브리핑은 15건까지 늘어놓지만,
-# 아침 카드의 본래 일은 "달라진 것"이라 여기서는 최근에 손댄 순으로 몇 개만 적는다.
-QUIET_PLAYING = 5
 
 
 def quiet_card(cur, today, since=None, dry=False):
@@ -361,7 +358,8 @@ def quiet_card(cur, today, since=None, dry=False):
     """
     import briefing   # briefing이 track을 읽는다. 위에서 부르면 순환이다
 
-    playing = briefing.collect(cur, today)["진행중"][:QUIET_PLAYING]
+    # 저녁 브리핑과 같은 목록·같은 개수를 쓴다(2026-09-25 사용자 요청: 통일).
+    playing = briefing.collect(cur, today)["진행중"]
     since = f"{since} 이후" if since else "어제 이후"
     summary = [f"[변경 없음] {since} 변경 사항이 없습니다 (추적 중 {len(cur)}건)"]
     details = []
@@ -382,6 +380,30 @@ def quiet_card(cur, today, since=None, dry=False):
         return False
     return notify.send_card("변경 없음", summary, details,
                             kinds=["브리핑"], count=0, date=today.isoformat())
+
+
+def playing_card(cur, today, dry=False):
+    """소식이 있는 아침에도 `진행 중` 칸을 붙인다 (2026-09-25 사용자 요청).
+
+    원래 아침 카드는 "바뀐 것"만 싣고 진행 중은 조용한 날의 빈칸 채우기로만
+    썼다. 그런데 게임쇼·뉴스·게임패스 알림이 늘면서 조용한 아침이 거의 없어져
+    9/20~25 아침 카드에 진행 중이 한 번도 안 떴다. 저녁 브리핑과 같은 목록을
+    따로 한 장 스풀해 두면 합칠 때 맨 끝(`notify.PART_RANK`)에 붙는다.
+    """
+    import briefing
+
+    playing = briefing.collect(cur, today)["진행중"]
+    if not playing:
+        return False
+    summary = ["[진행 중] " + ", ".join(r["제목"] for r in playing)]
+    details = [(f"[진행 중] {r['제목']}", describe.detail("진행중", r, None, today))
+               for r in playing]
+    for line in summary:
+        print("  " + line)
+    if dry:
+        return False
+    return notify.send_card("진행 중", summary, details, kinds=["진행중"],
+                            date=today.isoformat())
 
 
 def build_card(events, today=None):
@@ -449,6 +471,7 @@ def main():
         waiting = notify.pending()
         if waiting:
             print(f"변경 없음 — 모아둔 알림 {waiting}장이 있어 따로 보내지 않습니다.")
+            playing_card(cur, datetime.date.today(), a.dry)
             return
         print("변경 없음 — 변화가 없다는 카드를 보냅니다.")
         quiet_card(cur, datetime.date.today(), prev_since, a.dry)
@@ -465,9 +488,11 @@ def main():
             print("      " + line)
 
     if a.dry:
+        playing_card(cur, datetime.date.today(), a.dry)
         return
     notify.send_card(title, summary, details, kinds=kinds, count=len(events),
                      date=today)
+    playing_card(cur, datetime.date.today(), a.dry)
     if not notify.spooling():
         print("\n알림 카드 1장 발송 완료")
 
