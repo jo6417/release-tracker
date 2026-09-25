@@ -44,10 +44,9 @@ SPOOL_ENV = "NOTIFY_SPOOL"
 # 합친 카드 안에서 부분이 놓이는 순서. 작을수록 앞이다.
 # 저녁은 브리핑이 본편이고, 아침은 "무슨 일이 있었나"(변경)가 먼저다.
 # 할인과 영상은 훑어보는 것이라 뒤로 보낸다.
-PART_RANK = {"점검": 0, "브리핑": 1, "할인": 8, "영상": 9}
-# 아침에도 브리핑이 붙은 뒤(2026-09-25, 아침·저녁 통일)로는 아침의 브리핑을
-# 맨 끝으로 보낸다. 내용은 같아도 아침의 주인공은 밤사이 바뀐 것이다.
-PART_RANK_MORNING = dict(PART_RANK, 브리핑=10)
+# 2026-09-25부터 아침·저녁은 같은 점검을 두 번 하는 것이라(직전 점검 이후
+# 바뀐 것) 순서도 하나다. 바뀐 것이 앞, 지금 상태(브리핑)가 맨 끝.
+PART_RANK = {"점검": 0, "할인": 8, "영상": 9, "브리핑": 10}
 PART_RANK_DEFAULT = 5      # track이 만드는 변경류(신규·상태변경·날짜변경…)
 
 # 합친 카드의 제목은 늘 이 한 문장이다. 예전에는 각 스크립트가 낸 라벨을 이어
@@ -168,10 +167,19 @@ def card_title(label, date=None, hour=None):
     return f"{head} · {label}" if label else head
 
 
+def slot_key(name=None):
+    """'아침'/'저녁'. 워크플로가 NOTIFY_SLOT으로 알려준다.
+
+    evening.yml이 daily.yml을 불러 쓰게 된 뒤로(2026-09-25) GITHUB_WORKFLOW만
+    보고는 슬롯을 확실히 가를 수 없어서 명시적인 변수를 먼저 본다.
+    """
+    return (name or os.environ.get("NOTIFY_SLOT")
+            or WORKFLOW_SLOT.get(os.environ.get("GITHUB_WORKFLOW", "")) or None)
+
+
 def slot(name=None):
     """(제목에 적을 시각, 예약된 UTC 시각). 슬롯을 모르면 None."""
-    key = name or WORKFLOW_SLOT.get(os.environ.get("GITHUB_WORKFLOW", ""))
-    return SLOTS.get(key or "")
+    return SLOTS.get(slot_key(name) or "")
 
 
 def slot_date(utc_hour, now=None):
@@ -278,9 +286,7 @@ def flush(path=None, dry=False, slot_name=None):
         print("모아둔 알림이 없습니다 — 보내지 않습니다.")
         return False
 
-    slot_key = slot_name or WORKFLOW_SLOT.get(os.environ.get("GITHUB_WORKFLOW", ""))
-    rank = PART_RANK_MORNING if slot_key == "아침" else PART_RANK
-    cards.sort(key=lambda c: min([rank.get(k, PART_RANK_DEFAULT)
+    cards.sort(key=lambda c: min([PART_RANK.get(k, PART_RANK_DEFAULT)
                                   for k in c["kinds"]] or [PART_RANK_DEFAULT]))
     label = BRIEFING_LABEL
     summary = [s for c in cards for s in c["summary"]]

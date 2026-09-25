@@ -8,7 +8,19 @@ on:
   # 되돌리려면 아래 두 줄 앞의 '# ' 만 지우면 된다.
   # schedule:
   #   - cron: "0 0 * * *"      # 09:00 KST (UTC 00:00)
-  workflow_dispatch:          # 수동 실행 버튼
+  workflow_dispatch:          # 수동 실행 버튼 (Cloudflare Worker도 이걸 부른다)
+    inputs:
+      slot:
+        description: "아침 또는 저녁"
+        default: "아침"
+  # 아침·저녁은 같은 점검을 하루 두 번 하는 것이다(2026-09-25 사용자 지시).
+  # 매번 "직전 점검 이후 바뀐 것"을 알린다 — 아침은 밤사이, 저녁은 낮 동안.
+  # 그래서 파이프라인을 하나로 두고 evening.yml은 이걸 slot=저녁으로 부른다.
+  workflow_call:
+    inputs:
+      slot:
+        type: string
+        default: "아침"
 
 permissions:
   contents: write             # 스냅샷 커밋용
@@ -16,11 +28,18 @@ permissions:
 jobs:
   track:
     runs-on: ubuntu-latest
+    # 아침·저녁이 겹쳐 돌면 스냅샷·상태 파일을 서로 덮는다. 줄 세운다.
+    # (evening.yml이 불러 쓰므로 워크플로 단위가 아니라 job 단위에 둔다)
+    concurrency:
+      group: tracker
+      cancel-in-progress: false
     # 카드를 만드는 스크립트가 셋(가격·트레일러·변화)이라 예전에는 아침에만
     # 알림이 3장 왔다. 이 변수가 있으면 각 스크립트는 보내지 않고 모아두고,
     # 마지막 스텝이 한 장으로 합쳐 보낸다.
     env:
       NOTIFY_SPOOL: notify_spool.json
+      # 카드 제목의 시각(09시/19시)과 합치는 순서, 후보 제시 횟수를 셀지를 가른다
+      NOTIFY_SLOT: ${{ inputs.slot || '아침' }}
     steps:
       - uses: actions/checkout@v4
 
@@ -54,7 +73,9 @@ jobs:
       #
       # 매칭은 전 행을 훑어 느리고 매일 할 이유도 없어 일요일에만 돈다.
       # apply 쪽은 비어 있는 칸만 채우므로 손으로 넣은 값을 덮지 않는다.
+      # 하루 한 번이면 되는 일이라 아침에만 돈다
       - name: 주간 매칭 (일요일)
+        if: ${{ (inputs.slot || '아침') == '아침' }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
           TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
@@ -167,13 +188,15 @@ jobs:
         run: python track.py
 
       # refresh_dates.py 등이 confirm_queue.json에 쌓아둔 "반영할까요?"를
-      # 하루 한 장으로 알린다. 답이 없으면 다음날도 그대로 다시 뜬다.
+      # 점검마다 다시 알린다. 답이 없으면 다음 점검에도 그대로 뜬다.
       - name: 확인 큐 알림
         run: python notify_confirm_queue.py
         continue-on-error: true
 
-      # 매월 1일에만 실제로 보낸다 (heartbeat.py가 날짜를 스스로 판단)
+      # 매월 1일에만 실제로 보낸다 (heartbeat.py가 날짜를 스스로 판단).
+      # 저녁에도 돌면 1일에 두 번 나가므로 아침에만 돈다
       - name: 월 1회 생존 신호
+        if: ${{ (inputs.slot || '아침') == '아침' }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python heartbeat.py
@@ -208,7 +231,7 @@ jobs:
             echo "스냅샷 변경 없음"
             exit 0
           fi
-          git commit -m "스냅샷 $(date +%Y-%m-%d)"
+          git commit -m "스냅샷 $(date +%Y-%m-%d) ${NOTIFY_SLOT}"
           # calendar.yml과 동시에 돌면 push가 밀릴 수 있어 재시도한다
           for i in 1 2 3; do
             git pull --rebase --autostash && git push && exit 0

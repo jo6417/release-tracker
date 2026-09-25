@@ -356,8 +356,8 @@ def quiet_card(cur, today, since=None, dry=False):
     예전에는 여기서 `진행 중` 몇 줄을 같이 실었다. 2026-09-25부터 아침에도
     브리핑 카드 전체(`morning_briefing`)가 붙으므로 이 카드는 한 줄만 낸다.
     """
-    since = f"{since} 이후" if since else "어제 이후"
-    summary = [f"[변경 없음] {since} 변경 사항이 없습니다 (추적 중 {len(cur)}건)"]
+    # 하루 두 번 점검하므로 "어제 이후"가 아니라 "직전 점검 이후"다
+    summary = [f"[변경 없음] 직전 점검 이후 변경 사항이 없습니다 (추적 중 {len(cur)}건)"]
     print("")
     print(notify.card_title("변경 없음", today.isoformat()))
     for line in summary:
@@ -380,7 +380,10 @@ def morning_briefing(cur, today, dry=False):
       후보가 두 배 빨리 밀려난다). 그래서 아침·저녁에 같은 후보가 뜬다
     """
     import briefing   # briefing이 track을 읽는다. 위에서 부르면 순환이다
-    return briefing.briefing_card(cur, today, mark=False, dry=dry, skip=("오늘",))
+    # 등록 후보 제시 횟수는 하루 한 번만 센다 — 저녁 점검에서만.
+    # 로컬 실행처럼 슬롯을 모르면 세지 않는다(안전한 쪽).
+    mark = notify.slot_key() == "저녁"
+    return briefing.briefing_card(cur, today, mark=mark, dry=dry, skip=("오늘",))
 
 
 def build_card(events, today=None):

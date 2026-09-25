@@ -81,24 +81,49 @@ def track(t_key, code, invoice):
         return json.loads(r.read())
 
 
-def check_key_age():
-    """발급 후 25일이 지나면 재발급을 알린다. 발급일은 최초 실행 때 오늘로
-    한 번 기록해두고(사용자가 실제 발급받은 날과 하루 이틀 어긋날 수 있지만,
-    "슬슬 갱신할 때"라는 목적에는 그 정도 오차가 문제 되지 않는다)."""
-    info = {}
+MONTH_LIMIT = 100   # 프리 등급 월 호출 한도
+BUDGET_STOP = 95    # 여기 닿으면 이번 달은 더 부르지 않는다 (여유 5건)
+KEY_WARN_DAYS = 25  # 발급 후 이 날수가 지나면 재발급 안내
+
+
+def load_key_info():
     if os.path.exists(KEY_FILE):
         with io.open(KEY_FILE, encoding="utf-8") as f:
-            info = json.load(f)
+            return json.load(f)
+    return {}
+
+
+def save_key_info(info):
+    with io.open(KEY_FILE, "w", encoding="utf-8") as f:
+        json.dump(info, f, ensure_ascii=False, indent=1, sort_keys=True)
+
+
+def month_calls(info):
+    """이번 달 호출 수. 달이 바뀌면 0부터 다시 센다.
+
+    2026-09-25부터 점검이 하루 두 번이라 추적 1건이 월 60건, 2건이면 120건으로
+    프리 한도(100건)를 넘는다. 호출마다 세고 BUDGET_STOP에서 멈춘다 — 조용히
+    한도를 넘겨 월말에 추적이 끊기는 것보다, 멈추고 알리는 쪽이 낫다.
+    """
+    month = time.strftime("%Y-%m")
+    if info.get("월") != month:
+        info["월"], info["호출"] = month, 0
+    return info.get("호출", 0)
+
+
+def key_age_warning(info, today):
+    """발급 후 KEY_WARN_DAYS가 지났으면 경과 일수. 단 **하루 한 번만** 알린다 —
+    점검이 하루 두 번이라 그냥 두면 같은 안내가 아침·저녁 두 번 뜬다."""
     issued = info.get("발급일")
     if not issued:
-        issued = time.strftime("%Y-%m-%d")
-        with io.open(KEY_FILE, "w", encoding="utf-8") as f:
-            json.dump({"발급일": issued}, f, ensure_ascii=False, indent=1)
+        info["발급일"] = today    # 최초 실행일을 발급일로 본다 (하루 이틀 오차 무방)
         return None
-    age = (datetime.date.today() - datetime.date.fromisoformat(issued)).days
-    if age >= 25:
-        return age
-    return None
+    age = (datetime.date.fromisoformat(today)
+           - datetime.date.fromisoformat(issued)).days
+    if age < KEY_WARN_DAYS or info.get("경고일") == today:
+        return None
+    info["경고일"] = today
+    return age
 
 
 def main():
@@ -129,7 +154,16 @@ def main():
     print(f"배송 추적 대상 {len(targets)}건 (배송추적 켜짐 + 송장 등록된 것만)")
 
     lines, done = [], []
+    info = load_key_info()
+    used = month_calls(info)
+    budget_hit = False
     for p, name, courier, invoice in targets:
+        if used >= BUDGET_STOP:
+            budget_hit = True
+            print(f"  {name}: 이번 달 호출 {used}건 — 한도 보호로 건너뜀")
+            continue
+        used += 1                 # 실패한 호출도 한도에서 빠질 수 있어 먼저 센다
+        info["호출"] = used
         try:
             d = track(key, courier, invoice)
         except urllib.error.HTTPError as e:
@@ -163,12 +197,21 @@ def main():
                              "배송추적": {"checkbox": False}})
             print(f"자동 완료 처리: {name} ({when})")
 
-    key_age = check_key_age()
+    key_age = key_age_warning(info, time.strftime("%Y-%m-%d"))
+    n_tracked = len(lines)
+    # 한도 안내는 그 달에 한 번만 — 안 막으면 월말까지 하루 두 번씩 같은 말이 뜬다
+    if budget_hit and info.get("한도알림") != info["월"]:
+        info["한도알림"] = info["월"]
+        lines.append(f"이번 달 스마트택배 조회 {used}건 — 무료 한도(월 {MONTH_LIMIT}건) "
+                     "보호를 위해 이달 남은 기간 자동 조회를 멈췄습니다")
+    print(f"이번 달 호출 {used}건 / 한도 {MONTH_LIMIT}건")
+    if not a.dry:
+        save_key_info(info)
 
     if not a.dry and (lines or key_age):
         summary_bits = []
         if lines:
-            summary_bits.append(f"배송 중 {len(lines)}건")
+            summary_bits.append(f"배송 중 {n_tracked}건" if n_tracked else "배송 추적 중단")
         if key_age:
             summary_bits.append("스마트택배 키 재발급 필요")
         details = []
@@ -179,7 +222,7 @@ def main():
                 f"키 발급 후 {key_age}일 지났습니다. 무료 키는 1개월만 유효합니다.",
                 "tracking.sweettracker.co.kr에서 재발급 후 .env·리포 시크릿을 갱신해주세요."]))
         notify.send_card(" · ".join(summary_bits), summary=[" · ".join(summary_bits)],
-                         details=details, kinds=["배송"], count=len(lines))
+                         details=details, kinds=["배송"], count=n_tracked)
         if not notify.spooling():
             print("알림 카드 1장 발송 완료")
 
