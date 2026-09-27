@@ -305,7 +305,7 @@
    "Dungeons & Dragons",
    "Forgotten Realms"
   ],
-  "평점": 94.7,
+  "평점": 94.8,
   "url": "https://www.igdb.com/games/baldurs-gate-iii",
   "경로": "steam",
   "확신": "확실"
@@ -1746,7 +1746,7 @@
    "XONE"
   ],
   "시리즈": [],
-  "평점": 71.9,
+  "평점": 71.7,
   "url": "https://www.igdb.com/games/palworld",
   "경로": "steam",
   "확신": "확실"
@@ -1992,7 +1992,7 @@
   "시리즈": [
    "Cyberpunk"
   ],
-  "평점": 79.2,
+  "평점": 79.3,
   "url": "https://www.igdb.com/games/cyberpunk-2077",
   "경로": "steam",
   "확신": "확실"
@@ -2094,7 +2094,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 87.1,
+  "평점": 87.2,
   "url": "https://www.igdb.com/games/pragmata",
   "경로": "steam",
   "확신": "확실"
@@ -2136,7 +2136,7 @@
  },
  "붉은사막": {
   "id": 125633,
-  "이름": "Crimson Desert",
+  "이름": "Crimson Desert Enhanced",
   "출시일": "2026-03-19",
   "플랫폼": [
    "Series X|S",
@@ -2146,7 +2146,7 @@
   ],
   "시리즈": [],
   "평점": 86.7,
-  "url": "https://www.igdb.com/games/crimson-desert",
+  "url": "https://www.igdb.com/games/crimson-desert-enhanced--1",
   "경로": "steam",
   "확신": "확실"
  },
@@ -2532,7 +2532,7 @@
   "시리즈": [
    "Tomb Raider"
   ],
-  "평점": 78.7,
+  "평점": 78.8,
   "url": "https://www.igdb.com/games/shadow-of-the-tomb-raider",
   "경로": "steam",
   "확신": "확실"
@@ -2567,7 +2567,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": null,
+  "평점": 70.0,
   "url": "https://www.igdb.com/games/moonlighter-2-the-endless-vault",
   "경로": "검색",
   "확신": "확실"
@@ -2749,7 +2749,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 93.3,
+  "평점": 93.6,
   "url": "https://www.igdb.com/games/aniimo",
   "경로": "검색",
   "확신": "확실"
@@ -2767,7 +2767,7 @@
   "시리즈": [
    "Onimusha"
   ],
-  "평점": 86.6,
+  "평점": 86.8,
   "url": "https://www.igdb.com/games/onimusha-way-of-the-sword",
   "경로": "검색",
   "확신": "확실"
@@ -3814,7 +3814,9 @@
    "XONE",
    "Switch"
   ],
-  "시리즈": [],
+  "시리즈": [
+   "Minecraft"
+  ],
   "평점": 70.9,
   "url": "https://www.igdb.com/games/minecraft-dungeons",
   "경로": "검색",
@@ -4001,7 +4003,7 @@
   "시리즈": [
    "Silent Hill"
   ],
-  "평점": null,
+  "평점": 84.5,
   "url": "https://www.igdb.com/games/silent-hill-townfall",
   "경로": "검색",
   "확신": "확실"
@@ -4036,7 +4038,7 @@
    "X-Men",
    "Wolverine"
   ],
-  "평점": 83.5,
+  "평점": 81.3,
   "url": "https://www.igdb.com/games/marvels-wolverine",
   "경로": "검색",
   "확신": "확실"
@@ -4159,7 +4161,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 55.7,
+  "평점": 55.8,
   "url": "https://www.igdb.com/games/nte-neverness-to-everness",
   "경로": "검색",
   "확신": "확실"
@@ -4828,7 +4830,7 @@
   "시리즈": [
    "Cyberpunk"
   ],
-  "평점": 92.0,
+  "평점": 92.1,
   "url": "https://www.igdb.com/games/cyberpunk-2077-phantom-liberty",
   "경로": "검색",
   "확신": "확실"
@@ -4840,6 +4842,7 @@
   "플랫폼": [
    "Series X|S",
    "PS4",
+   "Switch 2",
    "PC",
    "PS5",
    "Mac",
@@ -4992,7 +4995,7 @@
   "시리즈": [
    "Diablo"
   ],
-  "평점": 83.3,
+  "평점": 83.4,
   "url": "https://www.igdb.com/games/diablo-iv",
   "경로": "검색",
   "확신": "확실"
@@ -5381,7 +5384,7 @@
    "Spider-Man",
    "Marvel"
   ],
-  "평점": 84.1,
+  "평점": 84.2,
   "url": "https://www.igdb.com/games/marvels-spider-man-miles-morales",
   "경로": "검색",
   "확신": "확실"
@@ -5782,7 +5785,7 @@
    "XONE"
   ],
   "시리즈": [],
-  "평점": 75.8,
+  "평점": 75.9,
   "url": "https://www.igdb.com/games/quantum-break",
   "경로": "검색",
   "확신": "확실"
@@ -6691,7 +6694,7 @@
   "시리즈": [
    "Gears of War"
   ],
-  "평점": 79.7,
+  "평점": 79.8,
   "url": "https://www.igdb.com/games/gears-of-war-4",
   "경로": "검색",
   "확신": "확실"
@@ -6769,7 +6772,7 @@
   "시리즈": [
    "X-COM"
   ],
-  "평점": 83.9,
+  "평점": 83.8,
   "url": "https://www.igdb.com/games/xcom-2",
   "경로": "검색",
   "확신": "확실"
