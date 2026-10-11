@@ -49,7 +49,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 82.5,
+  "평점": 82.8,
   "url": "https://www.igdb.com/games/ogu-and-the-secret-forest",
   "경로": "steam",
   "확신": "확실"
@@ -399,7 +399,7 @@
    "Batman",
    "DC Comics"
   ],
-  "평점": 73.2,
+  "평점": 73.3,
   "url": "https://www.igdb.com/games/batman-arkham-origins",
   "경로": "steam",
   "확신": "확실"
@@ -471,7 +471,7 @@
   "시리즈": [
    "Borderlands"
   ],
-  "평점": 73.7,
+  "평점": 73.6,
   "url": "https://www.igdb.com/games/borderlands-the-pre-sequel",
   "경로": "steam",
   "확신": "확실"
@@ -579,7 +579,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 86.2,
+  "평점": 86.1,
   "url": "https://www.igdb.com/games/vampire-survivors",
   "경로": "steam",
   "확신": "확실"
@@ -1135,7 +1135,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 79.3,
+  "평점": 79.4,
   "url": "https://www.igdb.com/games/enter-the-gungeon",
   "경로": "steam",
   "확신": "확실"
@@ -1835,7 +1835,7 @@
   "시리즈": [
    "Dying Light"
   ],
-  "평점": 75.8,
+  "평점": 75.7,
   "url": "https://www.igdb.com/games/dying-light-the-beast",
   "경로": "steam",
   "확신": "확실"
@@ -2131,7 +2131,7 @@
   "시리즈": [
    "Resident Evil"
   ],
-  "평점": 90.0,
+  "평점": 89.8,
   "url": "https://www.igdb.com/games/resident-evil-requiem",
   "경로": "steam",
   "확신": "확실"
@@ -2237,7 +2237,7 @@
   "시리즈": [
    "Dying Light"
   ],
-  "평점": 74.1,
+  "평점": 74.0,
   "url": "https://www.igdb.com/games/dying-light-2-stay-human",
   "경로": "steam",
   "확신": "확실"
@@ -2266,6 +2266,7 @@
   "플랫폼": [
    "Series X|S",
    "PS4",
+   "Switch 2",
    "PC",
    "PS5",
    "XONE",
@@ -2512,7 +2513,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 89.4,
+  "평점": 89.3,
   "url": "https://www.igdb.com/games/it-takes-two",
   "경로": "steam",
   "확신": "확실"
@@ -2938,20 +2939,15 @@
   "확신": "확실"
  },
  "세인츠로우": {
-  "id": 165346,
+  "id": 825,
   "이름": "Saints Row",
-  "출시일": "2022-08-23",
+  "출시일": "2006-08-29",
   "플랫폼": [
-   "Stadia",
-   "Series X|S",
-   "PS4",
-   "PC",
-   "PS5",
-   "XONE"
+   "X360"
   ],
   "시리즈": [],
-  "평점": 58.7,
-  "url": "https://www.igdb.com/games/saints-row--1",
+  "평점": 75.0,
+  "url": "https://www.igdb.com/games/saints-row",
   "경로": "검색",
   "확신": "확실"
  },
@@ -3019,7 +3015,7 @@
    "XONE"
   ],
   "시리즈": [],
-  "평점": 63.4,
+  "평점": 63.3,
   "url": "https://www.igdb.com/games/murdered-soul-suspect",
   "경로": "검색",
   "확신": "확실"
@@ -3166,7 +3162,7 @@
   "시리즈": [
    "Battlefield"
   ],
-  "평점": 79.7,
+  "평점": 79.4,
   "url": "https://www.igdb.com/games/battlefield-6",
   "경로": "검색",
   "확신": "확실"
@@ -3308,7 +3304,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 80.3,
+  "평점": 79.9,
   "url": "https://www.igdb.com/games/avowed",
   "경로": "검색",
   "확신": "확실"
@@ -3896,7 +3892,7 @@
   "시리즈": [
    "Assassin's Creed"
   ],
-  "평점": 84.0,
+  "평점": 83.9,
   "url": "https://www.igdb.com/games/assassins-creed-black-flag-resynced",
   "경로": "검색",
   "확신": "확실"
@@ -3989,7 +3985,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 84.9,
+  "평점": 82.7,
   "url": "https://www.igdb.com/games/control-resonant--1",
   "경로": "검색",
   "확신": "확실"
@@ -4005,7 +4001,7 @@
   "시리즈": [
    "Silent Hill"
   ],
-  "평점": 77.1,
+  "평점": 79.2,
   "url": "https://www.igdb.com/games/silent-hill-townfall",
   "경로": "검색",
   "확신": "확실"
@@ -4058,7 +4054,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 68.1,
+  "평점": 67.9,
   "url": "https://www.igdb.com/games/outbound",
   "경로": "검색",
   "확신": "확실"
@@ -4194,7 +4190,7 @@
   "시리즈": [
    "James Bond"
   ],
-  "평점": 81.3,
+  "평점": 81.2,
   "url": "https://www.igdb.com/games/007-first-light",
   "경로": "검색",
   "확신": "확실"
@@ -4209,14 +4205,14 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 77.1,
+  "평점": 76.1,
   "url": "https://www.igdb.com/games/beast-of-reincarnation",
   "경로": "검색",
   "확신": "확실"
  },
  "팬텀블레이드 제로": {
   "id": 250618,
-  "이름": "Phantom Blade 0",
+  "이름": "Phantom Blade Zero",
   "출시일": "2026-10-29",
   "플랫폼": [
    "PC",
@@ -4224,9 +4220,9 @@
   ],
   "시리즈": [],
   "평점": null,
-  "url": "https://www.igdb.com/games/phantom-blade-0",
+  "url": "https://www.igdb.com/games/phantom-blade-zero",
   "경로": "검색",
-  "확신": "낮음"
+  "확신": "확실"
  },
  "수어사이드 스쿼드 : 킬 더 저스티스 리그": {
   "id": 136627,
@@ -5009,6 +5005,7 @@
   "플랫폼": [
    "Series X|S",
    "PS4",
+   "Switch 2",
    "PC",
    "PS5",
    "XONE",
@@ -5966,7 +5963,8 @@
    "PS4",
    "PC",
    "Mac",
-   "XONE"
+   "XONE",
+   "Switch"
   ],
   "시리즈": [],
   "평점": 85.0,
@@ -6593,8 +6591,10 @@
   "이름": "Mafia III",
   "출시일": "2016-10-07",
   "플랫폼": [
+   "Series X|S",
    "PS4",
    "PC",
+   "PS5",
    "Mac",
    "XONE"
   ],
