@@ -45,6 +45,7 @@ from config import API, headers
 
 IDS_FILE = "db_ids.json"
 LOOKBACK_DAYS = 10
+# (2026-10-13부터 미사용 — 아래 MAJOR_SHOW 이름 기준으로 바뀜. 참고용으로 남김)
 # 이보다 참가 게임이 적은 쇼는 관심작이 없으면 건너뛴다. 숫자는 튜닝 대상 —
 # 실측(2026-09) 기준 닌텐도 다이렉트 86 / State of Play 34 / Gamescom ONL 73 /
 # 소규모 인디쇼 10~20건. 20으로 두면 소규모는 걸러지고 대형 쇼는 다 걸린다.
@@ -53,6 +54,29 @@ MIN_GAMES = 20
 # 다 적으면 칸이 넘친다 — 몇 건까지 자동 등록 후보로 올릴지는 확인 큐를
 # 만들 때(설계-확인큐.md) 다시 정한다. 지금은 참고용 텍스트일 뿐이다.
 MAX_기대작 = 6
+
+# 캘린더에 띄울 "큰 쇼" 이름 패턴 (2026-10-13 사용자 요청).
+# MIN_GAMES(참가 게임 수)만으로 거르니 Triple-i, Convergence, Cozy After Dark
+# 같은 인디 연합 쇼케이스도 게임이 20개를 넘어서 캘린더에 계속 떴다. 사용자는
+# 이런 자잘한 쇼를 캘린더에서 보고 싶지 않다. 그래서 기준을 바꾼다:
+#   - 큰 쇼(아래 패턴)      → 일정 기록 + 캘린더 노출
+#   - 작은 쇼 + 관심작 있음 → 일정 기록(작품 연결)·알림 카드는 유지, 캘린더는 숨김
+#   - 작은 쇼 + 관심작 없음 → 기록하지 않음
+# 허용 목록 방식이라 새 대형 쇼가 안 잡히면 여기에 추가한다
+# (로그에 "[작은 쇼]"로 찍히니 거기서 확인).
+MAJOR_SHOW = re.compile(
+    r"nintendo direct|state of play|playstation showcase|"
+    r"\bxbox\b|ubisoft forward|capcom (?:spotlight|showcase)|"
+    r"konami press start|square enix|bandai namco|\bsega\b|\bea play\b|"
+    r"gamescom|opening night live|tokyo game show|summer game fest|"
+    r"game awards|pc gaming show",
+    re.I)
+# "Horror Game Awards Showcase"처럼 큰 쇼 이름을 빌려 쓴 작은 쇼는 제외한다.
+NOT_MAJOR = re.compile(r"horror game awards", re.I)
+
+
+def is_major(name):
+    return bool(MAJOR_SHOW.search(name)) and not NOT_MAJOR.search(name)
 KST = datetime.timezone(datetime.timedelta(hours=9))
 
 
@@ -172,8 +196,12 @@ def main():
             continue
         game_ids = e.get("games") or []
         matched = [gid for gid in game_ids if gid in igdb_map]
-        if not matched and len(game_ids) < MIN_GAMES:
+        major = is_major(e["name"])
+        if not major and not matched:
+            print(f"  [작은 쇼·건너뜀] {e['name']}")
             continue
+        if not major:
+            print(f"  [작은 쇼·캘린더 숨김] {e['name']} (관심작 {len(matched)}건)")
         targets.append((e, matched))
 
     if not targets:
@@ -195,7 +223,7 @@ def main():
             "종류": {"select": {"name": "발표"}},
             "날짜": {"date": {"start": when}},
             "날짜정밀도": {"select": {"name": "확정"}},
-            "캘린더노출": {"checkbox": True},
+            "캘린더노출": {"checkbox": is_major(e["name"])},
             "외부ID": {"rich_text": [{"type": "text",
                                     "text": {"content": f"igdb_event:{e['id']}"}}]},
         }
