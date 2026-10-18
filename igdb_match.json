@@ -106,27 +106,8 @@
   "시리즈": [
    "Resident Evil"
   ],
-  "평점": 92.5,
+  "평점": 92.3,
   "url": "https://www.igdb.com/games/resident-evil-4--1",
-  "경로": "steam",
-  "확신": "확실"
- },
- "어쌔신크리드 섀도우": {
-  "id": 300976,
-  "이름": "Assassin's Creed Shadows",
-  "출시일": "2025-03-20",
-  "플랫폼": [
-   "Series X|S",
-   "Switch 2",
-   "PC",
-   "PS5",
-   "Mac"
-  ],
-  "시리즈": [
-   "Assassin's Creed"
-  ],
-  "평점": 79.0,
-  "url": "https://www.igdb.com/games/assassins-creed-shadows",
   "경로": "steam",
   "확신": "확실"
  },
@@ -399,7 +380,7 @@
    "Batman",
    "DC Comics"
   ],
-  "평점": 73.3,
+  "평점": 73.2,
   "url": "https://www.igdb.com/games/batman-arkham-origins",
   "경로": "steam",
   "확신": "확실"
@@ -481,6 +462,7 @@
   "이름": "Primal Planet",
   "출시일": "2025-07-28",
   "플랫폼": [
+   "Series X|S",
    "PC",
    "Switch"
   ],
@@ -600,7 +582,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 71.9,
+  "평점": 71.8,
   "url": "https://www.igdb.com/games/cloverpit",
   "경로": "steam",
   "확신": "확실"
@@ -863,7 +845,7 @@
   "시리즈": [
    "Max Payne"
   ],
-  "평점": 85.7,
+  "평점": 85.6,
   "url": "https://www.igdb.com/games/max-payne-3",
   "경로": "steam",
   "확신": "확실"
@@ -873,7 +855,10 @@
   "이름": "Peak",
   "출시일": "2025-06-16",
   "플랫폼": [
-   "PC"
+   "Series X|S",
+   "Switch 2",
+   "PC",
+   "PS5"
   ],
   "시리즈": [],
   "평점": 82.4,
@@ -1273,6 +1258,20 @@
   "시리즈": [],
   "평점": 82.2,
   "url": "https://www.igdb.com/games/katana-zero",
+  "경로": "steam",
+  "확신": "확실"
+ },
+ "머시나리움 2": {
+  "id": 422247,
+  "이름": "Machinarium 2",
+  "출시일": null,
+  "플랫폼": [
+   "PC",
+   "Mac"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/machinarium-2",
   "경로": "steam",
   "확신": "확실"
  },
@@ -1731,7 +1730,7 @@
    "PC"
   ],
   "시리즈": [],
-  "평점": 76.1,
+  "평점": 75.0,
   "url": "https://www.igdb.com/games/meccha-chameleon--1",
   "경로": "steam",
   "확신": "확실"
@@ -1785,6 +1784,25 @@
   ],
   "평점": 76.0,
   "url": "https://www.igdb.com/games/call-of-duty-advanced-warfare",
+  "경로": "steam",
+  "확신": "확실"
+ },
+ "어쌔신크리드 섀도우": {
+  "id": 300976,
+  "이름": "Assassin's Creed Shadows",
+  "출시일": "2025-03-20",
+  "플랫폼": [
+   "Series X|S",
+   "Switch 2",
+   "PC",
+   "PS5",
+   "Mac"
+  ],
+  "시리즈": [
+   "Assassin's Creed"
+  ],
+  "평점": 79.0,
+  "url": "https://www.igdb.com/games/assassins-creed-shadows",
   "경로": "steam",
   "확신": "확실"
  },
@@ -1884,7 +1902,7 @@
   "시리즈": [
    "Marvel"
   ],
-  "평점": 77.3,
+  "평점": 77.1,
   "url": "https://www.igdb.com/games/marvel-rivals",
   "경로": "steam",
   "확신": "확실"
@@ -1902,7 +1920,7 @@
   "시리즈": [
    "Warhammer 40,000"
   ],
-  "평점": 79.5,
+  "평점": 79.2,
   "url": "https://www.igdb.com/games/warhammer-40000-space-marine-ii",
   "경로": "steam",
   "확신": "확실"
@@ -2147,7 +2165,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 86.0,
+  "평점": 85.9,
   "url": "https://www.igdb.com/games/crimson-desert-enhanced--1",
   "경로": "steam",
   "확신": "확실"
@@ -2581,7 +2599,8 @@
   "출시일": null,
   "플랫폼": [
    "PC",
-   "PS5"
+   "PS5",
+   "XONE"
   ],
   "시리즈": [],
   "평점": null,
@@ -2770,7 +2789,7 @@
   "시리즈": [
    "Onimusha"
   ],
-  "평점": 86.8,
+  "평점": 86.3,
   "url": "https://www.igdb.com/games/onimusha-way-of-the-sword",
   "경로": "검색",
   "확신": "확실"
@@ -2850,14 +2869,18 @@
   "이름": "Metro Redux",
   "출시일": "2014-08-25",
   "플랫폼": [
+   "Series X|S",
    "PS4",
    "Linux",
    "PC",
+   "PS5",
    "Mac",
    "XONE",
    "Switch"
   ],
-  "시리즈": [],
+  "시리즈": [
+   "Metro"
+  ],
   "평점": 82.9,
   "url": "https://www.igdb.com/games/metro-redux",
   "경로": "검색",
@@ -3162,7 +3185,7 @@
   "시리즈": [
    "Battlefield"
   ],
-  "평점": 79.4,
+  "평점": 78.9,
   "url": "https://www.igdb.com/games/battlefield-6",
   "경로": "검색",
   "확신": "확실"
@@ -3443,7 +3466,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 83.9,
+  "평점": 84.0,
   "url": "https://www.igdb.com/games/stellar-blade",
   "경로": "검색",
   "확신": "확실"
@@ -3479,7 +3502,7 @@
   "시리즈": [
    "Star Wars"
   ],
-  "평점": 83.3,
+  "평점": 83.5,
   "url": "https://www.igdb.com/games/star-wars-jedi-survivor",
   "경로": "검색",
   "확신": "확실"
@@ -3528,7 +3551,7 @@
    "Batman",
    "DC Comics"
   ],
-  "평점": 66.1,
+  "평점": 66.7,
   "url": "https://www.igdb.com/games/gotham-knights",
   "경로": "검색",
   "확신": "확실"
@@ -3633,7 +3656,7 @@
    "XONE"
   ],
   "시리즈": [],
-  "평점": 81.5,
+  "평점": 81.4,
   "url": "https://www.igdb.com/games/kena-bridge-of-spirits",
   "경로": "검색",
   "확신": "확실"
@@ -3797,7 +3820,7 @@
    "XONE"
   ],
   "시리즈": [],
-  "평점": 76.8,
+  "평점": 76.7,
   "url": "https://www.igdb.com/games/mafia-definitive-edition",
   "경로": "검색",
   "확신": "확실"
@@ -3905,7 +3928,7 @@
    "Switch 2"
   ],
   "시리즈": [],
-  "평점": null,
+  "평점": 85.4,
   "url": "https://www.igdb.com/games/orbitals--1",
   "경로": "검색",
   "확신": "확실"
@@ -3985,7 +4008,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 82.7,
+  "평점": 83.0,
   "url": "https://www.igdb.com/games/control-resonant--1",
   "경로": "검색",
   "확신": "확실"
@@ -4001,7 +4024,7 @@
   "시리즈": [
    "Silent Hill"
   ],
-  "평점": 79.2,
+  "평점": 78.8,
   "url": "https://www.igdb.com/games/silent-hill-townfall",
   "경로": "검색",
   "확신": "확실"
@@ -4122,8 +4145,8 @@
   "출시일": "2026-04-14",
   "플랫폼": [
    "Series X|S",
-   "PC",
-   "XONE"
+   "Android",
+   "PC"
   ],
   "시리즈": [],
   "평점": 84.5,
@@ -4205,7 +4228,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 76.1,
+  "평점": 76.0,
   "url": "https://www.igdb.com/games/beast-of-reincarnation",
   "경로": "검색",
   "확신": "확실"
@@ -4319,7 +4342,7 @@
    "Spider-Man",
    "Venom"
   ],
-  "평점": 83.5,
+  "평점": 83.4,
   "url": "https://www.igdb.com/games/marvels-spider-man-2",
   "경로": "검색",
   "확신": "확실"
@@ -4450,7 +4473,8 @@
    "Switch 2"
   ],
   "시리즈": [
-   "The Legend of Zelda"
+   "The Legend of Zelda",
+   "Musou"
   ],
   "평점": 81.4,
   "url": "https://www.igdb.com/games/hyrule-warriors-age-of-imprisonment",
@@ -4828,7 +4852,7 @@
   "시리즈": [
    "Cyberpunk"
   ],
-  "평점": 92.1,
+  "평점": 92.0,
   "url": "https://www.igdb.com/games/cyberpunk-2077-phantom-liberty",
   "경로": "검색",
   "확신": "확실"
@@ -4884,7 +4908,7 @@
   "시리즈": [
    "Resident Evil"
   ],
-  "평점": 79.2,
+  "평점": 78.7,
   "url": "https://www.igdb.com/games/resident-evil-3",
   "경로": "검색",
   "확신": "확실"
@@ -5283,7 +5307,7 @@
    "Marvel",
    "Guardians of the Galaxy"
   ],
-  "평점": 81.3,
+  "평점": 81.2,
   "url": "https://www.igdb.com/games/marvels-guardians-of-the-galaxy",
   "경로": "검색",
   "확신": "확실"
@@ -5435,7 +5459,7 @@
   "시리즈": [
    "The Last of Us"
   ],
-  "평점": 92.7,
+  "평점": 92.8,
   "url": "https://www.igdb.com/games/the-last-of-us-part-ii",
   "경로": "검색",
   "확신": "확실"
@@ -5491,8 +5515,11 @@
   "이름": "Ancestors: The Humankind Odyssey",
   "출시일": "2019-08-27",
   "플랫폼": [
+   "Series X|S",
    "PS4",
+   "Switch 2",
    "PC",
+   "PS5",
    "XONE"
   ],
   "시리즈": [],
@@ -6104,7 +6131,7 @@
    "Spider-Man",
    "Marvel"
   ],
-  "평점": 88.5,
+  "평점": 88.4,
   "url": "https://www.igdb.com/games/marvels-spider-man",
   "경로": "검색",
   "확신": "확실"
@@ -6226,7 +6253,7 @@
    "XONE"
   ],
   "시리즈": [],
-  "평점": 80.7,
+  "평점": 80.6,
   "url": "https://www.igdb.com/games/a-plague-tale-innocence",
   "경로": "검색",
   "확신": "확실"
