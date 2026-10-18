@@ -75,8 +75,10 @@ def txt(prop):
 
 def track(t_key, code, invoice):
     code = COURIER_CODE.get(code, code)
-    q = urllib.parse.urlencode({"t_key": t_key, "t_code": code, "t_invoice": invoice})
-    req = urllib.request.Request(f"{TRACK_API}?{q}")
+    # 2026-10-30 14시부터 GET 호출은 405로 막힌다 — 값을 본문에 담아 POST로 보낸다
+    body = urllib.parse.urlencode({"t_key": t_key, "t_code": code, "t_invoice": invoice})
+    req = urllib.request.Request(TRACK_API, data=body.encode(), method="POST",
+                                 headers={"Content-Type": "application/x-www-form-urlencoded"})
     with urllib.request.urlopen(req, timeout=20) as r:
         return json.loads(r.read())
 
