@@ -14,15 +14,21 @@
 한도라(2026-09-12), 동시에 여러 개를 사면 하루 한 번씩만 돌아도 금방
 바닥난다. 그래서 `배송추적` 체크박스가 켜진 것만 본다 — 채팅으로
 "추적해줘"라고 답한 물건만이다. `구매 완료`로 닫으면서 체크도 같이
-꺼서 다음부터는 조회 대상에서 빠지게 한다. 키 만료 임박(발급 후
-25일)도 여기서 감지해 알린다.
+꺼서 다음부터는 조회 대상에서 빠지게 한다.
+
+**키 만료는 미리 알리지 않는다.** 무료 키는 한 달짜리인데, 추적은 1년에
+몇 번 쓸까 말까다(스마트택배 앱도 따로 쓴다). 매달 재발급을 조르는 대신
+사용자가 추적을 요청할 때 `--키확인`으로 보고, 끊겨 있으면 그때 재발급을
+안내한다(2026-10-18 사용자 지시). 단 추적이 켜진 물건이 있는데 키가 끊겨
+조회를 못 하면 그건 [배송] 줄에 남긴다 — 사용자가 요청한 추적이 조용히
+멈추면 안 되기 때문이다.
 
 사용법:
+    python sync_delivery.py --키확인
     python sync_delivery.py --dry
     python sync_delivery.py
 """
 import argparse
-import datetime
 import io
 import json
 import os
@@ -38,7 +44,7 @@ from config import API, COURIER_CODE, headers
 
 IDS_FILE = "db_ids.json"
 TRACK_API = "https://info.sweettracker.co.kr/api/v1/trackingInfo"
-KEY_FILE = "sweettracker_key.json"  # 발급일 기록 (만료 알림용)
+KEY_FILE = "sweettracker_key.json"  # 월별 호출 수 기록 (한도 보호용)
 DONE_LEVEL = 6
 
 
@@ -85,7 +91,7 @@ def track(t_key, code, invoice):
 
 MONTH_LIMIT = 100   # 프리 등급 월 호출 한도
 BUDGET_STOP = 95    # 여기 닿으면 이번 달은 더 부르지 않는다 (여유 5건)
-KEY_WARN_DAYS = 25  # 발급 후 이 날수가 지나면 재발급 안내
+KEY_EXPIRED = "101" # 스마트택배 오류 코드: 종료됐거나 유효하지 않은 키 (HTTP 400으로 온다)
 
 
 def load_key_info():
@@ -113,30 +119,46 @@ def month_calls(info):
     return info.get("호출", 0)
 
 
-def key_age_warning(info, today):
-    """발급 후 KEY_WARN_DAYS가 지났으면 경과 일수. 단 **하루 한 번만** 알린다 —
-    점검이 하루 두 번이라 그냥 두면 같은 안내가 아침·저녁 두 번 뜬다."""
-    issued = info.get("발급일")
-    if not issued:
-        info["발급일"] = today    # 최초 실행일을 발급일로 본다 (하루 이틀 오차 무방)
-        return None
-    age = (datetime.date.fromisoformat(today)
-           - datetime.date.fromisoformat(issued)).days
-    if age < KEY_WARN_DAYS or info.get("경고일") == today:
-        return None
-    info["경고일"] = today
-    return age
+def error_code(e):
+    """HTTPError 본문에서 스마트택배 오류 코드를 꺼낸다."""
+    body = e.read().decode("utf-8", "replace")
+    try:
+        return str(json.loads(body).get("code", "")), body
+    except ValueError:
+        return "", body
+
+
+def check_key(key):
+    """가짜 송장 하나로 키가 살아 있는지 본다. 없는 송장 조회는 한도에서
+    차감되지 않는다(요금제 안내 기준) — 추적 요청을 받을 때마다 불러도 된다."""
+    try:
+        d = track(key, "04", "000000000000")
+    except urllib.error.HTTPError as e:
+        code, body = error_code(e)
+        if code == KEY_EXPIRED:
+            print("키 만료 — tracking.sweettracker.co.kr에서 프리 이용권을 새로 받아야 합니다")
+        else:
+            print(f"키 확인 실패 {e.code} {body[:150]}")
+        return False
+    if d.get("status") is False:
+        print(f"키 확인 실패 {d.get('code')} {d.get('msg')}")
+        return False
+    print("키 정상")
+    return True
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--dry", action="store_true")
+    ap.add_argument("--키확인", action="store_true", help="키가 살아 있는지만 보고 끝낸다")
     a = ap.parse_args()
 
     key = os.environ.get("SWEETTRACKER_API_KEY")
     if not key:
         print("SWEETTRACKER_API_KEY가 없습니다 (.env 확인)", file=sys.stderr)
         return
+    if a.키확인:
+        sys.exit(0 if check_key(key) else 1)
 
     with io.open(IDS_FILE, encoding="utf-8") as f:
         ids = json.load(f)
@@ -158,7 +180,7 @@ def main():
     lines, done = [], []
     info = load_key_info()
     used = month_calls(info)
-    budget_hit = False
+    budget_hit = key_dead = False
     for p, name, courier, invoice in targets:
         if used >= BUDGET_STOP:
             budget_hit = True
@@ -169,8 +191,11 @@ def main():
         try:
             d = track(key, courier, invoice)
         except urllib.error.HTTPError as e:
-            body = e.read().decode()
+            code, body = error_code(e)
             print(f"  {name}: 조회 실패 {e.code} {body[:150]}", file=sys.stderr)
+            if code == KEY_EXPIRED:
+                key_dead = True   # 키가 끊겼으면 나머지도 다 실패한다
+                break
             continue
         if d.get("status") is False:
             print(f"  {name}: {d.get('msg')}")
@@ -199,8 +224,14 @@ def main():
                              "배송추적": {"checkbox": False}})
             print(f"자동 완료 처리: {name} ({when})")
 
-    key_age = key_age_warning(info, time.strftime("%Y-%m-%d"))
     n_tracked = len(lines)
+    # 추적이 켜진 물건이 있는데 키가 끊긴 경우만 알린다. 하루 한 번 —
+    # 점검이 하루 두 번이라 그냥 두면 같은 말이 아침·저녁 두 번 뜬다.
+    today = time.strftime("%Y-%m-%d")
+    if key_dead and info.get("만료알림") != today:
+        info["만료알림"] = today
+        lines.append("스마트택배 키가 만료되어 배송 조회를 하지 못했습니다. "
+                     "채팅으로 재발급을 요청해 주세요.")
     # 한도 안내는 그 달에 한 번만 — 안 막으면 월말까지 하루 두 번씩 같은 말이 뜬다
     if budget_hit and info.get("한도알림") != info["월"]:
         info["한도알림"] = info["월"]
@@ -210,21 +241,10 @@ def main():
     if not a.dry:
         save_key_info(info)
 
-    if not a.dry and (lines or key_age):
-        summary_bits = []
-        if lines:
-            summary_bits.append(f"배송 중 {n_tracked}건" if n_tracked else "배송 추적 중단")
-        if key_age:
-            summary_bits.append("스마트택배 키 재발급 필요")
-        details = []
-        if lines:
-            details.append(("[배송]", lines))
-        if key_age:
-            details.append(("[스마트택배]", [
-                f"키 발급 후 {key_age}일 지났습니다. 무료 키는 1개월만 유효합니다.",
-                "tracking.sweettracker.co.kr에서 재발급 후 .env·리포 시크릿을 갱신해주세요."]))
-        notify.send_card(" · ".join(summary_bits), summary=[" · ".join(summary_bits)],
-                         details=details, kinds=["배송"], count=n_tracked)
+    if not a.dry and lines:
+        summary = f"배송 중 {n_tracked}건" if n_tracked else "배송 추적 중단"
+        notify.send_card(summary, summary=[summary],
+                         details=[("[배송]", lines)], kinds=["배송"], count=n_tracked)
         if not notify.spooling():
             print("알림 카드 1장 발송 완료")
 
