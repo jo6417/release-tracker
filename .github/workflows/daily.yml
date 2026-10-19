@@ -118,10 +118,10 @@ jobs:
         run: python sync_intro.py --limit 120
         continue-on-error: true
 
-      # 메타스코어·오픈크리틱. 출시 180일 안은 7일마다, 그 뒤는 90일마다만
+      # 메타크리틱·오픈크리틱. 출시 180일 안은 7일마다, 그 뒤는 90일마다만
       # 다시 본다(critic_state.json). 알림은 없다 — track.py가 이 둘을 안 본다.
       # 하루 한 번이면 되는 일이라 아침에만 돈다
-      - name: 평론 점수 채우기 (메타·오픈크리틱)
+      - name: 평론 점수 채우기 (메타크리틱·오픈크리틱)
         if: ${{ (inputs.slot || '아침') == '아침' }}
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}

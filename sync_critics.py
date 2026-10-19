@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
-"""게임의 메타스코어·오픈크리틱 점수를 노션 작품 DB에 채운다.
+"""게임의 메타크리틱·오픈크리틱 점수를 노션 작품 DB에 채운다.
 
 `평점`은 IGDB 종합 점수(유저+평론 섞임)를 매칭 때 한 번 넣는 자리라,
 사람들이 실제로 보는 두 숫자와 어긋난다. 그 둘을 따로 둔다.
 
-    메타스코어   metacritic.com 작품 페이지의 JSON-LD(aggregateRating)
+    메타크리틱   metacritic.com 작품 페이지의 JSON-LD(aggregateRating)
                  → 안 맞으면 스팀 상점 API의 metacritic 값 (PC판 점수)
     오픈크리틱   위키데이터에서 IGDB 슬러그 → OpenCritic ID(P2864)를 찾고
                  opencritic.com 작품 페이지의 topCriticScore
@@ -56,7 +56,7 @@ RECENT_EVERY = 7
 OLD_EVERY = 90
 GAP = 1.0              # 같은 사이트 연속 요청 간격(초)
 
-P_MC = "메타스코어"
+P_MC = "메타크리틱"
 P_OC = "오픈크리틱"
 
 
@@ -189,7 +189,7 @@ def mc_slug(name):
 
 
 def metacritic_page(slug, year):
-    """작품 페이지의 메타스코어. 출시 연도가 ±1년을 벗어나면 다른 작품으로 본다
+    """작품 페이지의 메타크리틱. 출시 연도가 ±1년을 벗어나면 다른 작품으로 본다
     (리메이크·동명 작품이 슬러그를 나눠 쓴다)."""
     st, t = fetch(f"https://www.metacritic.com/game/{slug}/", "metacritic")
     if st != 200:
@@ -280,7 +280,7 @@ def main():
     need = [r["슬러그"] for r in todo if not (state.get(str(r["igdb"])) or {}).get("oc")]
     oc_ids = wikidata_oc(need) if need else {}
 
-    stat = {"메타": 0, "스팀": 0, "오픈": 0, "기록": 0}
+    stat = {"메타크리틱": 0, "스팀": 0, "오픈크리틱": 0, "기록": 0}
     for r in todo:
         key = str(r["igdb"])
         ent = state.get(key) or {}
@@ -290,7 +290,7 @@ def main():
         for slug in dict.fromkeys(filter(None, [ent.get("mc"), r["슬러그"], mc_slug(r["이름"])])):
             mc = metacritic_page(slug, r["출시일"].year)
             if mc:
-                ent["mc"], src = slug, "메타"
+                ent["mc"], src = slug, "메타크리틱"
                 break
         if not mc and r["steam"]:
             mc = metacritic_steam(r["steam"])
@@ -300,7 +300,7 @@ def main():
         if src:
             stat[src] += 1
         if oc:
-            stat["오픈"] += 1
+            stat["오픈크리틱"] += 1
         ent.update({"oc": oc_id, "확인": today.isoformat(), P_MC: mc, P_OC: oc})
         state[key] = ent
 
@@ -311,8 +311,8 @@ def main():
         if oc is not None and oc != r[P_OC]:
             props[P_OC] = {"number": oc}
         mark = "*" if props else " "
-        print(f" {mark} {r['제목'][:22]:22} 메타 {mc if mc is not None else '-':>3}"
-              f"{'(스팀)' if src == '스팀' else '':5} 오픈 {oc if oc is not None else '-':>3}")
+        print(f" {mark} {r['제목'][:22]:22} 메타크리틱 {mc if mc is not None else '-':>3}"
+              f"{"(스팀)" if src == "스팀" else "":5} 오픈크리틱 {oc if oc is not None else '-':>3}")
         if props and not a.dry:
             patch_page(r["pid"], props)
             stat["기록"] += 1
@@ -322,8 +322,8 @@ def main():
         with io.open(STATE_FILE, "w", encoding="utf-8") as f:
             json.dump(state, f, ensure_ascii=False, indent=1, sort_keys=True)
 
-    print(f"\n조회 {len(todo)}건 · 메타 {stat['메타']} (+스팀 {stat['스팀']}) · "
-          f"오픈크리틱 {stat['오픈']} · 노션 갱신 {stat['기록']}건"
+    print(f"\n조회 {len(todo)}건 · 메타크리틱 {stat['메타크리틱']} (+스팀 {stat['스팀']}) · "
+          f"오픈크리틱 {stat['오픈크리틱']} · 노션 갱신 {stat['기록']}건"
           f"{' (미리보기라 쓰지 않음)' if a.dry else ''}")
 
 
