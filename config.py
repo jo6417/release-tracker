@@ -177,6 +177,8 @@ WORK_SCHEMA = {
     "현재최저가": {"number": {"format": "won"}},
     "역대최저가": {"number": {"format": "won"}},
     "평점": {"number": {"format": "number"}},
+    "메타스코어": {"number": {"format": "number"}},   # sync_critics.py
+    "오픈크리틱": {"number": {"format": "number"}},   # sync_critics.py
 
     "졸업일": {"date": {}},
     "마지막플레이일": {"date": {}},

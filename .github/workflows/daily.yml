@@ -118,6 +118,18 @@ jobs:
         run: python sync_intro.py --limit 120
         continue-on-error: true
 
+      # 메타스코어·오픈크리틱. 출시 180일 안은 7일마다, 그 뒤는 90일마다만
+      # 다시 본다(critic_state.json). 알림은 없다 — track.py가 이 둘을 안 본다.
+      # 하루 한 번이면 되는 일이라 아침에만 돈다
+      - name: 평론 점수 채우기 (메타·오픈크리틱)
+        if: ${{ (inputs.slot || '아침') == '아침' }}
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: python sync_critics.py --limit 150
+        continue-on-error: true
+
       - name: 새 트레일러 감지
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
@@ -224,7 +236,7 @@ jobs:
           git add hardware_news_state.json
           # 처음 생기기 전까지는 파일이 없다 — 없으면 git add가 실패해서
           # bash -e 때문에 이 스텝 전체가 죽는다. 있을 때만 더한다.
-          for f in sweettracker_key.json confirm_queue.json show_reminder_state.json; do
+          for f in sweettracker_key.json confirm_queue.json show_reminder_state.json critic_state.json; do
             [ -f "$f" ] && git add "$f"
           done
           if git diff --staged --quiet; then

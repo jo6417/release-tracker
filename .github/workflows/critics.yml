@@ -1,0 +1,59 @@
+name: 평론 점수 채우기
+
+# 평소에는 daily.yml 아침 단계가 돈다. 이건 손으로 한꺼번에 채울 때만 쓴다
+# (처음 채울 때, 사이트가 막혀 며칠 비었을 때). 알림 카드는 보내지 않는다.
+on:
+  workflow_dispatch:
+    inputs:
+      limit:
+        description: "이번에 조회할 최대 건수"
+        default: "500"
+      force:
+        description: "주기 무시하고 전부 다시 (true/false)"
+        default: "false"
+
+permissions:
+  contents: write
+
+jobs:
+  critics:
+    runs-on: ubuntu-latest
+    # 아침·저녁 추적과 겹치면 상태 파일 커밋이 엉킨다
+    concurrency:
+      group: tracker
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: 메타·오픈크리틱 점수 채우기
+        env:
+          NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
+          TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
+        run: |
+          if [ "${{ inputs.force }}" = "true" ]; then
+            python sync_critics.py --limit "${{ inputs.limit }}" --force
+          else
+            python sync_critics.py --limit "${{ inputs.limit }}"
+          fi
+
+      - name: 조회 기록 커밋
+        run: |
+          git config user.name "release-tracker"
+          git config user.email "noreply@github.com"
+          [ -f critic_state.json ] && git add critic_state.json
+          if git diff --staged --quiet; then
+            echo "변경 없음"
+            exit 0
+          fi
+          git commit -m "평론 점수 조회 기록 $(date +%Y-%m-%d)"
+          for i in 1 2 3; do
+            git pull --rebase --autostash && git push && exit 0
+            echo "push 재시도 $i"
+            sleep 5
+          done
+          exit 1
