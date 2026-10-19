@@ -312,7 +312,7 @@ def main():
             props[P_OC] = {"number": oc}
         mark = "*" if props else " "
         print(f" {mark} {r['제목'][:22]:22} 메타크리틱 {mc if mc is not None else '-':>3}"
-              f"{"(스팀)" if src == "스팀" else "":5} 오픈크리틱 {oc if oc is not None else '-':>3}")
+              f"{'(스팀)' if src == '스팀' else '':5} 오픈크리틱 {oc if oc is not None else '-':>3}")
         if props and not a.dry:
             patch_page(r["pid"], props)
             stat["기록"] += 1
