@@ -13,7 +13,9 @@
 RapidAPI 키가 필요하다. 그래서 공개 페이지에 박힌 값을 읽는다.
 메타크리틱의 내부 검색 API는 사이트에 박힌 키를 빌려 써야 해서 쓰지 않는다.
 
-**대상**: 종류=게임, 외부ID에 igdb:가 있고 이미 출시된 것.
+**대상**: 종류=게임이고 이미 출시된 것. IGDB ID가 있으면 그쪽 이름·슬러그·
+출시일을 쓰고, 없으면 노션의 원제·출시일로 메타크리틱 주소를 맞춰 본다.
+오픈크리틱 ID는 IGDB 슬러그로, 없으면 스팀 appid(P1733)로 위키데이터에서 찾는다.
 **주기**: 점수는 출시 직후 몇 주 동안만 움직인다.
     - 처음 보는 게임 → 조회
     - 출시 180일 이내 → 7일마다 다시
@@ -148,13 +150,14 @@ def igdb_info(ids):
     return out
 
 
-def wikidata_oc(slugs):
-    """IGDB 슬러그 → OpenCritic ID. 위키데이터에 없으면 빠진다."""
-    out, slugs = {}, [s for s in slugs if s]
-    for i in range(0, len(slugs), 150):
-        vals = " ".join('"%s"' % s.replace('"', "") for s in slugs[i:i + 150])
-        q = ("SELECT ?igdb ?oc WHERE { VALUES ?igdb {%s} "
-             "?item wdt:P5794 ?igdb . ?item wdt:P2864 ?oc }" % vals)
+def wikidata_oc(keys, prop="P5794"):
+    """IGDB 슬러그(P5794) 또는 스팀 appid(P1733) → OpenCritic ID.
+    위키데이터에 없으면 빠진다."""
+    out, keys = {}, [k for k in keys if k]
+    for i in range(0, len(keys), 150):
+        vals = " ".join('"%s"' % k.replace('"', "") for k in keys[i:i + 150])
+        q = ("SELECT ?k ?oc WHERE { VALUES ?k {%s} "
+             "?item wdt:%s ?k . ?item wdt:P2864 ?oc }" % (vals, prop))
         url = "https://query.wikidata.org/sparql?" + urllib.parse.urlencode({"query": q})
         for attempt in range(4):
             st, body = fetch(url, "wikidata", WD_UA)
@@ -165,7 +168,7 @@ def wikidata_oc(slugs):
             print(f"  [위키데이터] HTTP {st} — 이번엔 오픈크리틱 ID를 못 찾음", file=sys.stderr)
             continue
         for b in json.loads(body)["results"]["bindings"]:
-            out.setdefault(b["igdb"]["value"], b["oc"]["value"])
+            out.setdefault(b["k"]["value"], b["oc"]["value"])
     return out
 
 
@@ -256,35 +259,48 @@ def main():
             continue
         ext = txt(pr.get("외부ID"))
         g = re.search(r"igdb:(\d+)", ext)
-        if not g:
-            continue
         s = re.search(r"steam:(\d+)", ext)
-        rows.append({"pid": p["id"], "제목": title, "igdb": int(g.group(1)),
-                     "steam": s.group(1) if s else None,
-                     P_MC: num(pr.get(P_MC)), P_OC: num(pr.get(P_OC))})
+        ref = (pr.get("레퍼런스") or {}).get("url") or ""
+        d = ((pr.get("출시·개봉일") or {}).get("date") or {}).get("start")
+        rows.append({
+            "pid": p["id"], "제목": title,
+            "igdb": int(g.group(1)) if g else None,
+            "steam": s.group(1) if s else None,
+            # 외부ID가 없는 행도 원제로 메타크리틱 주소를 맞춰 볼 수 있다
+            "이름": txt(pr.get("원제")) or title,
+            "슬러그": ref.rsplit("/games/", 1)[1].strip("/") if "igdb.com/games/" in ref else None,
+            "출시일": datetime.date.fromisoformat(d[:10]) if d else None,
+            P_MC: num(pr.get(P_MC)), P_OC: num(pr.get(P_OC))})
 
-    info = igdb_info({r["igdb"] for r in rows})
+    # IGDB가 있으면 그쪽 이름·슬러그·출시일이 더 정확하다
+    info = igdb_info({r["igdb"] for r in rows if r["igdb"]})
     todo = []
     for r in rows:
-        i = info.get(r["igdb"])
-        if not i or not i["출시일"] or i["출시일"] > today:
+        i = info.get(r["igdb"]) if r["igdb"] else None
+        if i:
+            r["이름"] = r["이름"] if r["이름"] != r["제목"] else i["이름"]
+            r["슬러그"] = i["슬러그"] or r["슬러그"]
+            r["출시일"] = i["출시일"] or r["출시일"]
+        if not r["출시일"] or r["출시일"] > today:
             continue                      # 아직 안 나왔다 — 점수가 있을 수 없다
-        r.update(i)
-        if due(state.get(str(r["igdb"])), i["출시일"], today, a.force):
+        r["키"] = (f"igdb:{r['igdb']}" if r["igdb"] else
+                   f"steam:{r['steam']}" if r["steam"] else r["pid"])
+        if due(state.get(r["키"]), r["출시일"], today, a.force):
             todo.append(r)
     # 한 번도 안 본 것 → 최근 출시 순
-    todo.sort(key=lambda r: (str(r["igdb"]) in state, -r["출시일"].toordinal()))
+    todo.sort(key=lambda r: (r["키"] in state, -r["출시일"].toordinal()))
     print(f"게임 {len(rows)}건 중 출시됨·조회 차례 {len(todo)}건 (이번 상한 {a.limit})")
     todo = todo[:a.limit]
 
-    need = [r["슬러그"] for r in todo if not (state.get(str(r["igdb"])) or {}).get("oc")]
-    oc_ids = wikidata_oc(need) if need else {}
+    fresh = [r for r in todo if not (state.get(r["키"]) or {}).get("oc")]
+    oc_by_slug = wikidata_oc([r["슬러그"] for r in fresh]) if fresh else {}
+    oc_by_steam = wikidata_oc([r["steam"] for r in fresh], "P1733") if fresh else {}
 
     stat = {"메타크리틱": 0, "스팀": 0, "오픈크리틱": 0, "기록": 0}
     for r in todo:
-        key = str(r["igdb"])
+        key = r["키"]
         ent = state.get(key) or {}
-        oc_id = ent.get("oc") or oc_ids.get(r["슬러그"])
+        oc_id = ent.get("oc") or oc_by_slug.get(r["슬러그"]) or oc_by_steam.get(r["steam"])
 
         mc, src = None, None
         for slug in dict.fromkeys(filter(None, [ent.get("mc"), r["슬러그"], mc_slug(r["이름"])])):
