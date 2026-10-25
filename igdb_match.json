@@ -1990,7 +1990,7 @@
   "시리즈": [
    "Doom"
   ],
-  "평점": 85.4,
+  "평점": 85.3,
   "url": "https://www.igdb.com/games/doom-eternal",
   "경로": "steam",
   "확신": "확실"
@@ -2114,7 +2114,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 87.2,
+  "평점": 87.3,
   "url": "https://www.igdb.com/games/pragmata",
   "경로": "steam",
   "확신": "확실"
@@ -2711,7 +2711,7 @@
   "시리즈": [
    "Call of Duty"
   ],
-  "평점": null,
+  "평점": 88.2,
   "url": "https://www.igdb.com/games/call-of-duty-modern-warfare-4",
   "경로": "검색",
   "확신": "확실"
@@ -3820,7 +3820,7 @@
    "XONE"
   ],
   "시리즈": [],
-  "평점": 76.7,
+  "평점": 76.8,
   "url": "https://www.igdb.com/games/mafia-definitive-edition",
   "경로": "검색",
   "확신": "확실"
@@ -3838,7 +3838,7 @@
   "시리즈": [
    "Minecraft"
   ],
-  "평점": 70.9,
+  "평점": 70.8,
   "url": "https://www.igdb.com/games/minecraft-dungeons",
   "경로": "검색",
   "확신": "확실"
@@ -3975,7 +3975,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": null,
+  "평점": 78.3,
   "url": "https://www.igdb.com/games/end-of-abyss",
   "경로": "검색",
   "확신": "확실"
@@ -4008,7 +4008,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 83.0,
+  "평점": 83.6,
   "url": "https://www.igdb.com/games/control-resonant--1",
   "경로": "검색",
   "확신": "확실"
@@ -4182,7 +4182,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 55.8,
+  "평점": 55.9,
   "url": "https://www.igdb.com/games/nte-neverness-to-everness",
   "경로": "검색",
   "확신": "확실"
@@ -4305,7 +4305,7 @@
   "시리즈": [
    "Dragon Quest"
   ],
-  "평점": 68.3,
+  "평점": 59.9,
   "url": "https://www.igdb.com/games/infinity-strash-dragon-quest-the-adventure-of-dai",
   "경로": "검색",
   "확신": "확실"
@@ -4571,7 +4571,7 @@
   "시리즈": [
    "Dungeon & Fighter"
   ],
-  "평점": 82.8,
+  "평점": 82.5,
   "url": "https://www.igdb.com/games/the-first-berserker-khazan",
   "경로": "검색",
   "확신": "확실"
@@ -5362,7 +5362,7 @@
   "시리즈": [
    "Ratchet & Clank"
   ],
-  "평점": 88.2,
+  "평점": 88.3,
   "url": "https://www.igdb.com/games/ratchet-and-clank-rift-apart",
   "경로": "검색",
   "확신": "확실"
@@ -6645,17 +6645,20 @@
   "확신": "확실"
  },
  "ZOMBI": {
-  "id": 11491,
+  "id": 2279,
   "이름": "Zombi",
-  "출시일": "2015-08-18",
+  "출시일": "1986-12-31",
   "플랫폼": [
-   "PS4",
-   "PC",
-   "XONE"
+   "C64",
+   "ZXS",
+   "Atari-ST",
+   "DOS",
+   "Amiga",
+   "ACPC"
   ],
   "시리즈": [],
-  "평점": 63.6,
-  "url": "https://www.igdb.com/games/zombi--1",
+  "평점": 67.7,
+  "url": "https://www.igdb.com/games/zombi",
   "경로": "검색",
   "확신": "확실"
  },
@@ -6691,7 +6694,7 @@
   "시리즈": [
    "Wolfenstein"
   ],
-  "평점": 76.9,
+  "평점": 76.8,
   "url": "https://www.igdb.com/games/wolfenstein-the-old-blood",
   "경로": "검색",
   "확신": "확실"
@@ -6833,7 +6836,7 @@
   "시리즈": [
    "Battlefield"
   ],
-  "평점": 83.6,
+  "평점": 83.5,
   "url": "https://www.igdb.com/games/battlefield-1",
   "경로": "검색",
   "확신": "확실"
