@@ -69,6 +69,7 @@
    "tmdb:6a7fe4458dd393b3f4393b2c",
    "tmdb:6a8a2386532d06cffb0d522a",
    "tmdb:6aa4982e4c69276c67d532c9",
+   "tmdb:6ab1f248a050cc040825c02e",
    "tmdb:6ab8280630c306dfa69bea0a",
    "tmdb:6ab993b13669e849eb665455",
    "tmdb:6ab9946712a3268422d8881f",
@@ -76,6 +77,7 @@
    "tmdb:6abd4f8491ed4561ea142221",
    "tmdb:6abd5d379f4bd4e0ed34160a",
    "tmdb:6abe8deb5820bbc744274721",
+   "tmdb:6abf9a0ff01554a82465619f",
    "tmdb:6abf9a2b5c4d41a31cb093cf",
    "tmdb:6ac4c65cb8c8f92e482f3f38",
    "tmdb:6ac4c6a36f66bcc16995cdc8",
@@ -696,6 +698,12 @@
   ],
   "확인": "2026-10-29"
  },
+ "408857fe-7a80-81fe-bc0a-f9751274854d": {
+  "본것": [
+   "steam:257119181"
+  ],
+  "확인": "2026-10-29"
+ },
  "yt:UC6NvS8_TrfDcCK65KawCxZg": {
   "본것": [
    "yt:1xGiPUeevCM",
@@ -714,7 +722,7 @@
    "yt:qOsDHymg_Yo",
    "yt:sqe3j4Qch1Y"
   ],
-  "확인": "2026-10-28"
+  "확인": "2026-10-29"
  },
  "yt:UC_OFPhmsaFG8U-HtLHShorA": {
   "본것": [
@@ -722,6 +730,6 @@
    "yt:b_5x0rmHexo",
    "yt:j6BWRhNvaDY"
   ],
-  "확인": "2026-10-28"
+  "확인": "2026-10-29"
  }
 }
