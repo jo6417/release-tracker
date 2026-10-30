@@ -216,7 +216,8 @@
    "igdb:170965",
    "igdb:185934",
    "igdb:186825",
-   "igdb:195749"
+   "igdb:195749",
+   "igdb:201063"
   ],
   "확인": "2026-10-30"
  },
@@ -508,7 +509,10 @@
    "tmdb:6ae094a831f421cfbae6e875",
    "tmdb:6ae0cdd19dbff43664eebb2a",
    "tmdb:6ae0d41642c70d196b3ba83c",
-   "tmdb:6ae209ed872f8589b82b1b74"
+   "tmdb:6ae209ed872f8589b82b1b74",
+   "tmdb:6ae3cc24fa7072923a4adb1a",
+   "tmdb:6ae3cc4b85c57a8d6c4e453c",
+   "tmdb:6ae3cc5f7b1412d4fe4e4573"
   ],
   "확인": "2026-10-30"
  },
@@ -723,7 +727,7 @@
    "yt:qOsDHymg_Yo",
    "yt:sqe3j4Qch1Y"
   ],
-  "확인": "2026-10-29"
+  "확인": "2026-10-30"
  },
  "yt:UC_OFPhmsaFG8U-HtLHShorA": {
   "본것": [
@@ -731,6 +735,6 @@
    "yt:b_5x0rmHexo",
    "yt:j6BWRhNvaDY"
   ],
-  "확인": "2026-10-29"
+  "확인": "2026-10-30"
  }
 }
