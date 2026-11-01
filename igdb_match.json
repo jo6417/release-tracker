@@ -71,6 +71,24 @@
   "경로": "steam",
   "확신": "확실"
  },
+ "위치브룩": {
+  "id": 67195,
+  "이름": "Witchbrook",
+  "출시일": "2027-01-28",
+  "플랫폼": [
+   "Series X|S",
+   "Switch 2",
+   "PC",
+   "PS5",
+   "XONE",
+   "Switch"
+  ],
+  "시리즈": [],
+  "평점": null,
+  "url": "https://www.igdb.com/games/witchbrook",
+  "경로": "steam",
+  "확신": "확실"
+ },
  "The Walking Dead: Saints & Sinners": {
   "id": 105416,
   "이름": "The Walking Dead: Saints & Sinners",
@@ -224,6 +242,7 @@
   "플랫폼": [
    "Series X|S",
    "PS4",
+   "Switch 2",
    "PC",
    "PS5",
    "Mac",
@@ -341,7 +360,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 76.2,
+  "평점": 76.3,
   "url": "https://www.igdb.com/games/moonlighter",
   "경로": "steam",
   "확신": "확실"
@@ -429,7 +448,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 91.3,
+  "평점": 91.2,
   "url": "https://www.igdb.com/games/mewgenics",
   "경로": "steam",
   "확신": "확실"
@@ -464,6 +483,7 @@
   "플랫폼": [
    "Series X|S",
    "PC",
+   "PS5",
    "Switch"
   ],
   "시리즈": [],
@@ -777,23 +797,6 @@
   "시리즈": [],
   "평점": 74.1,
   "url": "https://www.igdb.com/games/evolve-stage-2",
-  "경로": "steam",
-  "확신": "확실"
- },
- "드래곤에이지 베일가드": {
-  "id": 30208,
-  "이름": "Dragon Age: The Veilguard",
-  "출시일": "2024-10-31",
-  "플랫폼": [
-   "Series X|S",
-   "PC",
-   "PS5"
-  ],
-  "시리즈": [
-   "Dragon Age"
-  ],
-  "평점": 80.0,
-  "url": "https://www.igdb.com/games/dragon-age-the-veilguard",
   "경로": "steam",
   "확신": "확실"
  },
@@ -2084,6 +2087,23 @@
   "경로": "steam",
   "확신": "확실"
  },
+ "드래곤에이지 베일가드": {
+  "id": 30208,
+  "이름": "Dragon Age: The Veilguard",
+  "출시일": "2024-10-31",
+  "플랫폼": [
+   "Series X|S",
+   "PC",
+   "PS5"
+  ],
+  "시리즈": [
+   "Dragon Age"
+  ],
+  "평점": 80.0,
+  "url": "https://www.igdb.com/games/dragon-age-the-veilguard",
+  "경로": "steam",
+  "확신": "확실"
+ },
  "배트맨:아캄나이트": {
   "id": 5503,
   "이름": "Batman: Arkham Knight",
@@ -2149,7 +2169,7 @@
   "시리즈": [
    "Resident Evil"
   ],
-  "평점": 89.8,
+  "평점": 89.6,
   "url": "https://www.igdb.com/games/resident-evil-requiem",
   "경로": "steam",
   "확신": "확실"
@@ -2165,7 +2185,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 85.9,
+  "평점": 86.0,
   "url": "https://www.igdb.com/games/crimson-desert-enhanced--1",
   "경로": "steam",
   "확신": "확실"
@@ -2181,7 +2201,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 90.3,
+  "평점": 89.8,
   "url": "https://www.igdb.com/games/split-fiction",
   "경로": "steam",
   "확신": "확실"
@@ -2304,6 +2324,7 @@
   "출시일": "2017-10-10",
   "플랫폼": [
    "PS4",
+   "Switch 2",
    "PC",
    "XONE"
   ],
@@ -2497,7 +2518,7 @@
   "시리즈": [
    "Wolfenstein"
   ],
-  "평점": 66.5,
+  "평점": 66.7,
   "url": "https://www.igdb.com/games/wolfenstein-youngblood",
   "경로": "steam",
   "확신": "확실"
@@ -2711,7 +2732,7 @@
   "시리즈": [
    "Call of Duty"
   ],
-  "평점": 88.2,
+  "평점": 84.9,
   "url": "https://www.igdb.com/games/call-of-duty-modern-warfare-4",
   "경로": "검색",
   "확신": "확실"
@@ -3280,7 +3301,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 69.8,
+  "평점": 70.6,
   "url": "https://www.igdb.com/games/inzoi",
   "경로": "검색",
   "확신": "확실"
@@ -3364,7 +3385,7 @@
    "Mickey Mouse",
    "Disney"
   ],
-  "평점": 74.6,
+  "평점": 74.8,
   "url": "https://www.igdb.com/games/epic-mickey-rebrushed",
   "경로": "검색",
   "확신": "확실"
@@ -3533,7 +3554,7 @@
   "시리즈": [
    "Dead Space"
   ],
-  "평점": 87.1,
+  "평점": 87.0,
   "url": "https://www.igdb.com/games/dead-space--1",
   "경로": "검색",
   "확신": "확실"
@@ -3633,6 +3654,7 @@
    "Stadia",
    "Series X|S",
    "PS4",
+   "Switch 2",
    "PC",
    "PS5",
    "XONE"
@@ -3960,7 +3982,7 @@
   "시리즈": [
    "Doom"
   ],
-  "평점": 84.5,
+  "평점": 84.3,
   "url": "https://www.igdb.com/games/doom-the-dark-ages",
   "경로": "검색",
   "확신": "확실"
@@ -3975,7 +3997,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 78.3,
+  "평점": 79.9,
   "url": "https://www.igdb.com/games/end-of-abyss",
   "경로": "검색",
   "확신": "확실"
@@ -4024,7 +4046,7 @@
   "시리즈": [
    "Silent Hill"
   ],
-  "평점": 78.8,
+  "평점": 78.7,
   "url": "https://www.igdb.com/games/silent-hill-townfall",
   "경로": "검색",
   "확신": "확실"
@@ -4213,7 +4235,7 @@
   "시리즈": [
    "James Bond"
   ],
-  "평점": 81.2,
+  "평점": 81.8,
   "url": "https://www.igdb.com/games/007-first-light",
   "경로": "검색",
   "확신": "확실"
@@ -4444,7 +4466,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 72.5,
+  "평점": 72.7,
   "url": "https://www.igdb.com/games/little-nightmares-iii--1",
   "경로": "검색",
   "확신": "확실"
@@ -4460,7 +4482,7 @@
   "시리즈": [
    "Pokémon"
   ],
-  "평점": 76.0,
+  "평점": 74.6,
   "url": "https://www.igdb.com/games/pokemon-legends-z-a",
   "경로": "검색",
   "확신": "낮음"
@@ -4525,7 +4547,7 @@
   "시리즈": [
    "Indiana Jones"
   ],
-  "평점": 88.5,
+  "평점": 88.3,
   "url": "https://www.igdb.com/games/indiana-jones-and-the-great-circle",
   "경로": "검색",
   "확신": "확실"
@@ -4535,6 +4557,8 @@
   "이름": "Sword of the Sea",
   "출시일": "2025-08-19",
   "플랫폼": [
+   "Series X|S",
+   "Switch 2",
    "PC",
    "PS5"
   ],
@@ -4908,7 +4932,7 @@
   "시리즈": [
    "Resident Evil"
   ],
-  "평점": 78.7,
+  "평점": 78.3,
   "url": "https://www.igdb.com/games/resident-evil-3",
   "경로": "검색",
   "확신": "확실"
@@ -6325,7 +6349,7 @@
   "시리즈": [
    "Far Cry"
   ],
-  "평점": 68.7,
+  "평점": 68.8,
   "url": "https://www.igdb.com/games/far-cry-new-dawn",
   "경로": "검색",
   "확신": "확실"
@@ -6420,7 +6444,7 @@
   "시리즈": [
    "Battlefield"
   ],
-  "평점": 74.0,
+  "평점": 74.1,
   "url": "https://www.igdb.com/games/battlefield-v",
   "경로": "검색",
   "확신": "확실"
