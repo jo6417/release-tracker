@@ -399,7 +399,7 @@
    "Batman",
    "DC Comics"
   ],
-  "평점": 73.2,
+  "평점": 73.1,
   "url": "https://www.igdb.com/games/batman-arkham-origins",
   "경로": "steam",
   "확신": "확실"
@@ -1650,7 +1650,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": null,
+  "평점": 78.5,
   "url": "https://www.igdb.com/games/little-witch-in-the-woods",
   "경로": "steam",
   "확신": "확실"
@@ -2518,7 +2518,7 @@
   "시리즈": [
    "Wolfenstein"
   ],
-  "평점": 66.7,
+  "평점": 66.4,
   "url": "https://www.igdb.com/games/wolfenstein-youngblood",
   "경로": "steam",
   "확신": "확실"
@@ -2676,8 +2676,9 @@
  "Petit Planet": {
   "id": 370095,
   "이름": "Petit Planet",
-  "출시일": "2026-12-31",
+  "출시일": "2026-12-04",
   "플랫폼": [
+   "Switch 2",
    "Android",
    "PC",
    "iOS"
@@ -2732,7 +2733,7 @@
   "시리즈": [
    "Call of Duty"
   ],
-  "평점": 84.9,
+  "평점": 84.8,
   "url": "https://www.igdb.com/games/call-of-duty-modern-warfare-4",
   "경로": "검색",
   "확신": "확실"
@@ -2792,7 +2793,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 88.2,
+  "평점": 92.0,
   "url": "https://www.igdb.com/games/aniimo",
   "경로": "검색",
   "확신": "확실"
@@ -2810,7 +2811,7 @@
   "시리즈": [
    "Onimusha"
   ],
-  "평점": 86.3,
+  "평점": 85.0,
   "url": "https://www.igdb.com/games/onimusha-way-of-the-sword",
   "경로": "검색",
   "확신": "확실"
@@ -3042,7 +3043,7 @@
   "시리즈": [
    "Dead Rising"
   ],
-  "평점": 71.8,
+  "평점": 71.7,
   "url": "https://www.igdb.com/games/dead-rising-3",
   "경로": "검색",
   "확신": "확실"
@@ -3301,7 +3302,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 70.6,
+  "평점": 70.4,
   "url": "https://www.igdb.com/games/inzoi",
   "경로": "검색",
   "확신": "확실"
@@ -3554,7 +3555,7 @@
   "시리즈": [
    "Dead Space"
   ],
-  "평점": 87.0,
+  "평점": 87.1,
   "url": "https://www.igdb.com/games/dead-space--1",
   "경로": "검색",
   "확신": "확실"
@@ -3713,7 +3714,7 @@
   "시리즈": [
    "Demon Slayer: Kimetsu no Yaiba"
   ],
-  "평점": 70.3,
+  "평점": 70.2,
   "url": "https://www.igdb.com/games/demon-slayer-kimetsu-no-yaiba-the-hinokami-chronicles",
   "경로": "검색",
   "확신": "확실"
@@ -3766,7 +3767,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 73.8,
+  "평점": 73.7,
   "url": "https://www.igdb.com/games/immortals-fenyx-rising",
   "경로": "검색",
   "확신": "확실"
@@ -3860,7 +3861,7 @@
   "시리즈": [
    "Minecraft"
   ],
-  "평점": 70.8,
+  "평점": 70.9,
   "url": "https://www.igdb.com/games/minecraft-dungeons",
   "경로": "검색",
   "확신": "확실"
@@ -3905,7 +3906,7 @@
   "시리즈": [
    "Nioh"
   ],
-  "평점": 83.1,
+  "평점": 83.0,
   "url": "https://www.igdb.com/games/nioh-2",
   "경로": "검색",
   "확신": "확실"
@@ -3913,7 +3914,7 @@
  "갓오브워: 라우페이": {
   "id": 404063,
   "이름": "God of War Laufey",
-  "출시일": "2027-02-16",
+  "출시일": "2027-05-20",
   "플랫폼": [
    "PS5"
   ],
@@ -4030,7 +4031,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 83.6,
+  "평점": 85.3,
   "url": "https://www.igdb.com/games/control-resonant--1",
   "경로": "검색",
   "확신": "확실"
@@ -4046,7 +4047,7 @@
   "시리즈": [
    "Silent Hill"
   ],
-  "평점": 78.7,
+  "평점": 78.2,
   "url": "https://www.igdb.com/games/silent-hill-townfall",
   "경로": "검색",
   "확신": "확실"
@@ -4081,7 +4082,7 @@
    "X-Men",
    "Wolverine"
   ],
-  "평점": 81.6,
+  "평점": 81.4,
   "url": "https://www.igdb.com/games/marvels-wolverine",
   "경로": "검색",
   "확신": "확실"
@@ -4128,7 +4129,7 @@
   "시리즈": [
    "Splatoon"
   ],
-  "평점": 84.2,
+  "평점": 84.3,
   "url": "https://www.igdb.com/games/splatoon-raiders",
   "경로": "검색",
   "확신": "확실"
@@ -4204,7 +4205,7 @@
    "Mac"
   ],
   "시리즈": [],
-  "평점": 55.9,
+  "평점": 55.8,
   "url": "https://www.igdb.com/games/nte-neverness-to-everness",
   "경로": "검색",
   "확신": "확실"
@@ -4264,7 +4265,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": null,
+  "평점": 84.1,
   "url": "https://www.igdb.com/games/phantom-blade-zero",
   "경로": "검색",
   "확신": "확실"
@@ -4466,7 +4467,7 @@
    "Switch"
   ],
   "시리즈": [],
-  "평점": 72.7,
+  "평점": 72.9,
   "url": "https://www.igdb.com/games/little-nightmares-iii--1",
   "경로": "검색",
   "확신": "확실"
@@ -4505,7 +4506,7 @@
  },
  "헬이즈어스": {
   "id": 196954,
-  "이름": "Hell is Us",
+  "이름": "Hell Is Us",
   "출시일": "2025-09-04",
   "플랫폼": [
    "Series X|S",
@@ -4547,7 +4548,7 @@
   "시리즈": [
    "Indiana Jones"
   ],
-  "평점": 88.3,
+  "평점": 88.4,
   "url": "https://www.igdb.com/games/indiana-jones-and-the-great-circle",
   "경로": "검색",
   "확신": "확실"
@@ -4733,7 +4734,7 @@
    "PS5"
   ],
   "시리즈": [],
-  "평점": 89.9,
+  "평점": 89.8,
   "url": "https://www.igdb.com/games/alan-wake-ii",
   "경로": "검색",
   "확신": "확실"
@@ -5130,7 +5131,7 @@
   "시리즈": [
    "One Piece"
   ],
-  "평점": 77.5,
+  "평점": 77.4,
   "url": "https://www.igdb.com/games/one-piece-odyssey",
   "경로": "검색",
   "확신": "확실"
@@ -5153,7 +5154,7 @@
   "시리즈": [
    "Resident Evil"
   ],
-  "평점": 85.4,
+  "평점": 85.3,
   "url": "https://www.igdb.com/games/resident-evil-village",
   "경로": "검색",
   "확신": "확실"
@@ -5258,7 +5259,7 @@
   "시리즈": [
    "God of War"
   ],
-  "평점": 92.8,
+  "평점": 92.7,
   "url": "https://www.igdb.com/games/god-of-war-ragnarok",
   "경로": "검색",
   "확신": "확실"
@@ -6106,7 +6107,7 @@
   "시리즈": [
    "Assassin's Creed"
   ],
-  "평점": 84.6,
+  "평점": 84.7,
   "url": "https://www.igdb.com/games/assassins-creed-odyssey",
   "경로": "검색",
   "확신": "확실"
@@ -6632,7 +6633,7 @@
   "시리즈": [
    "Drakengard"
   ],
-  "평점": 87.7,
+  "평점": 87.8,
   "url": "https://www.igdb.com/games/nier-automata",
   "경로": "검색",
   "확신": "확실"
@@ -6701,7 +6702,7 @@
   "시리즈": [
    "Assassin's Creed"
   ],
-  "평점": 83.7,
+  "평점": 83.6,
   "url": "https://www.igdb.com/games/assassins-creed-origins",
   "경로": "검색",
   "확신": "확실"
