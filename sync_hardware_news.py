@@ -115,6 +115,19 @@ def search_query(title):
     return re.sub(r"\s*\([^)]*\)\s*$", "", title).strip() or title
 
 
+# 하드웨어 기사가 진짜 그 물건 얘기인지 볼 브랜드 단어. 네이버 뉴스 검색은
+# 검색어 단어 일부만 맞아도 돌려줘서, "시간의 오카리나 악기"로 찾으면 동네
+# 오카리나 공연·학교 기사까지 섞였다(2026-11-09). 제목·요약에 이 중 하나는
+# 있어야 알린다.
+BRAND_WORDS = ["닌텐도", "nintendo", "젤다", "zelda", "스위치", "switch", "아미보", "amiibo"]
+
+
+def is_hardware_article(item):
+    text = (strip_tags(item.get("title", "")) + " " +
+            strip_tags(item.get("description", ""))).lower()
+    return any(w in text for w in BRAND_WORDS)
+
+
 def hardware_targets(work_db):
     """검색할 하드웨어 제목만 추린다 — 이미 받았거나 안 살 건 뺀다."""
     rows = query_all(work_db, {"property": "종류", "select": {"equals": "하드웨어"}})
@@ -226,6 +239,8 @@ def main():
         if kind == "게임쇼":
             fresh = [it for it in fresh
                      if relevant(name, strip_tags(it["title"]), name in booked)]
+        else:
+            fresh = [it for it in fresh if is_hardware_article(it)]
         ids_now = [it["link"] for it in items]
         first = name not in state
         if first:
