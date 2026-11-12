@@ -312,6 +312,7 @@
   "9NWPW7F19FS5",
   "9NWS5S7ZGD9T",
   "9NWVC7XP3PFD",
+  "9NWWL1CBWFCG",
   "9NWX420Z2NLG",
   "9NX6K9HN4F4K",
   "9NX6XGVJ0J3D",
@@ -343,6 +344,7 @@
   "9P1P5Q3BNM7J",
   "9P1P7DWHBDBD",
   "9P1RPXHWZ1C7",
+  "9P1S707BPW6W",
   "9P1VK0ZCQGND",
   "9P1VNX9Z03N5",
   "9P1Z43KRNQD4",
@@ -726,7 +728,7 @@
   "C57L9GR0HHB7",
   "C5HHPG1TXDNG"
  ],
- "갱신": "2026-11-11",
+ "갱신": "2026-11-12",
  "예고": {
   "Dead Cells|2026-09-15": true,
   "Moonlighter|2026-11-15": true,
@@ -738,5 +740,5 @@
   "프로스트펑크|2026-09-15": true,
   "플레이그 테일 2: 레퀴엠|2026-10-15": true
  },
- "직전건수": 727
+ "직전건수": 725
 }
