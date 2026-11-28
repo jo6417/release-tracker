@@ -35,6 +35,7 @@ import urllib.error
 import urllib.request
 
 from config import API, headers
+from kkachi_push import PushRejected, PushTarget
 
 IDS_FILE = "notify_ids.json"
 MAX_BLOCKS = 95        # 노션은 한 번에 100 블록까지. 여유를 둔다
@@ -67,9 +68,9 @@ def _ids():
         return json.load(f)
 
 
-def _post(path, payload):
+def _post(path, payload, method="POST"):
     req = urllib.request.Request(f"{API}{path}", data=json.dumps(payload).encode(),
-                                 headers=headers(), method="POST")
+                                 headers=headers(), method=method)
     return json.loads(urllib.request.urlopen(req).read())
 
 
@@ -117,9 +118,8 @@ def _divider():
 
 
 def _body(user_id, title, summary, details):
-    """카드 본문. 멘션은 첫 줄에 둔다 — 이게 폰 푸시를 띄운다."""
-    blocks = [_para([{"type": "mention", "mention": {"user": {"id": user_id}}},
-                     _text(" " + title, bold=True)])]
+    """카드 본문용 블록. 노션 푸시를 쓰는 경우에만 첫 줄에 멘션을 넣는다."""
+    blocks = [_mention_heading(user_id, title) if user_id else _para([_text(title, bold=True)])]
     if summary:
         blocks.append(_heading("요약"))
         blocks += [_bullet(s) for s in summary]
@@ -134,6 +134,11 @@ def _body(user_id, title, summary, details):
                 blocks.append(_para([_text("… 나머지는 작품 DB에서 확인")]))
                 break
     return blocks
+
+
+def _mention_heading(user_id, title):
+    return _para([{"type": "mention", "mention": {"user": {"id": user_id}}},
+                  _text(" " + title, bold=True)])
 
 
 def _legacy(user_id, page_id, title, summary, details):
@@ -205,6 +210,11 @@ def _send_now(label, summary, details, kinds, count, date, hour=None):
     if not ids.get("notify_db"):
         return _legacy(ids["user_id"], ids["notify_page"], title, summary, details)
 
+    direct = label == BRIEFING_LABEL and hour in (9, 19) and os.environ.get("KKACHI_BRIEFING_ROUTE") == "direct"
+    target = PushTarget.from_environment() if direct else None
+    if direct and target is None:
+        print("[경고] 까치 우편 발송 설정이 비어 있어 기존 노션 푸시로 발송합니다.")
+
     props = {
         "제목": {"title": [{"type": "text", "text": {"content": title[:200]}}]},
         "날짜": {"date": {"start": date}},
@@ -215,10 +225,18 @@ def _send_now(label, summary, details, kinds, count, date, hour=None):
     if count is not None:
         props["건수"] = {"number": count}
 
-    _post("/pages", {"parent": {"database_id": ids["notify_db"]},
-                     "icon": {"type": "emoji", "emoji": "🔔"},
-                     "properties": props,
-                     "children": _body(ids["user_id"], title, summary, details)})
+    page = _post("/pages", {"parent": {"database_id": ids["notify_db"]},
+                            "icon": {"type": "emoji", "emoji": "🔔"},
+                            "properties": props,
+                            "children": _body(None if target else ids["user_id"], title, summary, details)})
+    if target:
+        try:
+            target.send(page["id"], title, summary, page["url"])
+            print("까치 우편 직접 푸시 접수 완료")
+        except PushRejected as error:
+            print(f"[경고] {error} — 이 카드에 노션 멘션으로 예비 알림을 보냅니다.")
+            _post(f"/blocks/{page['id']}/children",
+                  {"children": [_mention_heading(ids["user_id"], title)]}, method="PATCH")
     return True
 
 

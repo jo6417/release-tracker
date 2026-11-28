@@ -1,0 +1,34 @@
+name: 까치 우편 푸시 시험
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: google-github-actions/auth@v3
+        id: kkachi_auth
+        with:
+          workload_identity_provider: ${{ vars.KKACHI_FCM_PROVIDER }}
+          service_account: ${{ vars.KKACHI_FCM_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/firebase.messaging
+          create_credentials_file: false
+          export_environment_variables: false
+      - name: 시험 푸시 한 건 발송
+        env:
+          KKACHI_FCM_PROJECT: ${{ vars.KKACHI_FCM_PROJECT }}
+          KKACHI_FCM_TOKEN: ${{ secrets.KKACHI_FCM_TOKEN }}
+          KKACHI_FCM_ACCESS_TOKEN: ${{ steps.kkachi_auth.outputs.access_token }}
+          KKACHI_TEST_NOTION_URL: ${{ secrets.KKACHI_TEST_NOTION_URL }}
+        run: python kkachi_push.py --test-url "$KKACHI_TEST_NOTION_URL"

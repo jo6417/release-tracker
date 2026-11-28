@@ -24,6 +24,7 @@ on:
 
 permissions:
   contents: write             # 스냅샷 커밋용
+  id-token: write             # Firebase 서비스 계정 단기 인증
 
 jobs:
   track:
@@ -213,12 +214,29 @@ jobs:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
         run: python heartbeat.py
 
+      - name: 까치 우편 발송 인증
+        id: kkachi_auth
+        if: ${{ always() && !cancelled() && vars.KKACHI_BRIEFING_ROUTE == 'direct' }}
+        continue-on-error: true
+        uses: google-github-actions/auth@v3
+        with:
+          workload_identity_provider: ${{ vars.KKACHI_FCM_PROVIDER }}
+          service_account: ${{ vars.KKACHI_FCM_SERVICE_ACCOUNT }}
+          token_format: access_token
+          access_token_scopes: https://www.googleapis.com/auth/firebase.messaging
+          create_credentials_file: false
+          export_environment_variables: false
+
       # 앞 스텝들이 모아둔 것을 한 장으로 보낸다.
       # if: always() — 앞이 하나 죽어도 나머지는 알려야 한다
       - name: 알림 한 장으로 보내기
         if: always()
         env:
           NOTION_TOKEN: ${{ secrets.NOTION_TOKEN }}
+          KKACHI_BRIEFING_ROUTE: ${{ vars.KKACHI_BRIEFING_ROUTE }}
+          KKACHI_FCM_PROJECT: ${{ vars.KKACHI_FCM_PROJECT }}
+          KKACHI_FCM_TOKEN: ${{ secrets.KKACHI_FCM_TOKEN }}
+          KKACHI_FCM_ACCESS_TOKEN: ${{ steps.kkachi_auth.outputs.access_token }}
         run: python notify.py --flush
         continue-on-error: true
 
